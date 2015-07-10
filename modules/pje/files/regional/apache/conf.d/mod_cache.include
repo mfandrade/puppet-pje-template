@@ -1,0 +1,52 @@
+    # habilita cache de conteudos estaticos
+    <IfModule mod_cache.c>
+        <IfModule mod_disk_cache.c>
+            # If an item doesn't have an expiry header, expire it from cache after 12h
+            #CacheDefaultExpire 43200
+            # define the maximum lifetime of all objects as 12h (3600sec * 12)
+            # The CacheMaxExpire directive specifies the maximum number of seconds 
+            # for which cachable HTTP documents will be retained without checking the origin server
+            CacheMaxExpire 43200
+            #Ignore the fact that a response has no Last Modified header.
+            CacheIgnoreNoLastMod On
+            CacheIgnoreCacheControl On
+
+            CacheRoot /var/cache/httpd/mod_cache
+            # Cache proxied url's
+            CacheEnable disk /primeirograu/img
+            CacheEnable disk /primeirograu/a4j
+            CacheEnable disk /primeirograu/js
+            CacheEnable disk /primeirograu/styleSkinInfox
+            #CacheEnable disk /primeirograu/ManualPJeProxy	
+            CacheEnable disk /primeirograu/ManualPJeProxy	
+		
+	    CacheEnable disk /segundograu/img
+            CacheEnable disk /segundograu/a4j
+            CacheEnable disk /segundograu/js
+            CacheEnable disk /segundograu/styleSkinInfox
+            CacheEnable disk /segundograu/ManualPJeProxy
+
+            # Evita o cache do Header Set-Cookie jsessionid (resposavel pela persistencia de sessao do cliente http)
+            CacheIgnoreHeaders Set-Cookie
+            # Introduced in Apache Httpd 2.2.14
+            CacheIgnoreURLSessionIdentifiers jsessionid JSESSIONID
+
+            # I/O operations are proportionally more expensive for small objects, so they
+            # should be the ones included in cache. Avoid including large files.
+            # in bytes
+            CacheMinFileSize 1
+            CacheMaxFileSize 1000000
+
+            # How many directories to have in cache
+            CacheDirLevels 5
+            # Length of directory names in the cache
+            CacheDirLength 3
+
+            # Setup logging so we can see cache hits, misses, and revalidate cache items
+            SetEnv CACHE_MISS 1
+            LogFormat '"%h %l %u %t "%r " %>s %b JSESSIONID:[%{JSESSIONID}C] Set-Cookie req/res:[%{Set-Cookie}i / %{Set-Cookie}o] CACHE_MISS[%{CACHE_MISS}e]"' cache
+            #LogLevel debug
+            CustomLog logs/pje-cached.log cache
+        </IfModule>
+    </IfModule>
+

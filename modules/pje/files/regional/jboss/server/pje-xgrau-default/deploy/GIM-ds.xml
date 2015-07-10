@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE datasources
+    PUBLIC "-//JBoss//DTD JBOSS JCA Config 1.5//EN"
+    "http://www.jboss.org/j2ee/dtd/jboss-ds_1_5.dtd">
+
+<!-- GIM NA BASE REPLICADA -->
+<datasources>
+	<no-tx-datasource>
+		<jndi-name>PJE_MODULO_GIM_DS</jndi-name>
+		<connection-url>jdbc:postgresql://10.0.0.0:5432/pje_Xgrau_replicada</connection-url>
+		<driver-class>org.postgresql.Driver</driver-class>
+		<user-name>user</user-name>
+		<password>pass</password>
+		<min-pool-size>1</min-pool-size>
+        <max-pool-size>20</max-pool-size>
+		<idle-timeout-minutes>5</idle-timeout-minutes>
+		<validate-on-match>true</validate-on-match>
+		<valid-connection-checker-class-name>org.jboss.resource.adapter.jdbc.vendor.PostgreSQLValidConnectionChecker</valid-connection-checker-class-name>
+		<metadata>
+		    <type-mapping>PostgreSQL 8.0</type-mapping>
+		</metadata>
+	</no-tx-datasource>
+</datasources>
+

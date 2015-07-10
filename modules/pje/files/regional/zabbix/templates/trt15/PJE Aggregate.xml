@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>2.0</version>
+    <date>2013-11-08T15:11:39Z</date>
+    <groups>
+        <group>
+            <name>PJE Aggregate</name>
+        </group>
+    </groups>
+    <hosts>
+        <host>
+            <host>PJE</host>
+            <name>PJE</name>
+            <proxy/>
+            <status>0</status>
+            <ipmi_authtype>-1</ipmi_authtype>
+            <ipmi_privilege>2</ipmi_privilege>
+            <ipmi_username/>
+            <ipmi_password/>
+            <templates>
+                <template>
+                    <name>Template PJE Aggregate</name>
+                </template>
+            </templates>
+            <groups>
+                <group>
+                    <name>PJE Aggregate</name>
+                </group>
+            </groups>
+            <interfaces>
+                <interface>
+                    <default>1</default>
+                    <type>1</type>
+                    <useip>1</useip>
+                    <ip>127.0.0.1</ip>
+                    <dns/>
+                    <port>10050</port>
+                    <interface_ref>if1</interface_ref>
+                </interface>
+            </interfaces>
+            <applications/>
+            <items/>
+            <discovery_rules/>
+            <macros>
+                <macro>
+                    <macro>{$SERVER_GROUP}</macro>
+                    <value>PJE JBoss</value>
+                </macro>
+            </macros>
+            <inventory/>
+        </host>
+        <host>
+            <host>PJE 1grau</host>
+            <name>PJE 1grau</name>
+            <proxy/>
+            <status>0</status>
+            <ipmi_authtype>-1</ipmi_authtype>
+            <ipmi_privilege>2</ipmi_privilege>
+            <ipmi_username/>
+            <ipmi_password/>
+            <templates>
+                <template>
+                    <name>Template PJE Aggregate</name>
+                </template>
+            </templates>
+            <groups>
+                <group>
+                    <name>PJE Aggregate</name>
+                </group>
+            </groups>
+            <interfaces>
+                <interface>
+                    <default>1</default>
+                    <type>1</type>
+                    <useip>1</useip>
+                    <ip>127.0.0.1</ip>
+                    <dns/>
+                    <port>10050</port>
+                    <interface_ref>if1</interface_ref>
+                </interface>
+            </interfaces>
+            <applications/>
+            <items/>
+            <discovery_rules/>
+            <macros>
+                <macro>
+                    <macro>{$SERVER_GROUP}</macro>
+                    <value>PJE JBoss 1grau</value>
+                </macro>
+            </macros>
+            <inventory/>
+        </host>
+        <host>
+            <host>PJE 1grau Externos</host>
+            <name>PJE 1grau Externos</name>
+            <proxy/>
+            <status>0</status>
+            <ipmi_authtype>-1</ipmi_authtype>
+            <ipmi_privilege>2</ipmi_privilege>
+            <ipmi_username/>
+            <ipmi_password/>
+            <templates>
+                <template>
+                    <name>Template PJE Aggregate</name>
+                </template>
+            </templates>
+            <groups>
+                <group>
+                    <name>PJE Aggregate</name>
+                </group>
+            </groups>
+            <interfaces>
+                <interface>
+                    <default>1</default>
+                    <type>1</type>
+                    <useip>1</useip>
+                    <ip>127.0.0.1</ip>
+                    <dns/>
+                    <port>10050</port>
+                    <interface_ref>if1</interface_ref>
+                </interface>
+            </interfaces>
+            <applications/>
+            <items/>
+            <discovery_rules/>
+            <macros>
+                <macro>
+                    <macro>{$SERVER_GROUP}</macro>
+                    <value>PJE JBoss 1grau Externos</value>
+                </macro>
+            </macros>
+            <inventory/>
+        </host>
+        <host>
+            <host>PJE 1grau Internos</host>
+            <name>PJE 1grau Internos</name>
+            <proxy/>
+            <status>0</status>
+            <ipmi_authtype>-1</ipmi_authtype>
+            <ipmi_privilege>2</ipmi_privilege>
+            <ipmi_username/>
+            <ipmi_password/>
+            <templates>
+                <template>
+                    <name>Template PJE Aggregate</name>
+                </template>
+            </templates>
+            <groups>
+                <group>
+                    <name>PJE Aggregate</name>
+                </group>
+            </groups>
+            <interfaces>
+                <interface>
+                    <default>1</default>
+                    <type>1</type>
+                    <useip>1</useip>
+                    <ip>127.0.0.1</ip>
+                    <dns/>
+                    <port>10050</port>
+                    <interface_ref>if1</interface_ref>
+                </interface>
+            </interfaces>
+            <applications/>
+            <items/>
+            <discovery_rules/>
+            <macros>
+                <macro>
+                    <macro>{$SERVER_GROUP}</macro>
+                    <value>PJE JBoss 1grau Internos</value>
+                </macro>
+            </macros>
+            <inventory/>
+        </host>
+        <host>
+            <host>PJE 2grau</host>
+            <name>PJE 2grau</name>
+            <proxy/>
+            <status>0</status>
+            <ipmi_authtype>-1</ipmi_authtype>
+            <ipmi_privilege>2</ipmi_privilege>
+            <ipmi_username/>
+            <ipmi_password/>
+            <templates>
+                <template>
+                    <name>Template PJE Aggregate</name>
+                </template>
+            </templates>
+            <groups>
+                <group>
+                    <name>PJE Aggregate</name>
+                </group>
+            </groups>
+            <interfaces>
+                <interface>
+                    <default>1</default>
+                    <type>1</type>
+                    <useip>1</useip>
+                    <ip>127.0.0.1</ip>
+                    <dns/>
+                    <port>10050</port>
+                    <interface_ref>if1</interface_ref>
+                </interface>
+            </interfaces>
+            <applications/>
+            <items/>
+            <discovery_rules/>
+            <macros>
+                <macro>
+                    <macro>{$SERVER_GROUP}</macro>
+                    <value>PJE JBoss 2grau</value>
+                </macro>
+            </macros>
+            <inventory/>
+        </host>
+        <host>
+            <host>PJE 2grau Externos</host>
+            <name>PJE 2grau Externos</name>
+            <proxy/>
+            <status>0</status>
+            <ipmi_authtype>-1</ipmi_authtype>
+            <ipmi_privilege>2</ipmi_privilege>
+            <ipmi_username/>
+            <ipmi_password/>
+            <templates>
+                <template>
+                    <name>Template PJE Aggregate</name>
+                </template>
+            </templates>
+            <groups>
+                <group>
+                    <name>PJE Aggregate</name>
+                </group>
+            </groups>
+            <interfaces>
+                <interface>
+                    <default>1</default>
+                    <type>1</type>
+                    <useip>1</useip>
+                    <ip>127.0.0.1</ip>
+                    <dns/>
+                    <port>10050</port>
+                    <interface_ref>if1</interface_ref>
+                </interface>
+            </interfaces>
+            <applications/>
+            <items/>
+            <discovery_rules/>
+            <macros>
+                <macro>
+                    <macro>{$SERVER_GROUP}</macro>
+                    <value>PJE JBoss 2grau Externos</value>
+                </macro>
+            </macros>
+            <inventory/>
+        </host>
+        <host>
+            <host>PJE 2grau Internos</host>
+            <name>PJE 2grau Internos</name>
+            <proxy/>
+            <status>0</status>
+            <ipmi_authtype>-1</ipmi_authtype>
+            <ipmi_privilege>2</ipmi_privilege>
+            <ipmi_username/>
+            <ipmi_password/>
+            <templates>
+                <template>
+                    <name>Template PJE Aggregate</name>
+                </template>
+            </templates>
+            <groups>
+                <group>
+                    <name>PJE Aggregate</name>
+                </group>
+            </groups>
+            <interfaces>
+                <interface>
+                    <default>1</default>
+                    <type>1</type>
+                    <useip>1</useip>
+                    <ip>127.0.0.1</ip>
+                    <dns/>
+                    <port>10050</port>
+                    <interface_ref>if1</interface_ref>
+                </interface>
+            </interfaces>
+            <applications/>
+            <items/>
+            <discovery_rules/>
+            <macros>
+                <macro>
+                    <macro>{$SERVER_GROUP}</macro>
+                    <value>PJE JBoss 2grau Internos</value>
+                </macro>
+            </macros>
+            <inventory/>
+        </host>
+    </hosts>
+</zabbix_export>
