@@ -14,6 +14,15 @@ Vagrant.configure(2) do |config|
   # boxes at https://atlas.hashicorp.com/search.
   config.vm.box = "puppetlabs/centos-6.6-32-puppet"
 
+  if Vagrant.has_plugin?('vagant-proxyconf')
+    if ENV['http_proxy']
+      config.proxy.http = ENV['http_proxy']
+    end
+    if ENV['https_proxy']
+      config.proxy.http = ENV['https_proxy']
+    end
+  end
+
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.
