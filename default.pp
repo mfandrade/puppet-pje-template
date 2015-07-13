@@ -1,4 +1,4 @@
 node 'pje8-jb-int-z.trt8.net' {
-  notify { 'Bom dia!': }
-  #include pje
+  #notify { 'Bom dia!': }
+  include pje
 }
