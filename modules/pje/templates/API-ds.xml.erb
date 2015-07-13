@@ -10,17 +10,17 @@
    <xa-datasource>
     <jndi-name>PJE_API_DS</jndi-name>
     <xa-datasource-class>org.postgresql.xa.PGXADataSource</xa-datasource-class>
-    <xa-datasource-property name="ServerName">10.0.0.0</xa-datasource-property>
+    <xa-datasource-property name="ServerName"><%= @apids_servername %></xa-datasource-property>
     <xa-datasource-property name="PortNumber">5432</xa-datasource-property>
-    <xa-datasource-property name="DatabaseName">pje_Xgrau</xa-datasource-property>
-    <user-name>user</user-name>
-    <password>pass</password>
+    <xa-datasource-property name="DatabaseName"><%= @apids_databasename %></xa-datasource-property>
+    <user-name><%= @apids_username %></user-name>
+    <password><%= @apids_password %></password>
     <min-pool-size>1</min-pool-size>
     <max-pool-size>20</max-pool-size>
     <prepared-statement-cache-size>10</prepared-statement-cache-size>
     <shared-prepared-statements>true</shared-prepared-statements>
-	<idle-timeout-minutes>5</idle-timeout-minutes>
-	<validate-on-match>true</validate-on-match>
+        <idle-timeout-minutes>5</idle-timeout-minutes>
+        <validate-on-match>true</validate-on-match>
     <valid-connection-checker-class-name>org.jboss.resource.adapter.jdbc.vendor.PostgreSQLValidConnectionChecker</valid-connection-checker-class-name>
     <track-connection-by-tx />
     <metadata>
@@ -31,10 +31,10 @@
   <!-- API NA BASE REPLICADA -->
   <no-tx-datasource>
       <jndi-name>PJE_API_BASE_REPLICADA_DS</jndi-name>
-      <connection-url>jdbc:postgresql://10.0.0.0:5432/pje_Xgrau_replicada</connection-url>
+      <connection-url>jdbc:postgresql://<%= @apids_servername %>:5432/<%= @apids_databasename %></connection-url>
       <driver-class>org.postgresql.Driver</driver-class>
-      <user-name>user</user-name>
-      <password>pass</password>
+      <user-name><%= @apids_username %></user-name>
+      <password><%= @apids_password %></password>
       <min-pool-size>1</min-pool-size>
       <max-pool-size>20</max-pool-size>
       <idle-timeout-minutes>5</idle-timeout-minutes>
