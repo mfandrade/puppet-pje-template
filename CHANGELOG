@@ -5,4 +5,9 @@ centosjavajboss
 	Instalado Java JDK 6u45 de http://www.oracle.com/technetwork/java/javase/downloads/java-archive-downloads-javase6-419409.html
 	Instalado JBoss 5.1.1 Enterprise do site da RedHat
 	Setadas variáveis de ambiente para Java e JBoss no profile.d
-1.0.1	Definido /etc/localtime para America/Belem
+1.0.1
+  Definido /etc/localtime para America/Belem
+1.1.0
+  Instalados pacotes apr e apr-utils
+  Executado yum upgrade
+  Limpos histórico e cache

@@ -12,7 +12,8 @@ Vagrant.configure(2) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "puppetlabs/centos-6.6-32-puppet"
+  #config.vm.box = "puppetlabs/centos-6.6-32-puppet"
+  config.vm.box = "centosjavajboss"
 
   if Vagrant.has_plugin?('vagant-proxyconf')
     if ENV['http_proxy']
@@ -35,12 +36,12 @@ Vagrant.configure(2) do |config|
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  # config.vm.network "private_network", ip: "192.168.33.10"
+  config.vm.network "private_network", ip: "192.168.33.10"
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
   # your network.
-  config.vm.network "public_network"
+  # config.vm.network "public_network"
 
   config.vm.hostname = "pje8-jb-int-z.trt8.net"
 
