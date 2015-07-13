@@ -39,15 +39,21 @@ class pje::profile($jboss_home = "/srv/jboss", $base_profile = "default", $profi
     require => File["$profile_name"],
   }
 
-  $apids_servername   = '10.8.14.206'
-  $apids_databasename = 'pje_1grau_producao'
-  $apids_username     = 'pje_usuario_servico_api'
-  $apids_password     = 'PjEcSjT'
+  $ds_servername    = '10.8.14.206'
+  $ds_databasename  = 'pje_1grau_producao'
+  $ds_base_username = 'pje_usuario_servico'
+  $ds_password      = 'PjEcSjT'
 
   file { 'API-ds.xml':
     ensure  => present,
     path    => "$jboss_home/server/$profile_name/deploy/API-ds.xml",
     content => template('pje/API-ds.xml.erb'),
   }
+  file { 'GIM-ds.xml':
+    ensure  => present,
+    path    => "$jboss_home/server/$profile_name/deploy/GIM-ds.xml",
+    content => template('pje/GIM-ds.xml.erb'),
+  }
+
 
 }
