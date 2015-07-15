@@ -70,5 +70,11 @@ class pje::profile($jboss_home = "/srv/jboss", $base_profile = "default", $profi
     content => template('pje/PJE-ds.xml.erb'),
   }
 
+  file { 'jmx-console-users.properties':
+    ensure => present,
+    path   => "$jboss_home/server/$profile_name/conf/props/jmx-console-users.properties",
+    source => 'puppet:///modules/pje/jmx-console-users.properties',
+  }
+
 
 }
