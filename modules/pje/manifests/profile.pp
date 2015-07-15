@@ -1,9 +1,30 @@
-class pje::profile($jboss_home = "/srv/jboss", $base_profile = "default", $profile_name = "pje-1grau-default") {
+#class pje::profile($jboss_home = "/srv/jboss", $base_profile = "default", $profile_name = "pje-1grau-default") {
+class pje::profile(
+  $jboss_home      = "/srv/jboss",
+  $profile_name    = "pje-1grau-default",
+  $jvmroute        = 'pje1a',
+  $jmxremote_port  = 9001,
+  $quartz          = false,
+  $db_server       = '10.8.14.206',
+  $db_name         = 'pje_1grau_producao',
+  $username_pje    = 'pje',
+  $password_pje    = 'PjEcSjT',
+  $minpoolsize_pje = 5,
+  $maxpoolsize_pje = 40,
+  $username_api    = 'pje_usuario_servico_api',
+  $password_api    = 'PjEcSjT',
+  $minpoolsize_api = 1,
+  $maxpoolsize_api = 20,
+  $username_gim    = 'pje_usuario_servico_gim',
+  $password_gim    = 'PjEcSjT',
+  $minpoolsize_gim = 1,
+  $maxpoolsize_gim = 20
+) {
   
   file { "$profile_name":
     path    => "$jboss_home/server/$profile_name",
     ensure  => present,
-    source  => "$jboss_home/server/$base_profile",
+    source  => 'puppet:///modules/pje/pje-xgrau-default',
     recurse => true,
   }
 
@@ -47,25 +68,6 @@ class pje::profile($jboss_home = "/srv/jboss", $base_profile = "default", $profi
     ensure => present,
     source => 'puppet:///modules/pje/aplicacaojt.keystore',
   }
-
-  $ds_servername      = '10.8.14.206'
-  $ds_databasename    = 'pje_1grau_producao'
-  $ds_api_username    = 'pje_usuario_servico_api'
-  $ds_api_password    = 'PjEcSjT'
-  $ds_api_minpoolsize = 1
-  $ds_api_maxpoolsize = 20
-  $ds_gim_username    = 'pje_usuario_servico_gim'
-  $ds_gim_password    = 'PjEcSjT'
-  $ds_gim_minpoolsize = 1
-  $ds_gim_maxpoolsize = 20
-  $ds_pje_username    = 'pje'
-  $ds_pje_password    = 'PjEcSjT'
-  $ds_pje_minpoolsize = 5
-  $ds_pje_maxpoolsize = 40
-
-  $jvmroute = 'pje1a'
-  $quartz   = true
-  $jmxport  = 10050
 
   file { 'API-ds.xml':
     ensure  => present,
