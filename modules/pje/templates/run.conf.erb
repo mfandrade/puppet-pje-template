@@ -107,7 +107,7 @@ if [ "x$JAVA_OPTS" = "x" ]; then
 
    # JMX
    JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote"
-   JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.port=<%= @jmxport %>"
+   JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.port=<%= @jmxremote_port %>"
    JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.authenticate=false"
    JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.ssl=false"
    JAVA_OPTS="$JAVA_OPTS -Djavax.management.builder.initial=org.jboss.system.server.jmx.MBeanServerBuilderImpl"

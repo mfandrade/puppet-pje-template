@@ -85,4 +85,10 @@ class pje::profile(
     content => template('pje/PJE-ds.xml.erb'),
   }
 
+  file { 'run.conf':
+    ensure  => present,
+    path    => "$jboss_home/server/$profile_name/run.conf",
+    content => template('pje/run.conf.erb'),
+  }
+
 }
