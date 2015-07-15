@@ -53,18 +53,16 @@ Vagrant.configure(2) do |config|
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
-  # Example for VirtualBox:
-  #
-  # config.vm.provider "virtualbox" do |vb|
-  #   # Display the VirtualBox GUI when booting the machine
-  #   vb.gui = true
-  #
-  #   # Customize the amount of memory on the VM:
-  #   vb.memory = "1024"
-  # end
-  #
   # View the documentation for the provider you are using for more
   # information on available options.
+  #
+  config.vm.provider "virtualbox" do |vb|
+    # Display the VirtualBox GUI when booting the machine
+    # vb.gui = true
+  
+    # Customize the amount of memory on the VM:
+    vb.memory = "3584"
+  end
 
   # Define a Vagrant Push strategy for pushing to Atlas. Other push strategies
   # such as FTP and Heroku are also available. See the documentation at
@@ -85,6 +83,6 @@ Vagrant.configure(2) do |config|
     puppet.module_path = "modules/"
     puppet.manifest_file = "default.pp"
     puppet.manifests_path = "."
-    puppet.options = "--verbose"
+    puppet.options = "--verbose --debug"
   end
 end
