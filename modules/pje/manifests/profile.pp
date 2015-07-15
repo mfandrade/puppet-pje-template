@@ -70,6 +70,11 @@ class pje::profile(
     ensure => present,
     source => 'puppet:///modules/pje/aplicacaojt.keystore',
   }
+  file { 'drive-postgresql':
+    ensure  => present,
+    path    => "$jboss_home/common/lib/postgresql-9.3-1103.jdbc4.jar",
+    source  => 'puppet:///modules/pje/postgresql-9.3-1103.jdbc4.jar',
+  }
 
   file { 'API-ds.xml':
     ensure  => present,
