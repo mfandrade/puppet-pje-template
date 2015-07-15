@@ -190,7 +190,8 @@
    
    <!-- elimina os sysout -->
    <category name="STDOUT">
-      <priority value="ERROR"/>
+      <!--priority value="ERROR"/-->
+      <priority value="INFO"/>
    </category>
    
    <!-- elimina os logs do hibernate -->
@@ -317,7 +318,20 @@
    <category name="org.jboss.ws.core.MessageTrace">
      <priority value="ERROR"/>
    </category>
-   <!-- -->
+
+   <!-- estas duas categorias foram criadas pelo Alayr, para diminuir a verbosidade do log quando colocado em INFO, 
+        para analisar o Verificador Periodico-->
+
+   <category name="org.jboss.ws.metadata.wsdl.WSDLDefinitions">
+   <priority value="ERROR"/>
+   </category>
+ 
+       
+   <category name="org.ajax4jsf.renderkit.AjaxRendererUtils">
+   <priority value="ERROR"/>
+   </category>
+
+<!-- -->
    
    <!--
       | An example of enabling the custom TRACE level priority that is used
@@ -405,7 +419,8 @@
          so the full JBoss system property format is not supported; e.g.
          setting a default via ${jboss.server.log.threshold:WARN} will not work.         
        -->
-      <priority value="${jboss.server.log.threshold}"/>
+      <!--priority value="${jboss.server.log.threshold}"/ -->
+      <priority value="INFO"/>
       <!-- RedHat - rsoares - 03102011 -->
       <!-- appender-ref ref="ASYNC"/ -->
       <!-- appender-ref ref="CONSOLE"/ -->

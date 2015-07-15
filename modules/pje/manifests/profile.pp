@@ -75,6 +75,11 @@ class pje::profile($jboss_home = "/srv/jboss", $base_profile = "default", $profi
     path   => "$jboss_home/server/$profile_name/conf/props/jmx-console-users.properties",
     source => 'puppet:///modules/pje/jmx-console-users.properties',
   }
+  file { 'jboss-log4j.xml':
+    ensure => present,
+    path   => "$jboss_home/server/$profile_name/conf/jboss-log4j.xml",
+    source => 'puppet:///modules/pje/jboss-log4j.xml',
+  }
 
 
 }
