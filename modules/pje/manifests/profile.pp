@@ -42,6 +42,12 @@ class pje::profile($jboss_home = "/srv/jboss", $base_profile = "default", $profi
     require => File["$profile_name"],
   }
 
+  file { 'aplicacaojt.keystore':
+    path   => '/usr/java/default/jre/lib/security/aplicacaojt.keystore',
+    ensure => present,
+    source => 'puppet:///modules/pje/aplicacaojt.keystore',
+  }
+
   $ds_servername      = '10.8.14.206'
   $ds_databasename    = 'pje_1grau_producao'
   $ds_api_username    = 'pje_usuario_servico_api'
@@ -56,6 +62,10 @@ class pje::profile($jboss_home = "/srv/jboss", $base_profile = "default", $profi
   $ds_pje_password    = 'PjEcSjT'
   $ds_pje_minpoolsize = 5
   $ds_pje_maxpoolsize = 40
+
+  $jvmroute = 'pje1a'
+  $quartz   = true
+  $jmxport  = 10050
 
   file { 'API-ds.xml':
     ensure  => present,

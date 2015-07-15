@@ -42,11 +42,9 @@ JAVA_HOME="/usr/java/default"
 # Specify options to pass to the Java VM.
 #
 if [ "x$JAVA_OPTS" = "x" ]; then
-   #JAVA_OPTS="-Xms1303m -Xmx1303m -XX:MaxPermSize=256m -Dorg.jboss.resolver.warning=true -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000 -Dsun.lang.ClassLoader.allowArraySyntax=true"
-   #-Xms -Xmx serao definidos pelo regional conforme a memoria disponivel no servidor
-   JAVA_OPTS="-Xms5g -Xmx5g -XX:PermSize=512m -XX:MaxPermSize=512m "
+   JAVA_OPTS="-Xms8192M -Xmx8192M -XX:PermSize=512M -XX:MaxPermSize=512M "
    JAVA_OPTS="$JAVA_OPTS -Dorg.jboss.resolver.warning=true"
-   JAVA_OPTS="$JAVA_OPTS -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000 "
+   JAVA_OPTS="$JAVA_OPTS -Dsun.rmi.dgc.client.gcInterval=900000 -Dsun.rmi.dgc.server.gcInterval=900000 "
    JAVA_OPTS="$JAVA_OPTS -Dsun.lang.ClassLoader.allowArraySyntax=true"
 
    # Some graphics handling code may try to access native windowing libraries 
@@ -57,7 +55,7 @@ if [ "x$JAVA_OPTS" = "x" ]; then
    # ModCluster Proxylist (Servidores Apache Httpd configurados como load balancers com mod_cluster habilitado)
    #JAVA_OPTS="$JAVA_OPTS -Djboss.modcluster.proxyList=127.0.0.1:7777"
    # jvmRoute
-   JAVA_OPTS="$JAVA_OPTS -Djboss.jvmRoute=pje00-jb-int-a1"
+   JAVA_OPTS="$JAVA_OPTS -Djboss.jvmRoute=<%= @jvmroute %>"
    #Melhorias no algoritmo GC propostas pelo CSJT
    JAVA_OPTS="$JAVA_OPTS -server"
    JAVA_OPTS="$JAVA_OPTS -XX:+ExplicitGCInvokesConcurrent"
@@ -77,14 +75,14 @@ if [ "x$JAVA_OPTS" = "x" ]; then
    JAVA_OPTS="$JAVA_OPTS -Djboss.platform.mbeanserver"
 
    # Configuracoes de proxy para acesso a servicos externos
-   JAVA_OPTS="$JAVA_OPTS -Dhttp.proxyHost=proxy.tst.jus.br -Dhttp.proxyPort=3128 -Dhttps.proxyHost=proxy.tst.jus.br -Dhttps.proxyPort=3128"
-   JAVA_OPTS="$JAVA_OPTS -Dhttp.nonProxyHosts=*.jt.jus.br -Dhttp.nonProxyHosts=*.pje.csjt.jus.br"
+   #JAVA_OPTS="$JAVA_OPTS -Dhttp.proxyHost=proxy.tst.jus.br -Dhttp.proxyPort=3128 -Dhttps.proxyHost=proxy.tst.jus.br -Dhttps.proxyPort=3128"
+   #JAVA_OPTS="$JAVA_OPTS -Dhttp.nonProxyHosts=*.jt.jus.br -Dhttp.nonProxyHosts=*.pje.csjt.jus.br"
   
    # YourKit Java Profiler 
    #JAVA_OPTS="$JAVA_OPTS -agentpath:/srv/yjp-10.0.2/bin/linux-x86-64/libyjpagent.so=sessionname=JBoss"
 
    # Lang Encoding
-   JAVA_OPTS="$JAVA_OPTS -Duser.language=pt -Duser.region=BR -Dfile.encoding=ISO8859_1"
+   JAVA_OPTS="$JAVA_OPTS -Duser.language=pt -Duser.region=BR -Dfile.encoding=ISO-8859-1"
    #JAVA_OPTS="$JAVA_OPTS -Duser.language=pt -Duser.region=BR -Dfile.encoding=UTF8"
 
    # SSL Debugging
@@ -92,7 +90,7 @@ if [ "x$JAVA_OPTS" = "x" ]; then
 
    # Trust Store usado pela JVM do JBossEAP
    #JAVA_OPTS="$JAVA_OPTS -Djavax.net.ssl.trustStore=client.truststore"
-   JAVA_OPTS="$JAVA_OPTS -Djavax.net.ssl.trustStore=/usr/java/default/jre/lib/security/aplicacaojt.keystore"
+   JAVA_OPTS="$JAVA_OPTS -Djavax.net.ssl.trustStore=/usr/java/latest/jre/lib/security/aplicacaojt.keystore"
 
    # registra a data de inicialização do JBoss
    DATE_START=`date  +%d-%m-%Y-%H%M`
@@ -105,11 +103,11 @@ if [ "x$JAVA_OPTS" = "x" ]; then
    JAVA_OPTS="$JAVA_OPTS -XX:OnError='gcore -o /var/log/jboss/jboss_PID%p_$DATE_START.coredump %p' "
    JAVA_OPTS="$JAVA_OPTS -XX:ErrorFile=/var/log/jboss/hs_err_jboss_PID%p_$DATE_START.log "
    #Apenas 1 instancia por grau pode ter esse parametro como true
-   JAVA_OPTS="$JAVA_OPTS -Dpje.quartz=false"
+   JAVA_OPTS="$JAVA_OPTS -Dpje.quartz=<%= @quartz %>"
 
    # JMX
    JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote"
-   JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.port=10150"
+   JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.port=<%= @jmxport %>"
    JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.authenticate=false"
    JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.ssl=false"
    JAVA_OPTS="$JAVA_OPTS -Djavax.management.builder.initial=org.jboss.system.server.jmx.MBeanServerBuilderImpl"
@@ -121,7 +119,7 @@ fi
 #JAVA_OPTS="$JAVA_OPTS -Djava.security.manager -Djava.security.policy=$POLICY"
 
 # Sample JPDA settings for remote socket debugging
-JAVA_OPTS="$JAVA_OPTS -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n"
+#JAVA_OPTS="$JAVA_OPTS -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n"
 
 # Sample JPDA settings for shared memory debugging 
 #JAVA_OPTS="$JAVA_OPTS -Xrunjdwp:transport=dt_shmem,address=jboss,server=y,suspend=n"
