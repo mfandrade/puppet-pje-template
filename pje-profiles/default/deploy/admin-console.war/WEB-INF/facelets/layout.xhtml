@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<!--
+  ~ Jopr Management Platform
+  ~ Copyright (C) 2005-2010 Red Hat, Inc.
+  ~ All rights reserved.
+  ~
+  ~ This program is free software; you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License, version 2, as
+  ~ published by the Free Software Foundation, and/or the GNU Lesser
+  ~ General Public License, version 2.1, also as published by the Free
+  ~ Software Foundation.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License and the GNU Lesser General Public License
+  ~ for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ and the GNU Lesser General Public License along with this program;
+  ~ if not, write to the Free Software Foundation, Inc.,
+  ~ 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+  -->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:remove>
+    <!-- Set the content type to "text/html" to ensure "application/xhtml+xml", which would put Firefox and
+  other Gecko-based browsers into XML mode (which requires pages to be well-formed XML), is not used.
+  We also specify the charset/encoding here, since we cannot specify it via the xml prolog, since
+  including an xml prolog causes IE6 to go into the undesirable "quirks mode".
+  (see https://jira.jboss.org/jira/browse/EMBJOPR-19) -->
+</ui:remove>
+<f:view contentType="text/html; charset=UTF-8">
+    <head>
+        <base href="#{baseUrl}"/>
+        <title>
+            <ui:insert name="title">#{messages['default.windowTitle']}</ui:insert>
+        </title>
+
+        <link href="css/console-style.css" rel="stylesheet" type="text/css"/>
+        <link href="css/form-style.css" rel="stylesheet" type="text/css"/>
+
+        <link rel="icon" type="image/png" href="images/favicon.png"/>
+        <link rel="apple-touch-icon" href="images/favicon.png"/>
+
+        <script type="text/javascript" src="js/embedded.js"></script>
+
+        <!--[if lt IE 7]>
+        <style type="text/css" media="screen">
+        /* let the IE expressions commence */
+        /* old ghost in the box for IEs 5.01 + 5.5 */
+        body
+            {
+            overflow-y: hidden;
+            margin: 0;
+            padding: 0;
+            }
+        #content
+            {
+            height: expression( document.body.clientHeight - (parseInt(document.body.currentStyle.fontSize) * 1.3333333 * (8 + 5) ) + 'px') ;
+            overflow: auto;
+            }
+        /* backslashes feed the new ghost in the box to IE6 */
+        h\tml
+            {
+            overflow: hidden;
+            }
+        h\tml body
+            {
+            height: 100%;
+            overflow: auto;
+            }
+        h\tml #content
+            {
+            padding: 16px; /* replace the em units for padding with something we can compute with in the expressions below */
+            overflow: auto;
+            height: expression((document.body.clientHeight - 2 * 31 - 49 + 1) + 'px');  /* 49 = header height, 31 = footer height, but why I have to substract it twice escapes me. 1 = so that it looks better.*/
+            width: expression((document.body.clientWidth - 300 - 2 * 16) + 'px'); /* 300 = width of the sidebar, 16 = padding */
+            }
+        #pageheader, #footer
+            {
+            width: expression(document.body.clientWidth + 'px');
+            }
+        #sidebar-left
+            {
+            height: expression((document.body.clientHeight - 31 - 49 + 2) + 'px'); /* 49 = header height, 31 = footer height, 2 = so it looks better. */
+            }
+        </style>
+        <![endif]-->
+    </head>
+    <body>
+    <div id="content">
+        <!--TODO: add if statement to determine if this warning should be displayed-->
+        <!--  Restart of server indicator  -->
+        <!--<div id="RestartWarning">-->
+        <!--<h:graphicImage value="images/icoServerRestartWarning.gif"/>-->
+        <!--<span>Restart of server is required</span>-->
+        <!--( <a href="#">hide</a>  |  <a href="#">Learn more</a> )-->
+        <!--</div>-->
+        <!--breadcrumb-->
+        <div id="bread">
+            <ui:repeat var="node" value="#{navigationAction.getBreadCrumbs()}">
+                <ul>
+                    <li>
+                        <h:outputText value=" : "/>
+                        <s:link view="/secure/summary.xhtml" propagation="end">
+                            <f:param name="path" value="#{node.path}"/>
+                            #{node.name} </s:link>
+                    </li>
+                </ul>
+            </ui:repeat>
+        </div>
+        <!-- page titling  -->
+        <h1>
+            <ui:insert name="pagetitle"/>
+        </h1>
+        <!--tab menu is optional-->
+        <ui:insert name="tabmenu"></ui:insert>
+        <ui:insert name="body">body goes here</ui:insert>
+    </div>
+    <ui:include src="resourceNavigation.xhtml"/>
+    <ui:include src="header.xhtml"/>
+    <ui:include src="footer.xhtml"/>
+
+        <!-- I'm giving up on proper CSS for IE. These poor hacks make the tab menu look nice in both IE6 and IE7 -->
+        <!-- This has to be present only *AFTER* all the content is defined, because the below CSS contains expressions
+             refering to the DOM objects defined above (like content). -->
+        <!--[if lt IE 8]>
+        <script type="text/javascript" language="javascript">
+            var scrollBarWidth = getScrollBarWidth();
+        </script>
+        <style type="text/css" media="screen">
+        h\tml #content
+            {
+            /* This definition is repeated from above so that it also applies for IE7 here, where we need this pixel-sized
+               padding so that we can compute the width of the tabmenu below. */
+            padding: 16px; /* replace the em units for padding with something we can compute with in the expressions below */
+            }
+        #tabmenu {
+            width: expression((document.body.clientWidth - 300 - 2 * 16 - (content.scrollHeight > content.clientHeight ? scrollBarWidth : 0)) + 'px'); /* 300 = width of sidebar, 16 content padding. */
+            }
+        </style>
+        <![endif]-->
+    </body>
+</f:view>
+</html>
+
