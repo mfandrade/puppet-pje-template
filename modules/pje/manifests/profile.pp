@@ -2,6 +2,8 @@
 class pje::profile(
   $jboss_home      = "/srv/jboss",
   $profile_name    = "pje-1grau-default",
+  $binding_ports   = "ports-default",
+  $binding_ipaddr  = '10.8.17.222',
   $jvmroute        = 'pje1a',
   $jmxremote_port  = 9001,
   $quartz          = false,
@@ -89,6 +91,12 @@ class pje::profile(
     ensure  => present,
     path    => "$jboss_home/server/$profile_name/run.conf",
     content => template('pje/run.conf.erb'),
+  }
+
+  file { 'pje-xgrau-default.sh':
+    ensure  => present,
+    path    => "$jboss_home/bin/pje-1grau-default.sh",
+    content => template('pje/pje-xgrau-default.sh'),
   }
 
 }
