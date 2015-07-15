@@ -6,7 +6,6 @@
         <annotation>@org.jboss.managed.api.annotation.ManagementObject(name="TransactionManager",componentType=@org.jboss.managed.api.annotation.ManagementComponent(type = "MCBean", subtype = "JTA"),targetInterface=com.arjuna.ats.jbossatx.jta.TransactionManagerServiceMBean.class)</annotation>
 
         <!-- property name="transactionTimeout">300</property -->
-        <property name="transactionTimeout">300</property>
         <property name="objectStoreDir">${jboss.server.data.dir}/tx-object-store</property>
         <property name="mbeanServer"><inject bean="JMXKernel" property="mbeanServer"/></property>
 
