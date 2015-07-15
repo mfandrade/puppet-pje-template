@@ -42,9 +42,9 @@ JAVA_HOME="/usr/java/default"
 # Specify options to pass to the Java VM.
 #
 if [ "x$JAVA_OPTS" = "x" ]; then
-   JAVA_OPTS="-Xms8192M -Xmx8192M -XX:PermSize=512M -XX:MaxPermSize=512M "
+   JAVA_OPTS="-Xms8g -Xmx8g -XX:PermSize=512m -XX:MaxPermSize=512m "
    JAVA_OPTS="$JAVA_OPTS -Dorg.jboss.resolver.warning=true"
-   JAVA_OPTS="$JAVA_OPTS -Dsun.rmi.dgc.client.gcInterval=900000 -Dsun.rmi.dgc.server.gcInterval=900000 "
+   JAVA_OPTS="$JAVA_OPTS -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000 "
    JAVA_OPTS="$JAVA_OPTS -Dsun.lang.ClassLoader.allowArraySyntax=true"
 
    # Some graphics handling code may try to access native windowing libraries 
