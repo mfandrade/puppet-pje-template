@@ -3,4 +3,5 @@
 *.war
 stash-area/
 *~
+.*swp
 pjereport/
