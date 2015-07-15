@@ -42,7 +42,7 @@ JAVA_HOME="/usr/java/default"
 # Specify options to pass to the Java VM.
 #
 if [ "x$JAVA_OPTS" = "x" ]; then
-   JAVA_OPTS="-Xms8g -Xmx8g -XX:PermSize=512m -XX:MaxPermSize=512m "
+   JAVA_OPTS="-Xms16m -Xmx2g -XX:PermSize=16m -XX:MaxPermSize=256m "
    JAVA_OPTS="$JAVA_OPTS -Dorg.jboss.resolver.warning=true"
    JAVA_OPTS="$JAVA_OPTS -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000 "
    JAVA_OPTS="$JAVA_OPTS -Dsun.lang.ClassLoader.allowArraySyntax=true"
