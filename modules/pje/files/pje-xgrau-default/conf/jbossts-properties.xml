@@ -239,8 +239,8 @@
         <!--
 			com.arjuna.ats.internal.jta.transaction.jts.UserTransactionImple
 			-->
-        <property name="com.arjuna.ats.jta.recovery.XAResourceRecovery.JBMESSAGING1"
-           value="org.jboss.jms.server.recovery.MessagingXAResourceRecovery;java:/DefaultJMSProvider"/> 
+        <!-- property name="com.arjuna.ats.jta.recovery.XAResourceRecovery.JBMESSAGING1"
+           value="org.jboss.jms.server.recovery.MessagingXAResourceRecovery;java:/DefaultJMSProvider"/ --> 
     </properties>
     <properties depends="arjuna,txoj,jta" name="recoverymanager">
         <!--

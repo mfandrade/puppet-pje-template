@@ -30,7 +30,10 @@ class pje::profile($jboss_home = "/srv/jboss", $base_profile = "default", $profi
     "$jboss_home/server/$profile_name/deploy/properties-service.xml",
     "$jboss_home/server/$profile_name/deploy/schedule-manager-service.xml",
     "$jboss_home/server/$profile_name/deploy/scheduler-service.xml",
-    "$jboss_home/server/$profile_name/deploy/sqlexception-service.xml"
+    "$jboss_home/server/$profile_name/deploy/sqlexception-service.xml",
+    "$jboss_home/server/$profile_name/deployers/bsh.deployer",
+    "$jboss_home/server/$profile_name/deployers/xnio.deployer",
+    "$jboss_home/server/$profile_name/deployers/messaging-definitions-jboss-beans.xml"
   ]
 
   file { $remove_from_deploy_folder:
@@ -69,17 +72,5 @@ class pje::profile($jboss_home = "/srv/jboss", $base_profile = "default", $profi
     path    => "$jboss_home/server/$profile_name/deploy/PJE-ds.xml",
     content => template('pje/PJE-ds.xml.erb'),
   }
-
-  file { 'jmx-console-users.properties':
-    ensure => present,
-    path   => "$jboss_home/server/$profile_name/conf/props/jmx-console-users.properties",
-    source => 'puppet:///modules/pje/jmx-console-users.properties',
-  }
-  file { 'jboss-log4j.xml':
-    ensure => present,
-    path   => "$jboss_home/server/$profile_name/conf/jboss-log4j.xml",
-    source => 'puppet:///modules/pje/jboss-log4j.xml',
-  }
-
 
 }

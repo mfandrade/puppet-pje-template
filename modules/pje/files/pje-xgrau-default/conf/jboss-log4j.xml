@@ -40,7 +40,12 @@
 
       <layout class="org.apache.log4j.PatternLayout">
          <!-- The default pattern: Date Priority [Category] (Thread) Message\n -->
-         <param name="ConversionPattern" value="%d %-5p [%c] (%t) %m%n"/>
+         <!-- RedHat - rsoares - 04112011 -->
+         <!-- param name="ConversionPattern" value="%d %-5p [%c] (%t) %m%n"/ -->
+         <!-- tuned pattern  -->
+         <param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c] %m%n"/>
+         <!-- Write log events in memory instead flush directly to disk -->
+         <param name="ImmediateFlush" value="false"/>
 
          <!-- The full pattern: Date MS Priority [Category] (Thread:NDC) Message\n
          <param name="ConversionPattern" value="%d %-5r %-5p [%c] (%t:%x) %m%n"/>
@@ -65,28 +70,35 @@
    <!-- ============================== -->
    <!-- Append messages to the console -->
    <!-- ============================== -->
-
+   <!-- RedHat - rsoares - 03102011
    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
       <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
       <param name="Target" value="System.out"/>
       <param name="Threshold" value="INFO"/>
 
       <layout class="org.apache.log4j.PatternLayout">
-         <!-- The default pattern: Date Priority [Category] Message\n -->
          <param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n"/>
       </layout>
    </appender>
+   -->
 
    <!-- ====================== -->
    <!-- More Appender examples -->
    <!-- ====================== -->
 
-   <!-- Buffer events and log them asynchronously
+   <!-- Buffer events and log them asynchronously -->
+   <!-- RedHat - rsoares - 03112011 -->
+   <!--
    <appender name="ASYNC" class="org.apache.log4j.AsyncAppender">
      <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
      <appender-ref ref="FILE"/>
+   -->
+
+     <!--
      <appender-ref ref="CONSOLE"/>
      <appender-ref ref="SMTP"/>
+     -->
+   <!--
    </appender>
    -->
 
@@ -175,7 +187,18 @@
    <!-- ================ -->
    <!-- Limit categories -->
    <!-- ================ -->
-
+   
+   <!-- elimina os sysout -->
+   <category name="STDOUT">
+      <!--priority value="ERROR"/-->
+      <priority value="INFO"/>
+   </category>
+   
+   <!-- elimina os logs do hibernate -->
+   <category name="org.hibernate">
+      <priority value="ERROR"/>
+   </category>
+   
    <!-- Limit the org.apache category to INFO as its DEBUG is verbose -->
    <category name="org.apache">
       <priority value="INFO"/>
@@ -183,7 +206,7 @@
    
    <!-- Limit the jacorb category to WARN as its INFO is verbose -->
    <category name="jacorb">
-      <priority value="WARN"/>
+      <priority value="ERROR"/>
    </category>
    
    <!-- Limit the jacorb.config category to ERROR -->
@@ -198,37 +221,42 @@
       | SEVERE, WARNING, CONFIG, FINE, FINER, FINEST
    -->
    <category name="javax.enterprise.resource.webcontainer.jsf">
-     <priority value="INFO" class="org.jboss.logging.log4j.JDKLevel"/>
+     <priority value="SEVERE" class="org.jboss.logging.log4j.JDKLevel"/>
+   </category>
+
+   <!-- elimina os sysout -->
+   <category name="facelets">
+      <priority value="SEVERE" class="org.jboss.logging.log4j.JDKLevel"/>
    </category>
    
    <!-- Limit the org.jgroups category to WARN as its INFO is verbose -->
    <category name="org.jgroups">
-      <priority value="WARN"/>
+      <priority value="ERROR"/>
    </category>
    
    <!-- Limit the org.quartz category to INFO as its DEBUG is verbose -->
    <category name="org.quartz">
-      <priority value="INFO"/>
+      <priority value="ERROR"/>
    </category>
    
    <!-- Limit the com.sun category to INFO as its FINE is verbose -->
    <category name="com.sun">
-      <priority value="INFO"/>
+      <priority value="ERROR"/>
    </category>
    
    <!-- Limit the sun category to INFO as its FINE is verbose -->
    <category name="sun">
-      <priority value="INFO"/>
+      <priority value="ERROR"/>
    </category>
    
    <!-- Limit the javax.xml.bind category to INFO as its FINE is verbose -->
    <category name="javax.xml.bind">
-      <priority value="INFO"/>
+      <priority value="ERROR"/>
    </category>
 
    <!-- Limit the springframework category to WARN-->
    <category name="org.springframework">
-     <priority value="WARN"/>
+     <priority value="ERROR"/>
    </category> 
   
    <!-- Limit JBoss categories
@@ -239,32 +267,27 @@
 
    <!-- Limit the JSR77 categories -->
    <category name="org.jboss.management">
-      <priority value="INFO"/>
+      <priority value="ERROR"/>
    </category>
-
-   <!-- Limit the verbose facelets compiler -->
-   <category name="facelets.compiler">
-      <priority value="WARN"/>
-   </category>
-   
+ 
    <!-- Limit the verbose ajax4jsf cache initialization -->
    <category name="org.ajax4jsf.cache">
-      <priority value="WARN"/>
+      <priority value="ERROR"/>
    </category>
    
    <!-- Limit the verbose embedded jopr categories -->
    <category name="org.rhq">
-      <priority value="WARN"/>
+      <priority value="ERROR"/>
    </category>
       
    <!-- Limit the verbose seam categories -->
    <category name="org.jboss.seam">
-      <priority value="WARN"/>
+      <priority value="ERROR"/>
    </category>
 
    <!-- Limit the verbose MC4J EMS (lib used by admin-console) categories -->
    <category name="org.mc4j.ems">
-      <priority value="WARN"/>
+      <priority value="ERROR"/>
    </category>
    
    <!-- Show the evolution of the DataSource pool in the logs [inUse/Available/Max]
@@ -282,7 +305,7 @@
    
    <!-- Limit the org.jboss.serial (jboss-serialization) to INFO as its DEBUG is verbose -->
    <category name="org.jboss.serial">
-      <priority value="INFO"/>
+      <priority value="ERROR"/>
    </category>
   
    <!-- Decrease the priority threshold for the org.jboss.varia category
@@ -291,11 +314,24 @@
    </category>
    -->
    
-   <!-- Enable JBossWS message tracing
+   <!-- Enable JBossWS message tracing -->
    <category name="org.jboss.ws.core.MessageTrace">
-     <priority value="TRACE"/>
+     <priority value="ERROR"/>
    </category>
-   -->
+
+   <!-- estas duas categorias foram criadas pelo Alayr, para diminuir a verbosidade do log quando colocado em INFO, 
+        para analisar o Verificador Periodico-->
+
+   <category name="org.jboss.ws.metadata.wsdl.WSDLDefinitions">
+   <priority value="ERROR"/>
+   </category>
+ 
+       
+   <category name="org.ajax4jsf.renderkit.AjaxRendererUtils">
+   <priority value="ERROR"/>
+   </category>
+
+<!-- -->
    
    <!--
       | An example of enabling the custom TRACE level priority that is used
@@ -383,8 +419,11 @@
          so the full JBoss system property format is not supported; e.g.
          setting a default via ${jboss.server.log.threshold:WARN} will not work.         
        -->
-      <priority value="${jboss.server.log.threshold}"/>
-      <appender-ref ref="CONSOLE"/>
+      <!--priority value="${jboss.server.log.threshold}"/ -->
+      <priority value="INFO"/>
+      <!-- RedHat - rsoares - 03102011 -->
+      <!-- appender-ref ref="ASYNC"/ -->
+      <!-- appender-ref ref="CONSOLE"/ -->
       <appender-ref ref="FILE"/>
    </root>
 

@@ -45,7 +45,6 @@
      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss.jca:service=CachedConnectionManager", exposedInterface=org.jboss.resource.connectionmanager.CachedConnectionManagerMBean.class)</annotation>
 
      <!-- Whether to track unclosed connections and close them -->
-     <!-- RedHat - rsoares - 03102011 -->
      <property name="debug">true</property>
 
      <!-- Whether to throw an error for unclosed connections (true) or just log a warning (false) -->
