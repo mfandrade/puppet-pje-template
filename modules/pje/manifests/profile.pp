@@ -39,10 +39,20 @@ class pje::profile($jboss_home = "/srv/jboss", $base_profile = "default", $profi
     require => File["$profile_name"],
   }
 
-  $ds_servername    = '10.8.14.206'
-  $ds_databasename  = 'pje_1grau_producao'
-  $ds_base_username = 'pje_usuario_servico'
-  $ds_password      = 'PjEcSjT'
+  $ds_servername      = '10.8.14.206'
+  $ds_databasename    = 'pje_1grau_producao'
+  $ds_api_username    = 'pje_usuario_servico_api'
+  $ds_api_password    = 'PjEcSjT'
+  $ds_api_minpoolsize = 1
+  $ds_api_maxpoolsize = 20
+  $ds_gim_username    = 'pje_usuario_servico_gim'
+  $ds_gim_password    = 'PjEcSjT'
+  $ds_gim_minpoolsize = 1
+  $ds_gim_maxpoolsize = 20
+  $ds_pje_username    = 'pje'
+  $ds_pje_password    = 'PjEcSjT'
+  $ds_pje_minpoolsize = 5
+  $ds_pje_maxpoolsize = 40
 
   file { 'API-ds.xml':
     ensure  => present,
@@ -53,6 +63,11 @@ class pje::profile($jboss_home = "/srv/jboss", $base_profile = "default", $profi
     ensure  => present,
     path    => "$jboss_home/server/$profile_name/deploy/GIM-ds.xml",
     content => template('pje/GIM-ds.xml.erb'),
+  }
+  file { 'PJE-ds.xml':
+    ensure  => present,
+    path    => "$jboss_home/server/$profile_name/deploy/PJE-ds.xml",
+    content => template('pje/PJE-ds.xml.erb'),
   }
 
 
