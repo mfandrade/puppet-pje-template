@@ -12,7 +12,7 @@
 
       If 'webServiceHost' is not set, JBossWS uses requesters protocol host when rewriting the <soap:address>.
     -->
-    <property name="webServiceHost">${jboss.bind.address}</property>
+    <!-- property name="webServiceHost">${jboss.bind.address}</property> -->
     <property name="modifySOAPAddress">true</property>
 
     <!--
