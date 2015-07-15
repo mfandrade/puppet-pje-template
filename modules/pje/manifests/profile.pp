@@ -1,10 +1,8 @@
-#class pje::profile($jboss_home = "/srv/jboss", $base_profile = "default", $profile_name = "pje-1grau-default") {
-class pje::profile(
-  $jboss_home      = "/srv/jboss",
+#class pje::profile(
+define pje::profile(
   $profile_name    = "pje-1grau-default",
   $binding_ports   = "ports-default",
   $binding_ipaddr  = '10.8.17.222',
-  $jvmroute        = 'pje1a',
   $jmxremote_port  = 9001,
   $quartz          = false,
   $db_server       = '10.8.14.206',
@@ -22,6 +20,9 @@ class pje::profile(
   $minpoolsize_gim = 1,
   $maxpoolsize_gim = 20
 ) {
+
+  $jvmroute   = $name
+  $jboss_home = $::pje::jboss_home
   
   file { "$profile_name":
     path    => "$jboss_home/server/$profile_name",
