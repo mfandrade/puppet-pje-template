@@ -1,0 +1,63 @@
+<!--
+  ~ Jopr Management Platform
+  ~ Copyright (C) 2005-2009 Red Hat, Inc.
+  ~ All rights reserved.
+  ~
+  ~ This program is free software; you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License, version 2, as
+  ~ published by the Free Software Foundation, and/or the GNU Lesser
+  ~ General Public License, version 2.1, also as published by the Free
+  ~ Software Foundation.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License and the GNU Lesser General Public License
+  ~ for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ and the GNU Lesser General Public License along with this program;
+  ~ if not, write to the Free Software Foundation, Inc.,
+  ~ 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:remove>
+    <!-- Set the content type to "text/html" to ensure "application/xhtml+xml", which would put Firefox and
+  other Gecko-based browsers into XML mode (which requires pages to be well-formed XML), is not used.
+  We also specify the charset/encoding here, since we cannot specify it via the xml prolog, since
+  including an xml prolog causes IE6 to go into the undesirable "quirks mode".
+  (see https://jira.jboss.org/jira/browse/EMBJOPR-19) -->
+</ui:remove>
+<f:view contentType="text/html; charset=UTF-8">
+
+    <head>
+        <base href="#{baseUrl}"/>
+        <title>
+            <ui:insert name="title">#{messages['default.windowTitle']}</ui:insert>
+        </title>
+
+        <link href="css/console-style.css" rel="stylesheet" type="text/css"/>
+        <link href="css/form-style.css" rel="stylesheet" type="text/css"/>
+
+        <link rel="icon" type="image/png" href="images/favicon.png"/>
+        <link rel="apple-touch-icon" href="images/favicon.png"/>
+
+        <script type="text/javascript" src="js/embedded.js"></script>
+    </head>
+    <body>
+    <div class="container">
+        <ui:include src="header.xhtml"/>
+        <ui:insert name="body">body goes here</ui:insert>
+    </div>
+    </body>
+</f:view>
+</html>
+        
