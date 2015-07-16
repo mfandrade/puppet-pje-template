@@ -37,7 +37,7 @@
 #
 class pje($version = undef, $jboss_home = "/srv/jboss") {
   
-  pje::profile { 'pje1a':
+  pje::profile { 'pje1z':
     profile_name    => "pje-1grau-default",
     binding_ports   => "ports-default",
     binding_ipaddr  => '10.8.17.222',
