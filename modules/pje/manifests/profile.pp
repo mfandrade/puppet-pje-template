@@ -27,7 +27,7 @@ define pje::profile(
   file { "$jboss_home":
     ensure => directory,
     owner  => 'jboss',
-    grop   => 'jboss',
+    group   => 'jboss',
   }
   
   file { "$profile_name":
