@@ -23,11 +23,19 @@ define pje::profile(
 
   $jvmroute   = $name
   $jboss_home = $::pje::jboss_home
+
+  file { "$jboss_home":
+    ensure => directory,
+    owner  => 'jboss',
+    grop   => 'jboss',
+  }
   
   file { "$profile_name":
     path    => "$jboss_home/server/$profile_name",
     ensure  => present,
     source  => 'puppet:///modules/pje/pje-xgrau-default',
+    owner   => 'jboss',
+    group   => 'jboss',
     recurse => true,
   }
 
@@ -70,39 +78,72 @@ define pje::profile(
     path   => '/usr/java/default/jre/lib/security/aplicacaojt.keystore',
     ensure => present,
     source => 'puppet:///modules/pje/aplicacaojt.keystore',
+    owner  => 'root',
+    mode   => '0644',
   }
   file { 'drive-postgresql':
     ensure  => present,
     path    => "$jboss_home/common/lib/postgresql-9.3-1103.jdbc4.jar",
     source  => 'puppet:///modules/pje/postgresql-9.3-1103.jdbc4.jar',
+    owner   => 'jboss',
+    mode    => '0644',
   }
 
   file { 'API-ds.xml':
     ensure  => present,
     path    => "$jboss_home/server/$profile_name/deploy/API-ds.xml",
     content => template('pje/API-ds.xml.erb'),
+    owner   => 'jboss',
+    mode    => '0644',
   }
   file { 'GIM-ds.xml':
     ensure  => present,
     path    => "$jboss_home/server/$profile_name/deploy/GIM-ds.xml",
     content => template('pje/GIM-ds.xml.erb'),
+    owner   => 'jboss',
+    mode    => '0644',
   }
   file { 'PJE-ds.xml':
     ensure  => present,
     path    => "$jboss_home/server/$profile_name/deploy/PJE-ds.xml",
     content => template('pje/PJE-ds.xml.erb'),
+    owner   => 'jboss',
+    mode    => '0644',
   }
 
   file { 'run.conf':
     ensure  => present,
     path    => "$jboss_home/server/$profile_name/run.conf",
     content => template('pje/run.conf.erb'),
+    owner   => 'jboss',
+    mode    => '0644',
   }
 
-  file { 'pje-xgrau-default.sh':
+  file { 'pje-1grau-default.sh':
     ensure  => present,
     path    => "$jboss_home/bin/pje-1grau-default.sh",
     content => template('pje/pje-xgrau-default.sh'),
+    owner   => 'root',
+    group   => 'jboss',
+    mode    => '0750',
   }
+  file{ '/etc/init.d/pje1grau':
+    ensure  => link,
+    target  => "$jboss_home/bin/pje-1grau-default.sh",
+    require => File['pje-1grau-default.sh'],
+  }
+#  file { 'pje-2grau-default.sh':
+#    ensure  => present,
+#    path    => "$jboss_home/bin/pje-2grau-default.sh",
+#    content => template('pje/pje-xgrau-default.sh'),
+#    owner   => 'root',
+#    group   => 'jboss',
+#    mode    => '0750',
+#  }
+#  file{ '/etc/init.d/pje2grau':
+#    ensure  => link,
+#    target  => "$jboss_home/bin/pje-2grau-default.sh",
+#    require => File['pje-2grau-default.sh'],
+#  }
 
 }
