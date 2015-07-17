@@ -88,6 +88,7 @@ class jboss ($version, $jboss_home) {
     exec { 'download-install-java6':
       command => "/usr/bin/wget $wget_options $url -O jdk6.bin && /bin/bash jdk6.bin",
       cwd     => '/tmp',
+      timeout => 0,
       unless  => "/bin/rpm -q jdk-1.6.0_45",
     }
 
