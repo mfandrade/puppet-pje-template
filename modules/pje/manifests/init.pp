@@ -59,21 +59,4 @@ class pje($version = undef) {
     require => Class['jboss'],
   }
 
-  pje::profile { 'pje1M':
-    #binding_ipaddr => '0.0.0.0',
-    binding_ports  => 'ports-01',
-    jmxremote_port => '9001',
-    #quartz         => false
-  }
-
-  pje::profile { 'pje2M':
-    binding_ports  => 'ports-02',
-    jmxremote_port => '9002',
-  }
-
-# pje
-# - version
-# - environment (producao|homologacao|treinamento)
-# 
-
 }

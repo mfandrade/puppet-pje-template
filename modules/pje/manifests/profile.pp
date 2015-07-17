@@ -1,4 +1,4 @@
-define pje::profile ( #namevar = jvmroute:
+define pje::profile (
   $binding_ipaddr = '0.0.0.0',
   $binding_ports  = 'ports-default',
   $jmxremote_port = undef,
@@ -8,7 +8,7 @@ define pje::profile ( #namevar = jvmroute:
 
   $jvmroute = $name
 
-  if $jvmroute =~ /^pje([1|2])([A-M])x?$/ {
+  if $jvmroute =~ /^pje([1|2])([a-h])x?$/ { # TODO: considerar também: jbexta2 jbinta1 exa1 exb2 ina1
 
     $grau         = "$1"
     $profile_name = "pje-${grau}grau-default"
@@ -16,7 +16,7 @@ define pje::profile ( #namevar = jvmroute:
 
   } else {
 
-    fail("pje::profile <namevar> invalid for jvmRoute")
+    fail("PJE profile '$name' is an invalid jvmRoute pattern")
 
   }
 
