@@ -35,9 +35,14 @@
 #
 # Copyright 2015 Your name here, unless otherwise noted.
 #
-class pje($version = undef, $jboss_home = "/srv/jboss") {
+class pje($version = undef) {
 
-include pje::params
+  include pje::params
+
+  class {'jboss':
+    jboss_home => $::pje::params::jboss_home,
+  }
+
 # $jboss_home      = '/srv/jboss'
 # $db_server       = undef
 # $db_name         = undef
@@ -81,27 +86,27 @@ include pje::params
 
 
 
-  pje::profile { 'pje1z':
-    profile_name    => "pje-1grau-default",
-    binding_ports   => "ports-default",
-    binding_ipaddr  => '10.8.17.222',
-    jmxremote_port  => 9001,
-    quartz          => false,
-    db_server       => '10.8.14.206',
-    db_name         => 'pje_1grau_producao',
-    username_pje    => 'pje',
-    password_pje    => 'PjEcSjT',
-    minpoolsize_pje => 5,
-    maxpoolsize_pje => 40,
-    username_api    => 'pje_usuario_servico_api',
-    password_api    => 'PjEcSjT',
-    minpoolsize_api => 1,
-    maxpoolsize_api => 20,
-    username_gim    => 'pje_usuario_servico_gim',
-    password_gim    => 'PjEcSjT',
-    minpoolsize_gim => 1,
-    maxpoolsize_gim => 20,
-  }
+#  pje::profile { 'pje1z':
+#    profile_name    => "pje-1grau-default",
+#    binding_ports   => "ports-default",
+#    binding_ipaddr  => '10.8.17.222',
+#    jmxremote_port  => 9001,
+#    quartz          => false,
+#    db_server       => '10.8.14.206',
+#    db_name         => 'pje_1grau_producao',
+#    username_pje    => 'pje',
+#    password_pje    => 'PjEcSjT',
+#    minpoolsize_pje => 5,
+#    maxpoolsize_pje => 40,
+#    username_api    => 'pje_usuario_servico_api',
+#    password_api    => 'PjEcSjT',
+#    minpoolsize_api => 1,
+#    maxpoolsize_api => 20,
+#    username_gim    => 'pje_usuario_servico_gim',
+#    password_gim    => 'PjEcSjT',
+#    minpoolsize_gim => 1,
+#    maxpoolsize_gim => 20,
+#  }
 
 
 }

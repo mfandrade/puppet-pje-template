@@ -35,7 +35,7 @@
 #
 # Copyright 2015 Your name here, unless otherwise noted.
 #
-class jboss {
+class jboss ($jboss_home) {
 
   if $::osfamily != 'RedHat' {
     fail('Only supported by rpm-based Linux distributions')
@@ -48,8 +48,6 @@ class jboss {
       command => "/usr/bin/wget -c --no-check-certificate --no-cookies --header $accept $url -O- | /bin/bash",
       unless  => "/bin/rpm -q jdk-1.6.0_45",
     }
-
-    $jboss_home = '/srv/jboss'
 
     $jboss_zip       = '/vagrant/modules/jboss/files/jboss-eap-5.1.1.zip'
     $extracted_dir   = 'jboss-eap-5.1'
