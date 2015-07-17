@@ -1,41 +1,81 @@
 # == Class: jboss
 #
-# Full description of class jboss here.
+# Classe para simples instalação do servidor de aplicação JBoss.
+# Esta classe no momento não gerencia muita coisa neste servidor
+# além da definição do diretório JBOSS_HOME.
 #
-# === Parameters
+# Coisas como scripts de inicialização e parametrização em geral
+# possivelmente será feita quando necessárias pelo uso das aplicações
+# implantadas neste servidor.
+# 
+# === Parâmetros
 #
-# Document parameters here.
+# Os únicos parâmetros no momento são:
 #
-# [*sample_parameter*]
-#   Explanation of what this parameter affects and what it defaults to.
-#   e.g. "Specify one or more upstream ntp servers as an array."
+# [*version*]
+#   Parâmetro não utilizado no momento.  Existe para ser definido com
+#   caráter informativo.  Apenas a versão 5.1.1 EAP do JBoss é atualmente
+#   suportada.
 #
-# === Variables
+# [*jboss_home*]
+#   Local onde o servidor de aplicação ficará acessível.  Por padrão,
+#   o diretório de instalação tenta obedecer ao FHS, de forma que este
+#   parâmetro representará um link simbólico para o local efetivo
+#   dentro do diretório de instalação.
 #
-# Here you should define a list of variables that this module would require.
+# Com o tempo, o parâmetro [version] pode definir qual versão do JBoss
+# a ser instalada --talvez com download da rede, dificultada no momento
+# devido à versão Enterprise Application Platform só estar disponível em
+# área restrita do site da RedHat.
 #
-# [*sample_variable*]
-#   Explanation of how this variable affects the funtion of this class and if
-#   it has a default. e.g. "The parameter enc_ntp_servers must be set by the
-#   External Node Classifier as a comma separated list of hostnames." (Note,
-#   global variables should be avoided in favor of class parameters as
-#   of Puppet 2.6.)
+# === Variáveis
 #
-# === Examples
+# Apenas a título informativo e para melhor entendimento do funcionamento
+# deste módulo, tem-se que o mesmo faz uso internamente das seguintes
+# variáveis:
+#
+# [*$::osfamily*]
+#   Na verdade, um fato.  Nesta versão atual, este módulo suporta apenas 
+#   hosts baseados em RPM, que é o formato de distribuição do Java escolhido.
+#
+# [*$accept*] e [*$url*]
+#   Este módulo jboss vai depender do Java JDK para funcionar.  Foi definida
+#   utilização da distribuição Java da Oracle em formato RPM.  Estas variáveis
+#   são utilizadas para download do Java JDK via script.  No futuro, outras
+#   versões e arquiteturas serão suportadas além da JDK 6u45 e i586,
+#   respectivamente.
+#
+# [*$jboss_zip*]
+#   O nome do arquivo zip do JBoss EAP já baixado e disponbilizado.
+#   (TODO: Há que se verificar questões legais de se distribuir este arquivo).
+#
+# [*extracted_dir*]
+#   Nome da pasta gerada quando se descompacta o [$jboss_zip].
+#
+# [*$destination_dir*]
+#   Diretório onde o arquivo será descompactado.  Leia informações sobre o
+#   parâmetro [*$jboss_home*].
+#
+# [*$install_dir*]
+#   Caminho completo do servidor de aplicação extraído do arquivo zip, usando
+#   [*$destination_dir*] e [*$extracted_dir*].
+#
+# === Exemplos
 #
 #  class { 'jboss':
-#    servers => [ 'pool.ntp.org', 'ntp.local.company.com' ],
+#    version    => '5.1.1',
+#    jboss_home => '/srv/jboss',
 #  }
 #
-# === Authors
+# === Autor
 #
-# Author Name <author@domain.com>
+# Marcelo F Andrade <contato@marceloandrade.info>
 #
-# === Copyright
+# === Copyleft
 #
-# Copyright 2015 Your name here, unless otherwise noted.
+# Copyleft 2015 Marcelo F Andrade.  Consulte o arquivo [LICENSE].
 #
-class jboss ($jboss_home) {
+class jboss ($version, $jboss_home) {
 
   if $::osfamily != 'RedHat' {
     fail('Only supported by rpm-based Linux distributions')
@@ -62,10 +102,6 @@ class jboss ($jboss_home) {
     file { "$destination_dir":
       ensure => directory,
     }
-    #file { "$install_dir":
-    #  ensure  => absent,
-    #  require => File["$destination_dir"],
-    #}
 
     exec { 'extract-jboss511':
       command => "/usr/bin/unzip -fo $jboss_zip -d $destination_dir",
