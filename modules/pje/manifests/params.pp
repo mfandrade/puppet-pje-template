@@ -1,0 +1,22 @@
+class pje::params {
+  $jboss_home      = '/srv/jboss'
+  $db_server       = undef
+  $db_name         = undef
+  $username_pje    = 'pje'
+  $password_pje    = 'pje'
+  $minpoolsize_pje = 5
+  $maxpoolsize_pje = 40
+  $username_api    = 'api'
+  $password_api    = 'api'
+  $minpoolsize_api = 1
+  $maxpoolsize_api = 10
+  $username_gim    = 'gim'
+  $password_gim    = 'gim'
+  $minpoolsize_gim = 1
+  $maxpoolsize_gim = 10
+  $quartz          = false
+  $mail_host       = 'correio2.trt8.jus.br'
+  $mail_port       = 25
+  $mail_username   = 'trt8push@trt8.jus.br'
+  $mail_password   = 'tribunal'
+}
