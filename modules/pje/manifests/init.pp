@@ -44,70 +44,36 @@ class pje($version = undef) {
     jboss_home => $::pje::params::jboss_home,
   }
 
-# $jboss_home      = '/srv/jboss'
-# $db_server       = undef
-# $db_name         = undef
-# $username_pje    = 'pje'
-# $password_pje    = 'pje'
-# $minpoolsize_pje = 5
-# $maxpoolsize_pje = 40
-# $username_api    = 'api'
-# $password_api    = 'api'
-# $minpoolsize_api = 1
-# $maxpoolsize_api = 10
-# $username_gim    = 'gim'
-# $password_gim    = 'gim'
-# $minpoolsize_gim = 1
-# $maxpoolsize_gim = 10
-# $quartz          = false
-# $mail_host       = 'correio2.trt8.jus.br'
-# $mail_port       = 25
-# $mail_username   = 'trt8push@trt8.jus.br'
-# $mail_password   = 'tribunal'
+  file { 'aplicacaojt.keystore':
+    path    => '/usr/java/default/jre/lib/security/aplicacaojt.keystore',
+    ensure  => present,
+    source  => 'puppet:///modules/pje/aplicacaojt.keystore',
+    owner   => 'root',
+    mode    => '0644',
+    require => Class['jboss'],
+  }
+  file { 'drive-postgresql':
+    ensure  => present,
+    path    => "$::pje::params::jboss_home/common/lib/postgresql-9.3-1103.jdbc4.jar",
+    source  => 'puppet:///modules/pje/postgresql-9.3-1103.jdbc4.jar',
+    require => Class['jboss'],
+  }
 
+  pje::profile { 'pje1M':
+    #binding_ipaddr => '0.0.0.0',
+    binding_ports  => 'ports-01',
+    jmxremote_port => '9001',
+    #quartz         => false
+  }
 
-# jboss class
-# - tar - install_dir fixo
-# - jboss_home = /srv/jboss
-#  class { 'jboss':
-#    version    => '5.1.1',
-#    jboss_home => $::pje::params::jboss_home,
-#  }
-
-# profile define
-# - grau (1|2)
-# - binding_ipaddr <0.0.0.0>
-# - binding_ports <ports-default>
-# - jmx_port <9001>
+  pje::profile { 'pje2M':
+    binding_ports  => 'ports-02',
+    jmxremote_port => '9002',
+  }
 
 # pje
 # - version
 # - environment (producao|homologacao|treinamento)
 # 
-
-
-
-#  pje::profile { 'pje1z':
-#    profile_name    => "pje-1grau-default",
-#    binding_ports   => "ports-default",
-#    binding_ipaddr  => '10.8.17.222',
-#    jmxremote_port  => 9001,
-#    quartz          => false,
-#    db_server       => '10.8.14.206',
-#    db_name         => 'pje_1grau_producao',
-#    username_pje    => 'pje',
-#    password_pje    => 'PjEcSjT',
-#    minpoolsize_pje => 5,
-#    maxpoolsize_pje => 40,
-#    username_api    => 'pje_usuario_servico_api',
-#    password_api    => 'PjEcSjT',
-#    minpoolsize_api => 1,
-#    maxpoolsize_api => 20,
-#    username_gim    => 'pje_usuario_servico_gim',
-#    password_gim    => 'PjEcSjT',
-#    minpoolsize_gim => 1,
-#    maxpoolsize_gim => 20,
-#  }
-
 
 }
