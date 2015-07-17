@@ -35,9 +35,7 @@
 #
 # Copyright 2015 Your name here, unless otherwise noted.
 #
-class jboss (
-  $jboss_home = '/srv/jboss',
-) {
+class jboss {
 
   if $::osfamily != 'RedHat' {
     fail('Only supported by rpm-based Linux distributions')
@@ -51,7 +49,9 @@ class jboss (
       unless  => "/bin/rpm -q jdk-1.6.0_45",
     }
 
-    $jboss_zip     = '/vagrant/modules/jboss/files/jboss-eap-5.1.1.zip',
+    $jboss_home = '/srv/jboss'
+
+    $jboss_zip     = '/vagrant/modules/jboss/files/jboss-eap-5.1.1.zip'
     $extracted_dir = 'jboss-eap-5.1'
     $destation_dir = '/opt/rh'
     $install_dir   = "$destination_dir/$extracted_dir"
