@@ -24,10 +24,23 @@ define pje::profile(
   $jvmroute   = $name
   $jboss_home = $::pje::jboss_home
 
+  group { 'jboss':
+    ensure => present,
+    gid    => '501',
+  }
+  user { 'jboss':
+    ensure  => present,
+    shell   => '/bin/bash',
+    uid     => '501',
+    gid     => 'jboss',
+    home    => "$jboss_home",
+    require => Group['jboss'],
+  }
+
   file { "$jboss_home":
-    ensure => directory,
+    ensure => present,
     owner  => 'jboss',
-    group   => 'jboss',
+    group  => 'jboss',
   }
   
   file { "$profile_name":

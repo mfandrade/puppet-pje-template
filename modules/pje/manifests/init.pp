@@ -59,17 +59,5 @@ class pje($version = undef, $jboss_home = "/srv/jboss") {
     maxpoolsize_gim => 20,
   }
 
-  group { 'jboss':
-    ensure => present,
-    gid    => 501,
-  }
-
-  user { 'jboss':
-    ensure  => present,
-    gid     => 'jboss',
-    shell   => '/bin/bash',
-    home    => $jboss_home,
-    require => Group['jboss'],
-  }
 
 }
