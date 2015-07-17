@@ -12,6 +12,7 @@ Vagrant.configure(2) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
+  #FIXME: demora 25min para atualizar o guestadditions
   #config.vm.box = "puppetlabs/centos-6.6-32-puppet"
   config.vm.box = "centosjavajboss"
 
@@ -23,6 +24,8 @@ Vagrant.configure(2) do |config|
       config.proxy.http = ENV['https_proxy']
     end
   end
+
+  config.vm.boot_timeout = 600
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -62,6 +65,7 @@ Vagrant.configure(2) do |config|
   
     # Customize the amount of memory on the VM:
     vb.memory = "3584"
+    vb.name = "PJE JBoss Template"
   end
 
   # Define a Vagrant Push strategy for pushing to Atlas. Other push strategies
