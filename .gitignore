@@ -1,7 +1,3 @@
 .vagrant/
-*.box
-*.war
-stash-area/
 *~
 .*swp
-pjereport/
