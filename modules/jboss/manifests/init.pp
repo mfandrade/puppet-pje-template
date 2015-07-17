@@ -107,9 +107,28 @@ class jboss ($version, $jboss_home) {
     }
 
     exec { 'extract-jboss511':
-      command => "/usr/bin/unzip -fo $jboss_zip -d $destination_dir",
+      command => "/usr/bin/unzip -uo $jboss_zip -d $destination_dir",
       onlyif  => "/usr/bin/test -f $jboss_zip",
       require => [Exec['download-install-java6'], Package['unzip'], File["$destination_dir"]],
+    }
+
+    group { 'jboss':
+      ensure => present,
+      gid    => 501,
+    }
+    user { 'jboss':
+      ensure  => present,
+      gid     => 501,
+      uid     => 501,
+      home    => "$jboss_home",
+      require => Group['jboss'],
+    }
+
+    file { "$install_dir":
+      owner   => 'jboss',
+      group   => 'jboss',
+      recurse => true,
+      require => [Exec['extract-jboss511'], User['jboss']],
     }
 
     file { "$jboss_home":
