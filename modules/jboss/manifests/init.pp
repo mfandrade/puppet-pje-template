@@ -81,11 +81,13 @@ class jboss ($version, $jboss_home) {
     fail('Only supported by rpm-based Linux distributions')
   } else {
 
-    $accept = 'Cookie: oraclelicense=accept-securebackup-cookie'
-    $url    = 'http://download.oracle.com/otn-pub/java/jdk/6u45-b06/jdk-6u45-linux-i586-rpm.bin'
+    $accept_header = 'Cookie: oraclelicense=accept-securebackup-cookie'
+    $wget_options  = "-c --no-check-certificate --no-cookies --header '$accept_header'"
+    $url       = 'http://download.oracle.com/otn-pub/java/jdk/6u45-b06/jdk-6u45-linux-i586-rpm.bin'
   
     exec { 'download-install-java6':
-      command => "/usr/bin/wget -c --no-check-certificate --no-cookies --header $accept $url -O- | /bin/bash",
+      command => "/usr/bin/wget $wget_options $url -O jdk6.bin && /bin/bash jdk6.bin",
+      cwd     => '/tmp',
       unless  => "/bin/rpm -q jdk-1.6.0_45",
     }
 
