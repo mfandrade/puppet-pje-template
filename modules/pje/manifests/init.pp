@@ -40,6 +40,7 @@ class pje($version = undef) {
   include pje::params
 
   class {'jboss':
+    version    => '5.1.1',
     jboss_home => $::pje::params::jboss_home,
   }
 
