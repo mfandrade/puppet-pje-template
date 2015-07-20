@@ -12,26 +12,39 @@ define pje::profile (
 
   $jvmroute = $name
 
-  if $jvmroute =~ /^pje([1|2])([a-h])x?$/ { # TODO: considerar também: jbexta2 jbinta1 exa1 exb2 ina1
+  if $jvmroute =~ /^pje([12])([a-z])x?$/ { # EXEMPLO: pje1a, pje2bx
+    $grau = "$1"
 
-    $grau         = "$1"
-    $profile_name = "pje-${grau}grau-default"
-    $profile_dir  = "$::pje::params::jboss_home/server/$profile_name"
+  } elsif $jvmroute =~ /^(int|ext)[a-z]([12])$/ { # EXEMPLO: inta1, extb2
+    $grau = "$2"
 
   } else {
-
     fail("PJE profile '$name' is an invalid jvmRoute pattern")
-
   }
+  $profile_name = "pje-${grau}grau-default"
+  $profile_dir  = "$::pje::params::jboss_home/server/$profile_name"
 
   include pje::params
 
-  file { "$profile_name":
-    path    => "$::pje::params::jboss_home/server/$profile_name",
-    ensure  => present,
-    source  => 'puppet:///modules/pje/pje-xgrau-default',
-    recurse => true,
+  if $::pje::params::runas_user != undef {
+    $user = $::pje::params::runas_user
+
+    file { "$profile_name":
+      path    => "$::pje::params::jboss_home/server/$profile_name",
+      ensure  => present,
+      owner   => $user,
+      source  => 'puppet:///modules/pje/pje-xgrau-default',
+      recurse => true,
+    }
+  } else {
+    file { "$profile_name":
+      path    => "$::pje::params::jboss_home/server/$profile_name",
+      ensure  => present,
+      source  => 'puppet:///modules/pje/pje-xgrau-default',
+      recurse => true,
+    }
   }
+
 
   $remove_from_deploy_folder = [
     "$profile_dir/deploy/ROOT.war",
