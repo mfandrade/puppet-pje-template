@@ -1,8 +1,12 @@
 define pje::profile (
-  $binding_ipaddr = '0.0.0.0',
-  $binding_ports  = 'ports-default',
-  $jmxremote_port = undef,
-  $quartz         = false
+  $binding_ipaddr  = '0.0.0.0',
+  $binding_ports   = 'ports-default',
+  $jmxremote_port  = undef,
+  $quartz          = false,
+  $jvm_heapsize    = $::pje::params::jvm_heapsize,
+  $jvm_maxheapsize = $::pje::params::jvm_maxheapsize,
+  $jvm_permsize    = $::pje::params::jvm_permsize,
+  $jvm_maxpermsize = $::pje::params::jvm_maxpermsize
 
 ) {
 

@@ -19,4 +19,8 @@ class pje::params {
   $mail_port       = 25
   $mail_username   = 'trt8push@trt8.jus.br'
   $mail_password   = 'tribunal'
+  $jvm_heapsize    = '16m'
+  $jvm_maxheapsize = '2g'
+  $jvm_permsize    = '128m'
+  $jvm_maxpermsize = '512m'
 }
