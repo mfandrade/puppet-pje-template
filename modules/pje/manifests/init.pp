@@ -49,6 +49,7 @@ class pje($version = undef) {
     ensure  => present,
     source  => 'puppet:///modules/pje/aplicacaojt.keystore',
     owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     require => Class['jboss'],
   }
@@ -56,6 +57,8 @@ class pje($version = undef) {
     ensure  => present,
     path    => "$::pje::params::jboss_home/common/lib/postgresql-9.3-1103.jdbc4.jar",
     source  => 'puppet:///modules/pje/postgresql-9.3-1103.jdbc4.jar',
+    owner   => 'root',
+    group   => 'root',
     require => Class['jboss'],
   }
 

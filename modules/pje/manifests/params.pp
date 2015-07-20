@@ -1,5 +1,6 @@
 class pje::params {
   $jboss_home      = '/srv/jboss'
+  $runas_user      = 'jboss'
   $db_server       = undef
   $db_name         = undef
   $username_pje    = 'pje'

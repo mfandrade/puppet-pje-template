@@ -46,7 +46,8 @@ Vagrant.configure(2) do |config|
   # your network.
   # config.vm.network "public_network"
 
-  config.vm.hostname = "pje8-jb-int-z.trt8.net"
+  #config.vm.hostname = "pje8-jb-int-z.trt8.net"
+  config.vm.hostname = "pje8-jb-inta.trt8.net"
 
   # Share an additional folder to the guest VM. The first argument is
   # the path on the host to the actual folder. The second argument is

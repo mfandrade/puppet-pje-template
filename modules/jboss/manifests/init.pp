@@ -123,9 +123,10 @@ class jboss ($version, $jboss_home) {
       home    => "$jboss_home",
       require => Group['jboss'],
     }
-
-    exec { "chown jboss.jboss -R $install_dir":
-      path    => '/bin',
+    file { "$install_dir":
+      owner   => 'jboss',
+      group   => 'jboss',
+      recurse => true,
       require => [Exec['extract-jboss511'], User['jboss']],
     }
 
