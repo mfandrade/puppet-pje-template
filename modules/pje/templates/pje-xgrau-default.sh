@@ -21,7 +21,7 @@
 # DO NOT EDIT BELOW THIS LINE (UNLESS YOU KNOW WHAT YOU ARE DOING)
 # ------------------------------------------------------------------------------
 # JNDI service port (used for service shutdown)
-  JBOSS_JNP_PORT="1099"
+  JBOSS_JNP_PORT="1099" # TODO: lógica a depender de ports
 # JAVA_HOME
   JAVA_HOME=${JAVA_HOME:-"/usr/java/default"}
 # JBOSS HOME
@@ -29,7 +29,7 @@
 # log folder
   JBOSS_LOG_DIR=${JBOSS_LOG_DIR:-"$JBOSS_HOME/server/$JBOSS_PROFILE/log"}
 # define the user under which jboss will run, or use 'RUNASIS' to run as the current user
-  JBOSS_USER="jboss"
+  JBOSS_USER="<%= @jboss_user %>"
 # clear work and tmp dirs?
   CLEAR_WORK_TMP="Y"
 

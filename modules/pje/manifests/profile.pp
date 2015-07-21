@@ -1,15 +1,21 @@
 define pje::profile (
-  $binding_ipaddr  = '0.0.0.0',
-  $binding_ports   = 'ports-default',
-  $jmxremote_port  = undef,
-  $quartz          = false,
-  $jvm_heapsize    = $::pje::params::jvm_heapsize,
-  $jvm_maxheapsize = $::pje::params::jvm_maxheapsize,
-  $jvm_permsize    = $::pje::params::jvm_permsize,
-  $jvm_maxpermsize = $::pje::params::jvm_maxpermsize
-
+  $binding_to         = undef,
+  $jmxremote_port     = undef,
+  $exec_quartz        = $::pje::params::exec_quartz,
+  $ds_databasename    = undef,
+  $ds_minpoolsize_pje = $::pje::params::ds_minpoolsize_pje,
+  $ds_maxpoolsize_pje = $::pje::params::ds_maxpoolsize_pje,
+  $ds_minpoolsize_api = $::pje::params::ds_minpoolsize_api,
+  $ds_maxpoolsize_api = $::pje::params::ds_maxpoolsize_api,
+  $ds_minpoolsize_gim = $::pje::params::ds_minpoolsize_gim,
+  $ds_maxpoolsize_gim = $::pje::params::ds_maxpoolsize_gim,
+  $jvm_heapsize       = $::pje::params::jvm_heapsize,
+  $jvm_maxheapsize    = $::pje::params::jvm_maxheapsize,
+  $jvm_permsize       = $::pje::params::jvm_permsize,
+  $jvm_maxpermsize    = $::pje::params::jvm_maxpermsize
 ) {
 
+# ------------------------------------------------------------------------
   $jvmroute = $name
 
   if $jvmroute =~ /^pje([12])([a-z])x?$/ { # EXEMPLO: pje1a, pje2bx
@@ -24,25 +30,55 @@ define pje::profile (
   $profile_name = "pje-${grau}grau-default"
   $profile_dir  = "$::pje::params::jboss_home/server/$profile_name"
 
+  if $ds_databasename == undef {
+    $ds_databasename = "pje_${grau}grau_producao"
+  }
+
+
+# ------------------------------------------------------------------------
   include pje::params
 
-  if $::pje::params::runas_user != undef {
-    $user = $::pje::params::runas_user
 
-    file { "$profile_name":
-      path    => "$::pje::params::jboss_home/server/$profile_name",
-      ensure  => present,
-      owner   => $user,
-      source  => 'puppet:///modules/pje/pje-xgrau-default',
-      recurse => true,
-    }
+  if ($binding_to == 'ports-default') or ($binding_to =~ /^ports-0[1-3]$/) {
+    $binding_ipaddr = '0.0.0.0'
+    $binding_ports  = $binding_to
+
+  } elsif ($binding_to =~ /^[0-9]{1,3}(\.[0-9]{1,3}){3}$/) {
+    $binding_ipaddr = $binding_to
+    $binding_ports  = 'ports-default'
+
   } else {
-    file { "$profile_name":
-      path    => "$::pje::params::jboss_home/server/$profile_name",
-      ensure  => present,
-      source  => 'puppet:///modules/pje/pje-xgrau-default',
-      recurse => true,
-    }
+    fail('You need to specify an IP address or a default port set to bind to')
+  }
+
+
+  if ($::pje::params::runas_user != undef) {
+    $jboss_user  = $::pje::params::runas_user
+    $owner_group = $::pje::params::runas_user
+  } else {
+    $jboss_user  = 'RUNASIS' # para o script de inicialização
+    $owner_group = 'root'
+  }
+  file { "$profile_name":
+    path    => "$::pje::params::jboss_home/server/$profile_name",
+    ensure  => present,
+    owner   => $owner_group,
+    group   => $owner_group,
+    source  => 'puppet:///modules/pje/pje-xgrau-default',
+    recurse => true,
+  }
+  file { "$profile_name.sh":
+    ensure  => present,
+    path    => "$::pje::params::jboss_home/bin/$profile_name.sh",
+    content => template('pje/pje-xgrau-default.sh'),
+    owner   => $owner_group,
+    group   => $owner_group,
+    mode    => '0750',
+  }
+  file{ "/etc/init.d/pje${grau}grau":
+    ensure  => link,
+    target  => "$::pje::params::jboss_home/bin/$profile_name.sh",
+    require => File["$profile_name.sh"],
   }
 
 
@@ -100,18 +136,5 @@ define pje::profile (
     content => template('pje/run.conf.erb'),
   }
 
-  file { "$profile_name.sh":
-    ensure  => present,
-    path    => "$::pje::params::jboss_home/bin/$profile_name.sh",
-    content => template('pje/pje-xgrau-default.sh'),
-    owner   => 'root',
-    group   => 'jboss',
-    mode    => '0750',
-  }
-  file{ "/etc/init.d/pje${grau}grau":
-    ensure  => link,
-    target  => "$::pje::params::jboss_home/bin/$profile_name.sh",
-    require => File["$profile_name.sh"],
-  }
 
 }

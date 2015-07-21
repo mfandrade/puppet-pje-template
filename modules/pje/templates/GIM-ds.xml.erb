@@ -8,12 +8,12 @@
 <datasources>
   <no-tx-datasource>
     <jndi-name>PJE_MODULO_GIM_DS</jndi-name>
-    <connection-url>jdbc:postgresql://<%= @db_server %>:5432/<%= @db_name %></connection-url>
+    <connection-url>jdbc:postgresql://<%= scope['::pje::params::ds_servername'] %>:<%= scope['::pje::params::ds_portnumber'] %>/<%= @ds_databasename %></connection-url>
     <driver-class>org.postgresql.Driver</driver-class>
-    <user-name><%= @username_gim %></user-name>
-    <password><%= @password_gim %></password>
-    <min-pool-size><%= @minpoolsize_gim %></min-pool-size>
-    <max-pool-size><%= @maxpoolsize_gim %></max-pool-size>
+    <user-name><%= scope['::pje::params::ds_username_gim'] %></user-name>
+    <password><%= scope['::pje::params::ds_password_gim'] %></password>
+    <min-pool-size><%= @ds_minpoolsize_gim %></min-pool-size>
+    <max-pool-size><%= @ds_maxpoolsize_gim %></max-pool-size>
     <idle-timeout-minutes>5</idle-timeout-minutes>
     <validate-on-match>true</validate-on-match>
     <valid-connection-checker-class-name>org.jboss.resource.adapter.jdbc.vendor.PostgreSQLValidConnectionChecker</valid-connection-checker-class-name>

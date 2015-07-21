@@ -42,10 +42,9 @@ JAVA_HOME="/usr/java/default"
 # Specify options to pass to the Java VM.
 #
 if [ "x$JAVA_OPTS" = "x" ]; then
-   JAVA_OPTS="-Xms<%= @jvm_heapsize %> -Xmx<%= @jvm_maxheapsize %>"
-   JAVA_OPTS="$JAVA_OPTS -XX:PermSize=<%= @jvm_permsize %> -XX:MaxPermSize=<%= @jvm_maxpermsize %>"
+   JAVA_OPTS="-Xms<%= @jvm_heapsize %> -Xmx<%= @jvm_maxheapsize %> -XX:PermSize=<%= @jvm_permsize %> -XX:MaxPermSize=<%= @jvm_maxpermsize %>"
    JAVA_OPTS="$JAVA_OPTS -Dorg.jboss.resolver.warning=true"
-   JAVA_OPTS="$JAVA_OPTS -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000 "
+   JAVA_OPTS="$JAVA_OPTS -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000"
    JAVA_OPTS="$JAVA_OPTS -Dsun.lang.ClassLoader.allowArraySyntax=true"
 
    # Some graphics handling code may try to access native windowing libraries 
@@ -97,14 +96,14 @@ if [ "x$JAVA_OPTS" = "x" ]; then
    DATE_START=`date  +%d-%m-%Y-%H%M`
 
    # Habilita a geração do DUMP de memória (HPROF)
-   JAVA_OPTS="$JAVA_OPTS -XX:+HeapDumpOnOutOfMemoryError "
-   JAVA_OPTS="$JAVA_OPTS -XX:HeapDumpPath=/var/log/jboss/heapdump_$DATE_START.hprof "
+   JAVA_OPTS="$JAVA_OPTS -XX:+HeapDumpOnOutOfMemoryError"
+   JAVA_OPTS="$JAVA_OPTS -XX:HeapDumpPath=/var/log/jboss/heapdump_$DATE_START.hprof"
 
    # Habilita a geração de coredump (BIN)
-   JAVA_OPTS="$JAVA_OPTS -XX:OnError='gcore -o /var/log/jboss/jboss_PID%p_$DATE_START.coredump %p' "
-   JAVA_OPTS="$JAVA_OPTS -XX:ErrorFile=/var/log/jboss/hs_err_jboss_PID%p_$DATE_START.log "
+   JAVA_OPTS="$JAVA_OPTS -XX:OnError='gcore -o /var/log/jboss/jboss_PID%p_$DATE_START.coredump %p'"
+   JAVA_OPTS="$JAVA_OPTS -XX:ErrorFile=/var/log/jboss/hs_err_jboss_PID%p_$DATE_START.log"
    #Apenas 1 instancia por grau pode ter esse parametro como true
-   JAVA_OPTS="$JAVA_OPTS -Dpje.quartz=<%= @quartz %>"
+   JAVA_OPTS="$JAVA_OPTS -Dpje.quartz=<%= @exec_quartz %>"
 
    # JMX
    JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote"
