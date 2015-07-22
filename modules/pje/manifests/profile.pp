@@ -15,6 +15,8 @@ define pje::profile (
   $jvm_maxpermsize    = $::pje::params::jvm_maxpermsize
 ) {
 
+  include pje
+
 # ------------------------------------------------------------------------
   $jvmroute = $name
 
