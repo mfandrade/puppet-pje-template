@@ -73,7 +73,7 @@ define pje::profile (
     content => template('pje/pje-xgrau-default.sh'),
     owner   => $owner_group,
     group   => $owner_group,
-    mode    => '0750',
+    mode    => '0755',
   }
 
 
