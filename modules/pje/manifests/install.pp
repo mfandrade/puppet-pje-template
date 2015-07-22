@@ -2,7 +2,7 @@
 #
 # Classe para gerenciar os requisitos básicos para se executar o PJE.  Neste
 # momento, a saber, o servidor de aplicação JBoss (vide módulo específico) e os
-# arquivos necessários: keystore e driver do postgresql.
+# arquivos necessários: keystore, driver do postgresql e init script.
 #
 # === Parâmetros
 #
@@ -15,7 +15,10 @@
 # [*jboss_home*]
 #   Variável definida com o valor do parâmetro correspondente para reduzir
 #   tamanho da linha e evitar alerta do `puppet-lint`.
-
+#
+# [*initscript_name*]
+#   Idem para a variável jboss_home.
+#
 # === Exemplo
 #
 #```
@@ -52,9 +55,26 @@ class pje::install {
     ensure  => present,
     path    => "${jboss_home}/common/lib/postgresql-9.3-1103.jdbc4.jar",
     source  => 'puppet:///modules/pje/postgresql-9.3-1103.jdbc4.jar',
+    require => Class['jboss'], # por causa do jboss_home, obviamente
+  }
+
+  $initscript = $::pje::params::initscript_name
+  file { "/etc/init.d/${initscript}":
+    ensure  => present,
+    content => template('pje/initscript.erb'),
     owner   => 'root',
     group   => 'root',
-    require => Class['jboss'], # por causa do jboss_home, obviamente
+    mode    => '0755',
+    require => Class['jboss'], # por causa do bin/run.sh
+  }
+
+  file { ['/etc/init.d/pje-1grau-default.sh',
+          '/etc/init.d/pje-2grau-default.sh',
+          '/etc/init.d/pje-1grau-default',
+          '/etc/init.d/pje-2grau-default',
+          '/etc/init.d/pje1grau',
+          '/etc/init.d/pje2grau']:
+    ensure => absent,
   }
 
 }

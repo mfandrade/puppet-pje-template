@@ -1,0 +1,29 @@
+#!/bin/sh
+# chkconfig: 345 90 10
+# description: PJE JBoss wrapper init script
+
+SCRIPT1GRAU=<%= scope['::pje::params::jboss_home'] %>/bin/pje-1grau-default.sh
+SCRIPT2GRAU=<%= scope['::pje::params::jboss_home'] %>/bin/pje-2grau-default.sh
+
+if [[ $# -eq 0  ]]; then
+	echo "Usage: $0 {start|stop|restart|kill|status} <1grau|2grau>"
+	exit 1
+
+elif [[ $# -eq 1 ]]; then
+	$SCRIPT1GRAU "$1"
+	[[ "$1" = "start" ]] && sleep 30s
+	$SCRIPT2GRAU "$1"
+
+elif [[ $# -ge 2 ]]; then
+	if [[ "$2" = "1grau" ]]; then
+		$SCRIPT1GRAU "$1"
+	
+	elif [[ "$2" = "2grau" ]]; then
+		$SCRIPT2GRAU "$1"
+	
+	else
+		echo "PJE '$2' is an invalid instance"
+		exit 1
+
+	fi
+fi

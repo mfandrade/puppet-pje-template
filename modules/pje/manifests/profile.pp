@@ -75,11 +75,6 @@ define pje::profile (
     group   => $owner_group,
     mode    => '0750',
   }
-  file{ "/etc/init.d/pje${grau}grau":
-    ensure  => link,
-    target  => "$::pje::params::jboss_home/bin/$profile_name.sh",
-    require => File["$profile_name.sh"],
-  }
 
 
   $remove_from_deploy_folder = [
