@@ -108,7 +108,7 @@ class jboss ($version, $jboss_home) {
 
     exec { 'extract-jboss511':
       command => "/usr/bin/unzip -uo $jboss_zip -d $destination_dir",
-      onlyif  => "/usr/bin/test -f $jboss_zip",
+      onlyif  => "/usr/bin/test -f $jboss_zip -a \\! -f $install_dir/bin/run.sh",
       require => [Exec['download-install-java6'], Package['unzip'], File["$destination_dir"]],
     }
 
