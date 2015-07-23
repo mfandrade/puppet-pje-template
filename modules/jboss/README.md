@@ -1,13 +1,13 @@
-# mfandrade-pje
+# mfandrade-jboss
 
 #### Sumário
 
 1. [Visão Geral](#visao-gerao)
 2. [Descrição do Módulo - O que este módulo faz e porque ele é útil](#descricao-do-modulo)
-3. [Configuração - O básico para se começar com o módulo mfandrade-pje](#configuracao)
+3. [Configuração - O básico para se começar com o módulo mfandrade-jboss](#configuracao)
     * [O que este módulo afeta](#o-que-este-modulo-afeta)
     * [Requisitos de configuração](#requisitos-de-configuracao)
-    * [Começando com o mfandrade-pje](#comecando-com-o-mfandrade-pje)
+    * [Começando com o mfandrade-jboss](#comecando-com-o-mfandrade-jboss)
 4. [Utilização - Opções de configuração e funcionalidades adicionais](#utilizacao)
 5. [Referência - Uma visão pormenorizada do que o módulo está fazendo e como](#referencia)
 5. [Limitações - Compatibilidade de SO, etc.](#limitacoes)
@@ -43,7 +43,7 @@ management, etc.) this is the time to mention it.
 If your module requires anything extra before setting up (pluginsync enabled,
 etc.), mention it here.
 
-### Começando com o mfandrade-pje
+### Começando com o mfandrade-jboss
 
 The very basic steps needed for a user to get the module up and running.
 
