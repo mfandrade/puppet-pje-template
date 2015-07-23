@@ -86,10 +86,11 @@ class jboss ($version, $jboss_home) {
     $url       = 'http://download.oracle.com/otn-pub/java/jdk/6u45-b06/jdk-6u45-linux-i586-rpm.bin'
   
     exec { 'download-install-java6':
-      command => "/usr/bin/wget $wget_options $url -O jdk6.bin && /bin/bash jdk6.bin",
+      command => "wget $wget_options $url -O jdk6.bin && /bin/bash jdk6.bin",
       cwd     => '/tmp',
       timeout => 0,
-      unless  => "/bin/rpm -q jdk-1.6.0_45",
+      unless  => "rpm -q jdk-1.6.0_45",
+      path    => '/usr/bin:/bin',
     }
 
     $jboss_zip       = '/vagrant/modules/jboss/files/jboss-eap-5.1.1.zip'
@@ -107,9 +108,10 @@ class jboss ($version, $jboss_home) {
     }
 
     exec { 'extract-jboss511':
-      command => "/usr/bin/unzip -uo $jboss_zip -d $destination_dir",
-      onlyif  => "/usr/bin/test -f $jboss_zip -a \\! -f $install_dir/bin/run.sh",
+      command => "unzip -uo $jboss_zip -d $destination_dir",
+      onlyif  => "test -f $jboss_zip -a \\! -f $install_dir/bin/run.sh",
       require => [Exec['download-install-java6'], Package['unzip'], File["$destination_dir"]],
+      path    => '/usr/bin',
     }
 
     group { 'jboss':
