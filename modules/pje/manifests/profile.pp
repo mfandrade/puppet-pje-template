@@ -1,18 +1,20 @@
 define pje::profile (
-  $binding_to         = undef,
-  $jmxremote_port     = undef,
-  $exec_quartz        = $::pje::params::exec_quartz,
-  $ds_databasename    = undef,
-  $ds_minpoolsize_pje = $::pje::params::ds_minpoolsize_pje,
-  $ds_maxpoolsize_pje = $::pje::params::ds_maxpoolsize_pje,
-  $ds_minpoolsize_api = $::pje::params::ds_minpoolsize_api,
-  $ds_maxpoolsize_api = $::pje::params::ds_maxpoolsize_api,
-  $ds_minpoolsize_gim = $::pje::params::ds_minpoolsize_gim,
-  $ds_maxpoolsize_gim = $::pje::params::ds_maxpoolsize_gim,
-  $jvm_heapsize       = $::pje::params::jvm_heapsize,
-  $jvm_maxheapsize    = $::pje::params::jvm_maxheapsize,
-  $jvm_permsize       = $::pje::params::jvm_permsize,
-  $jvm_maxpermsize    = $::pje::params::jvm_maxpermsize
+  $version,
+  $env,
+  $binding_to,
+  $jmxremote_port,
+  $ds_databasename,
+  $ds_minpoolsize_pje = 5,
+  $ds_maxpoolsize_pje = 40,
+  $ds_minpoolsize_api = 1,
+  $ds_maxpoolsize_api = 10,
+  $ds_minpoolsize_gim = 1,
+  $ds_maxpoolsize_gim = 10,
+  $jvm_heapsize       = '16m',
+  $jvm_maxheapsize    = '2g',
+  $jvm_permsize       = '64m',
+  $jvm_maxpermsize    = '512m',
+  $exec_quartz        = false,
 ) {
 
   include pje
@@ -21,7 +23,7 @@ define pje::profile (
   $jvmroute = $name
 
   if $jvmroute =~ /^pje([12])([a-z])x?$/ { # EXEMPLO: pje1a, pje2bx
-    $grau = "$1"
+    $grau    = "$1"
 
   } elsif $jvmroute =~ /^(int|ext)[a-z]([12])$/ { # EXEMPLO: inta1, extb2
     $grau = "$2"
@@ -38,9 +40,6 @@ define pje::profile (
 
 
 # ------------------------------------------------------------------------
-  include pje::params
-
-
   if ($binding_to == 'ports-default') or ($binding_to =~ /^ports-0[1-3]$/) {
     $binding_ipaddr = '0.0.0.0'
     $binding_ports  = $binding_to
@@ -53,8 +52,11 @@ define pje::profile (
     fail('You need to specify an IP address or a default port set to bind to')
   }
 
+# ------------------------------------------------------------------------
+  include pje::params
 
-  if ($::pje::params::runas_user != undef) {
+
+  if $::pje::params::runas_user != undef {
     $jboss_user  = $::pje::params::runas_user
     $owner_group = $::pje::params::runas_user
   } else {
@@ -133,5 +135,43 @@ define pje::profile (
     content => template('pje/run.conf.erb'),
   }
 
+  $war_name  = "pje-jt-${version}.war"
+  $local_war = "/vagrant/modules/pje/files/${war_name}"
+  $url       = "http://portal.pje.redejt/nexus/content/repositories/releases/br/jus/csjt/pje/pje-jt/${version}/${war_name}"
+
+  exec { 'download-pje':
+    command => "wget -c -O $local_war $url",
+    cwd     => '/tmp',
+    timeout => 0,
+    onlyif  => "test $(curl -sIo /dev/null -w \"%{http_code}\\n\" $url) -eq 200 -a \\! -f $local_war",
+    path    => '/usr/bin'
+  }
+
+
+  if $grau == '1' {
+    $ordgrau = 'primeirograu'
+
+  } elsif $grau == '2' {
+    $ordgrau = 'segundograu'
+
+  }
+
+  notify { "####### VOU DEPLOYAR ${ordgrau}": }
+#
+#  if $env == 'producao' {
+#    $ctxpath = "${ordgrau}"
+#
+#  } elsif $env =~ /^(homologacao|treinamento|bugfix)$/ {
+#    $ctxpath = "${ordgrau}_${env}"
+#
+#  } else {
+#    fail("PJE environment '${env}' does not exist")
+#  }
+#
+#  $war_dir = "${profile_dir}/deploy/${ctxpath}.war"
+#  exec { 'deploy-pje':
+#    command => "/bin/rm -rf ${war_dir} && /usr/bin/unzip ${local_war} -d ${war_dir}",
+#    require => Exec['download-pje'],
+#  }
 
 }
