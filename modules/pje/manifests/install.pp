@@ -55,8 +55,6 @@ class pje::install {
     ensure  => present,
     path    => "${jboss_home}/common/lib/postgresql-9.3-1103.jdbc4.jar",
     source  => 'puppet:///modules/pje/postgresql-9.3-1103.jdbc4.jar',
-    owner   => 'root',
-    group   => 'root',
     require => Class['jboss'], # por causa do jboss_home, obviamente
   }
 

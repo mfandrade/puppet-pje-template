@@ -108,9 +108,9 @@ class jboss ($version, $jboss_home) {
     }
 
     exec { 'extract-jboss511':
-      command => "unzip -uo $jboss_zip -d $destination_dir",
-      onlyif  => "test -f $jboss_zip -a \\! -f $install_dir/bin/run.sh",
-      require => [Exec['download-install-java6'], Package['unzip'], File["$destination_dir"]],
+      command => "unzip -uo ${jboss_zip} -d ${destination_dir}",
+      onlyif  => "test -f ${jboss_zip} -a \\! -f ${install_dir}/bin/run.sh",
+      require => [Exec['download-install-java6'], Package['unzip'], File["${destination_dir}"]],
       path    => '/usr/bin',
     }
 
@@ -122,20 +122,25 @@ class jboss ($version, $jboss_home) {
       ensure  => present,
       gid     => 501,
       uid     => 501,
-      home    => "$jboss_home",
+      home    => "${jboss_home}",
       require => Group['jboss'],
     }
-    file { "$install_dir":
-      owner   => 'jboss',
-      group   => 'jboss',
+    file { "${install_dir}":
       recurse => true,
       require => [Exec['extract-jboss511'], User['jboss']],
+      notify  => Exec['fix-perms'],
     }
 
-    file { "$jboss_home":
+    file { "${jboss_home}":
       ensure  => link,
-      target  => "$install_dir/jboss-as",
+      target  => "${install_dir}/jboss-as",
       require => Exec['extract-jboss511'],
+    }
+    exec { 'fix-perms':
+      command => "chown -R jboss.jboss ${install_dir}",
+      onlyif  => "find ${install_dir} \\! -user jboss",
+      path    => '/bin:/usr/bin',
+      require => User['jboss'],
     }
   }
 
