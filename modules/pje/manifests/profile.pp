@@ -156,22 +156,21 @@ define pje::profile (
 
   }
 
-  notify { "####### VOU DEPLOYAR ${ordgrau}": }
-#
-#  if $env == 'producao' {
-#    $ctxpath = "${ordgrau}"
-#
-#  } elsif $env =~ /^(homologacao|treinamento|bugfix)$/ {
-#    $ctxpath = "${ordgrau}_${env}"
-#
-#  } else {
-#    fail("PJE environment '${env}' does not exist")
-#  }
-#
-#  $war_dir = "${profile_dir}/deploy/${ctxpath}.war"
-#  exec { 'deploy-pje':
-#    command => "/bin/rm -rf ${war_dir} && /usr/bin/unzip ${local_war} -d ${war_dir}",
-#    require => Exec['download-pje'],
-#  }
+  if $env == 'producao' {
+    $ctxpath = "${ordgrau}"
+
+  } elsif $env =~ /^(homologacao|treinamento|bugfix)$/ {
+    $ctxpath = "${ordgrau}_${env}"
+
+  } else {
+    fail("PJE environment '${env}' does not exist")
+  }
+
+  $war_dir = "${profile_dir}/deploy/${ctxpath}.war"
+  exec { 'deploy-pje':
+    command => "/bin/rm -rf ${war_dir} && /usr/bin/unzip ${local_war} -d ${war_dir}",
+    require => Exec['download-pje'],
+    notify  => Class['pje::service'],
+  }
 
 }
