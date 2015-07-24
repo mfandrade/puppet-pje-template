@@ -78,15 +78,24 @@
 class jboss ($version, $jboss_home) {
 
   if $::osfamily != 'RedHat' {
-    fail('Only supported by rpm-based Linux distributions')
+    fail("Only supported by rpm-based Linux distributions (current: ${::osfamily})")
+
   } else {
 
-    $accept_header = 'Cookie: oraclelicense=accept-securebackup-cookie'
-    $wget_options  = "-c --no-check-certificate --no-cookies --header '$accept_header'"
-    $url       = 'http://download.oracle.com/otn-pub/java/jdk/6u45-b06/jdk-6u45-linux-i586-rpm.bin'
+    if $::architecture =~ /^i.86$/ {
+      $url = 'http://download.oracle.com/otn-pub/java/jdk/6u45-b06/jdk-6u45-linux-i586-rpm.bin'
+
+    } elsif $::architecture == 'x86_64' {
+      $url = 'http://download.oracle.com/otn-pub/java/jdk/6u45-b06/jdk-6u45-linux-x64-rpm.bin'
+
+    } else {
+      fail("Only supported by i586 and x86_64 architectures (current: ${::architecture})")
+    }
   
+    $accept_header = 'Cookie: oraclelicense=accept-securebackup-cookie'
+    $wget_options  = "-c --no-check-certificate --no-cookies --header '${accept_header}'"
     exec { 'download-install-java6':
-      command => "wget $wget_options $url -O jdk6.bin && /bin/bash jdk6.bin",
+      command => "wget ${wget_options} ${url} -O jdk6.bin && /bin/bash jdk6.bin",
       cwd     => '/tmp',
       timeout => 0,
       unless  => "rpm -q jdk-1.6.0_45",
@@ -96,14 +105,14 @@ class jboss ($version, $jboss_home) {
     $jboss_zip       = 'puppet:///modules/jboss/jboss-eap-5.1.1.zip' #'/vagrant/modules/jboss/files/jboss-eap-5.1.1.zip'
     $extracted_dir   = 'jboss-eap-5.1'
     $destination_dir = '/opt/rh'
-    $install_dir     = "$destination_dir/$extracted_dir"
+    $install_dir     = "${destination_dir}/${extracted_dir}"
 
     package { 'unzip':
       ensure        => present,
       allow_virtual => false,
     }
 
-    file { "$destination_dir":
+    file { "${destination_dir}":
       ensure => directory,
     }
 
