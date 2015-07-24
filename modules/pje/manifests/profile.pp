@@ -11,7 +11,7 @@ define pje::profile (
   $ds_minpoolsize_gim = 1,
   $ds_maxpoolsize_gim = 10,
   $jvm_heapsize       = '16m',
-  $jvm_maxheapsize    = '2g',
+  $jvm_maxheapsize    = '1536m',
   $jvm_permsize       = '64m',
   $jvm_maxpermsize    = '512m',
   $exec_quartz        = false,
