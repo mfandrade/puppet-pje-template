@@ -168,7 +168,8 @@ define pje::profile (
 
   $war_dir = "${profile_dir}/deploy/${ctxpath}.war"
   exec { 'deploy-pje':
-    command => "/bin/rm -rf ${war_dir} && /usr/bin/unzip ${local_war} -d ${war_dir}",
+    command => "rm -rf ${war_dir} && unzip ${local_war} -d ${war_dir}",
+    path    => '/bin:/usr/bin',
     require => Exec['download-pje'],
     notify  => Class['pje::service'],
   }
