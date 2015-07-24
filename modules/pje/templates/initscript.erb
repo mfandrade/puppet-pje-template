@@ -5,31 +5,74 @@
 SCRIPT1GRAU=<%= scope['::pje::params::jboss_home'] %>/bin/pje-1grau-default.sh
 SCRIPT2GRAU=<%= scope['::pje::params::jboss_home'] %>/bin/pje-2grau-default.sh
 
+jbossPID() {
+
+  if [[ $# -eq 1 ]]; then
+    if [[ ("$1" = '1grau') || ("$1" = '2grau') ]]; then
+      local JBOSSPID=$(/usr/bin/pgrep -f "org.jboss.Main.*$1")
+      echo "$JBOSSPID"
+    else
+      local JBOSSPID=$(/usr/bin/pgrep -f "org.jboss.Main")
+      echo "$JBOSSPID"
+    fi
+  else
+    echo ""
+  fi
+}
+
 if [[ $# -eq 0  ]]; then
     echo "Usage: $0 {start|stop|restart|kill|status} <1grau|2grau>"
     exit 1
 
 elif [[ $# -eq 1 ]]; then
-  [[ -x $SCRIPT1GRAU ]] && $SCRIPT1GRAU "$1" || \
-    echo "PJE '1grau' instance is not ready and will be not started" \
-    exit 2
 
-  #[[ "$1" = "start" ]] && sleep 30s
+  if [[ "$1" = 'status' ]]; then
+    PID=$(jbossPID)
+    if [[ ! $PID = "" ]]; then
+      echo 'PJE is running...'
+      echo "$PID"
+      exit 0
 
-  [[ -x $SCRIPT2GRAU ]] && $SCRIPT2GRAU "$1" || \
-    echo "PJE '2grau' instance is not ready and will be not started" \
-    exit 2
-
-elif [[ $# -ge 2 ]]; then
-    if [[ "$2" = "1grau" ]]; then
-        [[ -x $SCRIPT1GRAU ]] && $SCRIPT1GRAU "$1"
-    
-    elif [[ "$2" = "2grau" ]]; then
-        [[ -x $SCRIPT2GRAU ]] && $SCRIPT2GRAU "$1"
-    
     else
-        echo "PJE '$2' is an invalid instance"
-        exit 3
+      echo 'PJE is stopped!'
+      exit 2
 
     fi
+  fi
+
+  [[ -x $SCRIPT1GRAU ]] && $SCRIPT1GRAU "$1" || \
+    echo "PJE '1grau' instance is not ready and will be not managed" \
+    exit 3
+
+  [[ -x $SCRIPT2GRAU ]] && $SCRIPT2GRAU "$1" || \
+    echo "PJE '2grau' instance is not ready and will be not managed" \
+    exit 3
+
+elif [[ $# -ge 2 ]]; then
+
+  if [[ "$1" = 'status' ]]; then
+    PID=$(jbossPID $2)
+    if [[ ! $PID = "" ]]; then
+      echo "PJE $2 is running..."
+      echo "$PID"
+      exit 0
+
+    else
+      echo "PJE $2 is stopped!"
+      exit 2
+
+    fi
+  fi
+
+  if [[ "$2" = "1grau" ]]; then
+    [[ -x $SCRIPT1GRAU ]] && $SCRIPT1GRAU "$1"
+    
+  elif [[ "$2" = "2grau" ]]; then
+    [[ -x $SCRIPT2GRAU ]] && $SCRIPT2GRAU "$1"
+    
+  else
+    echo "PJE '$2' is an invalid instance"
+    exit 4
+
+  fi
 fi
