@@ -139,7 +139,7 @@ define pje::profile (
   $local_war = "/vagrant/modules/pje/files/${war_name}"
   $url       = "http://portal.pje.redejt/nexus/content/repositories/releases/br/jus/csjt/pje/pje-jt/${version}/${war_name}"
 
-  exec { 'download-pje':
+  exec { "download-pje-${grau}": # FIXME: acoxambramento... bom para o hiera
     command => "wget -c -O $local_war $url",
     cwd     => '/tmp',
     timeout => 0,
@@ -167,10 +167,10 @@ define pje::profile (
   }
 
   $war_dir = "${profile_dir}/deploy/${ctxpath}.war"
-  exec { 'deploy-pje':
-    command => "rm -rf ${war_dir} && unzip ${local_war} -d ${war_dir}",
+  exec { "deploy-pje-${grau}":
+    command => "rm -rf ${war_dir}; unzip ${local_war} -d ${war_dir}",
     path    => '/bin:/usr/bin',
-    require => Exec['download-pje'],
+    require => Exec["download-pje-${grau}"],
     notify  => Class['pje::service'],
   }
 
