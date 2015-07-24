@@ -77,4 +77,12 @@ class pje::install {
     ensure => absent,
   }
 
+  $war_name  = "pje-jt-${::pje::params::pje_version}.war"
+  #$url       = "http://portal.pje.redejt/nexus/content/repositories/releases/br/jus/csjt/pje/pje-jt/${version}/${war_name}"
+  file { "/tmp/${war_name}": 
+    ensure => present,
+    source => "puppet:///modules/pje/${war_name}",  # "/vagrant/modules/pje/files/${war_name}"
+    #FIXME: sempre tem que ter o war no filebucket do módulo pje
+  }
+
 }

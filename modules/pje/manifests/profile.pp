@@ -135,17 +135,6 @@ define pje::profile (
     content => template('pje/run.conf.erb'),
   }
 
-  $war_name  = "pje-jt-${version}.war"
-  $local_war = "/vagrant/modules/pje/files/${war_name}"
-  $url       = "http://portal.pje.redejt/nexus/content/repositories/releases/br/jus/csjt/pje/pje-jt/${version}/${war_name}"
-
-  exec { "download-pje-${grau}": # FIXME: acoxambramento... bom para o hiera
-    command => "wget -c -O $local_war $url",
-    cwd     => '/tmp',
-    timeout => 0,
-    onlyif  => "test $(curl -sIo /dev/null -w \"%{http_code}\\n\" $url) -eq 200 -a \\! -f $local_war",
-    path    => '/usr/bin'
-  }
 
 
   if $grau == '1' {
@@ -155,7 +144,6 @@ define pje::profile (
     $ordgrau = 'segundograu'
 
   }
-
   if $env == 'producao' {
     $ctxpath = "${ordgrau}"
 
@@ -168,9 +156,9 @@ define pje::profile (
 
   $war_dir = "${profile_dir}/deploy/${ctxpath}.war"
   exec { "deploy-pje-${grau}":
-    command => "rm -rf ${war_dir}; unzip ${local_war} -d ${war_dir}",
+    command => "rm -rf ${war_dir}; unzip /tmp/pje-jt-${::pje::params::pje_version}.war -d ${war_dir}",
     path    => '/bin:/usr/bin',
-    require => Exec["download-pje-${grau}"],
+    require => Class['pje::install'],
     notify  => Class['pje::service'],
   }
 

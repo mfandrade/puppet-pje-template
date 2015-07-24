@@ -93,7 +93,7 @@ class jboss ($version, $jboss_home) {
       path    => '/usr/bin:/bin',
     }
 
-    $jboss_zip       = '/vagrant/modules/jboss/files/jboss-eap-5.1.1.zip'
+    $jboss_zip       = 'puppet:///modules/jboss/jboss-eap-5.1.1.zip' #'/vagrant/modules/jboss/files/jboss-eap-5.1.1.zip'
     $extracted_dir   = 'jboss-eap-5.1'
     $destination_dir = '/opt/rh'
     $install_dir     = "$destination_dir/$extracted_dir"
