@@ -102,23 +102,25 @@ class jboss ($version, $jboss_home) {
       path    => '/usr/bin:/bin',
     }
 
-    $jboss_zip       = 'puppet:///modules/jboss/jboss-eap-5.1.1.zip' #'/vagrant/modules/jboss/files/jboss-eap-5.1.1.zip'
     $extracted_dir   = 'jboss-eap-5.1'
     $destination_dir = '/opt/rh'
     $install_dir     = "${destination_dir}/${extracted_dir}"
-
     package { 'unzip':
       ensure        => present,
       allow_virtual => false,
     }
-
     file { "${destination_dir}":
       ensure => directory,
     }
-
+    file { "/tmp/jboss511.zip":
+      ensure => present,
+      source => 'puppet:///modules/jboss/jboss-eap-5.1.1.zip',
+      # FIXME: ^o arquivo deve existir e, por favor, ponha uma variável aqui no name
+      before => Exec['extract-jboss511'],
+    }
     exec { 'extract-jboss511':
-      command => "unzip -uo ${jboss_zip} -d ${destination_dir}",
-      onlyif  => "test -f ${jboss_zip} -a \\! -f ${install_dir}/bin/run.sh",
+      command => "unzip -uo /tmp/jboss511.zip -d ${destination_dir}",
+      onlyif  => "test -f /tmp/jboss511.zip -a \\! -f ${install_dir}/bin/run.sh",
       require => [Exec['download-install-java6'], Package['unzip'], File["${destination_dir}"]],
       path    => '/usr/bin',
     }
