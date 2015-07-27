@@ -68,7 +68,7 @@ define pje::profile (
     ensure  => present,
     source  => 'puppet:///modules/pje/pje-xgrau-default',
     recurse => true,
-    notify  => Exec["fix-perms-${profile_name}"],
+    #notify  => Exec["fix-perms-${profile_name}"],
   }
   file { "$profile_name.sh":
     ensure  => present,
@@ -78,10 +78,11 @@ define pje::profile (
     group   => $owner_group,
     mode    => '0755',
   }
-  exec { "fix-perms-${profile_name}":
-    command => "chown -R ${owner_group}.${owner_group} ${profile_name}",
-    path    => '/bin',
-  }
+  #exec { "fix-perms-${profile_name}":
+  #  command => "chown -R ${owner_group}.${owner_group} ${profile_name}",
+  #  cwd     => "${::pje::params::jboss_home}/server",
+  #  path    => '/bin',
+  #}
 
 
   $remove_from_deploy_folder = [
