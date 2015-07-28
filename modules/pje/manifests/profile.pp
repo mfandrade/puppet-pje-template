@@ -66,9 +66,9 @@ define pje::profile (
   file { "$profile_name":
     path    => "$::pje::params::jboss_home/server/$profile_name",
     ensure  => present,
-    source  => 'puppet:///modules/pje/pje-xgrau-default',
+    source  => "file:///$::pje::params::jboss_home/server/default",
     recurse => true,
-    #notify  => Exec["fix-perms-${profile_name}"],
+    require => Class['pje::install'],
   }
   file { "$profile_name.sh":
     ensure  => present,
@@ -158,9 +158,11 @@ define pje::profile (
     fail("PJE environment '${env}' does not exist")
   }
 
-  $war_dir = "${profile_dir}/deploy/${ctxpath}.war"
+  $war_file = "pje-jt-${::pje::params::pje_version}.war"
+  $war_dir  = "${profile_dir}/deploy/${ctxpath}.war"
   exec { "deploy-pje-${grau}":
-    command => "rm -rf ${war_dir}; unzip /tmp/pje-jt-${::pje::params::pje_version}.war -d ${war_dir}",
+    command => "rm -rf ${war_dir}; unzip /tmp/${war_file} -d ${war_dir}",
+    onlyif  => "test -f /tmp/${war_file}",
     path    => '/bin:/usr/bin',
     require => Class['pje::install'],
     notify  => Class['pje::service'],
