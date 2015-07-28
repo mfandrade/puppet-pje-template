@@ -100,6 +100,7 @@ class jboss ($version, $jboss_home) {
       timeout => 0,
       unless  => "rpm -q jdk-1.6.0_45",
       path    => '/usr/bin:/bin',
+      before  => Exec['extract-jboss511']
     }
 
     $extracted_dir   = 'jboss-eap-5.1'
@@ -116,12 +117,11 @@ class jboss ($version, $jboss_home) {
       ensure => present,
       source => 'puppet:///modules/jboss/jboss-eap-5.1.1.zip',
       # FIXME: ^o arquivo deve existir e, por favor, ponha uma variável aqui no name
-      before => Exec['extract-jboss511'],
     }
     exec { 'extract-jboss511':
       command => "unzip -uo /tmp/jboss511.zip -d ${destination_dir}",
       onlyif  => "test \\! -x ${install_dir}/jboss-as/bin/run.sh && test -f /tmp/jboss511.zip",
-      require => [Exec['download-install-java6'], Package['unzip'], File["${destination_dir}"]],
+      require => [File["/tmp/jboss511.zip"], Package['unzip'], File["${destination_dir}"]],
       path    => '/usr/bin',
     }
 
