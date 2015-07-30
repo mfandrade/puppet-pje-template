@@ -8,26 +8,24 @@
 # Either modify this script for your requirements or just ensure that
 # the following variables are set correctly before calling the script.
 
-#JAVA_HOME
-  export JAVA_HOME=${JAVA_HOME:-"/usr/java/default"}
-# JBoss Home
-  JBOSS_HOME="/srv/jboss"
-# Ports Binding set
-  JBOSS_BINDING_PORTS=${JBOSS_BINDING_PORTS:-"ports-default"}
-# define o profile (nome da instancia) usada para iniciar o jboss
-  JBOSS_PROFILE=${JBOSS_PROFILE:-"pje-1grau-default"}
-# define o ip onde jboss farah o bind
-  JBOSS_BINDING_IPADDR=${JBOSS_BINDING_IPADDR:-"##########"}
-# porta do JNDI service do JBoss (usada para shutdown)
-  JBOSS_JNP_PORT=${JBOSS_JNP_PORT:-"1099"}
-# LOG4J Level (FATAL ERROR WARN INFO DEBUG TRACE ALL OFF) 
-  JBOSS_LOG_LEVEL=${JBOSS_LOG_LEVEL:-"ERROR"}
-# Dir. de logs
-  JBOSS_LOG_DIR=${JBOSS_LOG_DIR:-"$JBOSS_HOME/server/$JBOSS_PROFILE/log"}
-# define the user under which	 jboss will run, or use 'RUNASIS' to run as the current user
-  JBOSS_USER=${JBOSS_USER:-"jboss"}
-# clear work and tmp dirs?
-  CLEAR_WORK_TMP="Y"
+DEFAULT_VARS=/etc/default/jboss-pje
+if [[ -f $DEFAULT_VARS ]]; then
+    . $DEFAULT_VARS
+else
+    echo "File '$DEFAULT_VARS' not found.  Please, create it with params for JBoss startup."    
+    exit 3 # http://refspecs.linuxbase.org/LSB_3.1.1/LSB-Core-generic/LSB-Core-generic/iniscrptact.html
+fi
+
+JBOSS_PROFILE=$JBOSS_1GRAU_PROFILE
+JBOSS_BINDING_PORTS=$JBOSS_1GRAU_PORTS
+JBOSS_BINDING_IPADDR=$JBOSS_1GRAU_IPADDR
+
+JBOSS_JNP_PORT=1099 # TODO lógica
+JBOSS_LOG_LEVEL=${JBOSS_LOG_LEVEL:-"ERROR"}
+
+JBOSS_LOG_DIR=${JBOSS_LOG_DIR:-"$JBOSS_HOME/server/$JBOSS_PROFILE/log"}
+JBOSS_USER=${JBOSS_USER:-"jboss"}
+CLEAR_WORK_TMP=${CLEAR_WORK_TMP:-"Y"}
 
 # Clustering Configs
 # Fill these only when using profiling supporting clustering. Otherise they'll be ignored by the script
@@ -85,8 +83,8 @@ if [ -n "$JBOSS_CONSOLE" -a ! -d "$JBOSS_CONSOLE" ]; then
 fi
 
 if [ -n "$JBOSS_CONSOLE" -a ! -f "$JBOSS_CONSOLE" ]; then
-  echo "WARNING: location for saving console log invalid: $JBOSS_CONSOLE"
-  echo "WARNING: ignoring it and using /dev/null"
+  #echo "WARNING: location for saving console log invalid: $JBOSS_CONSOLE"
+  #echo "WARNING: ignoring it and using /dev/null"
   JBOSS_CONSOLE="/dev/null"
 fi
 
@@ -289,3 +287,4 @@ status)
 *)
    echo "usage: $0 start|stop|restart|kill|status"
 esac
+
