@@ -254,7 +254,7 @@ kill)
    PID=$(jbossPID)
    if [ "x$PID" = "x" ]
    then
-      echo "JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR) not runing! JVM process not found!"
+      echo "JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR) not running! JVM process not found!"
    else
       echo "process still running..."
       echo "killing JBoss (JVM process) [PID $PID]"
@@ -287,10 +287,10 @@ info)
    PID=$(jbossPID)
    if [ "x$PID" = "x" ]
    then
-      echo "JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR) not runing! JVM process not found!"
+      echo "JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR) not running! JVM process not found!"
    else
       echo " "
-      echo "JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR) runing!"
+      echo "JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR) running!"
       echo "   JBoss (JVM process) [PID $PID] is UP"
       echo " "
       echo "   Some server info:"
