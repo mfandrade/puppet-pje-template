@@ -92,15 +92,21 @@ fi
 CURRENT_USER=`whoami`
 
 if [ "$JBOSS_USER" = "RUNASIS" -o "$JBOSS_USER" = "$CURRENT_USER"  ]; then
+    JBOSS_USER=$CURRENT_USER
     SU_USER=""
 else
-    SU_USER="su -l $JBOSS_USER -c"
+    SU_USER="su -l $JBOSS_USER -c "
 fi
 
 # define what will be done with the console log
 JBOSS_CONSOLE=${JBOSS_CONSOLE:-"/dev/null"}
-if [ ! -z "$SU_USER" ]; then
-    chown $JBOSS_USER $JBOSS_CONSOLE
+if [[ -e $JBOSS_CONSOLE ]]; then
+    if [[ (! -w $JBOSS_CONSOLE) && (! -c $JBOSS_CONSOLE) ]]; then
+        chown $JBOSS_USER $JBOSS_CONSOLE
+        chmod u+w $JBOSS_CONSOLE
+    else
+        chmod o+w $JBOSS_CONSOLE
+    fi
 fi
 
 JBOSS_JVM_PROPS="-Djboss.service.binding.set=$JBOSS_BINDING_PORTS \
