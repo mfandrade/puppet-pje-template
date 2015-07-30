@@ -8,28 +8,24 @@
 # Either modify this script for your requirements or just ensure that
 # the following variables are set correctly before calling the script.
 
-# define the profile (instance name) used to start jboss service
-  JBOSS_PROFILE="<%= @profile_name %>"
-# define ip adress to bind to
-  JBOSS_BIND_ADDR="<%= @binding_ipaddr %>"
-# ports binding set
-  JBOSS_SERVICE_BIND="<%= @binding_ports %>"
-# LOG4J level (FATAL ERROR WARN INFO DEBUG TRACE ALL OFF) 
-  JBOSS_LOG_LEVEL="ERROR"
-
-# ------------------------------------------------------------------------------
-# DO NOT EDIT BELOW THIS LINE (UNLESS YOU KNOW WHAT YOU ARE DOING)
-# ------------------------------------------------------------------------------
-# JNDI service port (used for service shutdown)
-  JBOSS_JNP_PORT="1099" # TODO: lógica a depender de ports
-# JAVA_HOME
-  JAVA_HOME=${JAVA_HOME:-"/usr/java/default"}
-# JBOSS HOME
-  JBOSS_HOME=${JBOSS_HOME:-"/srv/jboss"}
-# log folder
+#JAVA_HOME
+  export JAVA_HOME=${JAVA_HOME:-"/usr/java/default"}
+# JBoss Home
+  JBOSS_HOME="/srv/jboss"
+# Ports Binding set
+  JBOSS_SERVICE_BIND=${JBOSS_SERVICE_BIND:-"ports-default"}
+# define o profile (nome da instancia) usada para iniciar o jboss
+  JBOSS_PROFILE=${JBOSS_PROFILE:-"pje-1grau-default"}
+# define o ip onde jboss farah o bind
+  JBOSS_BIND_ADDR=${JBOSS_BIND_ADDR:-"##########"}
+# porta do JNDI service do JBoss (usada para shutdown)
+  JBOSS_JNP_PORT=${JBOSS_JNP_PORT:-"1099"}
+# LOG4J Level (FATAL ERROR WARN INFO DEBUG TRACE ALL OFF) 
+  JBOSS_LOG_LEVEL=${JBOSS_LOG_LEVEL:-"ERROR"}
+# Dir. de logs
   JBOSS_LOG_DIR=${JBOSS_LOG_DIR:-"$JBOSS_HOME/server/$JBOSS_PROFILE/log"}
-# define the user under which jboss will run, or use 'RUNASIS' to run as the current user
-  JBOSS_USER="<%= @jboss_user %>"
+# define the user under which	 jboss will run, or use 'RUNASIS' to run as the current user
+  JBOSS_USER=${JBOSS_USER:-"jboss"}
 # clear work and tmp dirs?
   CLEAR_WORK_TMP="Y"
 
@@ -45,15 +41,15 @@
   CLUSTER_UDP_MCAST_PORT=${CLUSTER_UDP_MCAST_PORT:-"55225"}
 
 # JMX Credentials
-  JMX_CREDENTIALS_FILE="$JBOSS_HOME/server/$JBOSS_PROFILE/conf/props/jmx-console-users.properties"
-  JMX_USER=$(cat $JMX_CREDENTIALS_FILE | grep -v '#' | cut -d '=' -f 1 | head -n 1)
-  JMX_PWD="$(cat $JMX_CREDENTIALS_FILE | grep -v '#' | cut -d '=' -f 2 | head -n 1 | tr -d '\r')"
+  JMX_CREDETIALS_FILE="$JBOSS_HOME/server/$JBOSS_PROFILE/conf/props/jmx-console-users.properties"
+  JMX_USER=$(cat $JMX_CREDETIALS_FILE | grep -v '#' | cut -d '=' -f 1 | head -n 1)
+  JMX_PWD="$(cat $JMX_CREDETIALS_FILE | grep -v '#' | cut -d '=' -f 2 | head -n 1 | tr -d '\r')"
 
   JBOSS_ADMIN_USER=${JMX_USER:-"admin"}
   JBOSS_ADMIN_PWD=${JMX_PWD:-"admin"}
 
 # make sure java is in your path
-  JAVAPATH=${JAVAPATH:-"$JAVA_HOME/bin"}
+  JAVAPTH=${JAVAPTH:-"$JAVA_HOME/bin"}
 # define the classpath for the shutdown class
   JBOSSCP=${JBOSSCP:-"$JBOSS_HOME/bin/shutdown.jar:$JBOSS_HOME/client/jnet.jar"}
 
@@ -107,8 +103,8 @@ JBOSS_CMD_STOP=${JBOSS_CMD_STOP:-"java -classpath $JBOSSCP org.jboss.Shutdown --
                                   -s jnp://$JBOSS_BIND_ADDR:$JBOSS_JNP_PORT \
                                   -u $JBOSS_ADMIN_USER -p $JBOSS_ADMIN_PWD"}
 
-if [ -z "`echo $PATH | grep $JAVAPATH`" ]; then
-   export PATH=$PATH:$JAVAPATH
+if [ -z "`echo $PATH | grep $JAVAPTH`" ]; then
+   export PATH=$PATH:$JAVAPTH
 fi
 
 if [ $# != 1  ]; then
@@ -117,7 +113,7 @@ if [ $# != 1  ]; then
 fi
 
 if [ ! -d "$JBOSS_HOME" ]; then
-   echo "JBOSS_HOME does not exist as a valid directory : $JBOSS_HOME"
+   echo JBOSS_HOME does not exist as a valid directory : $JBOSS_HOME
    exit 1
 fi
 
@@ -293,4 +289,3 @@ status)
 *)
    echo "usage: $0 start|stop|restart|kill|status"
 esac
-
