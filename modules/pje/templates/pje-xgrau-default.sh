@@ -140,21 +140,22 @@ twiddleInfo()
     echo "      |--- $($TWIDDLE_CMD_GET $SERVER_MBEAN VersionNumber)"
     echo "      |--- $($TWIDDLE_CMD_GET $SERVER_MBEAN StartDate)"
     echo "      |--- $($TWIDDLE_CMD_GET $SERVER_INFO_MBEAN JavaVersion)"
-    echo "          JVM Flags"
+    echo " "
+    echo "   JVM Flags"
 
     if [ -e "$JAVA_HOME/bin/jinfo" ]; then
         $JAVA_HOME/bin/jinfo -flags $PID 2>&1 | grep "run.sh" | tr ' ' '\n'
     fi
 
-    echo " "
+    echo "      | "
     echo "      |--- $($TWIDDLE_CMD_GET $SERVER_INFO_MBEAN ActiveThreadCount)"
 
     MaxMemInBytes=`$TWIDDLE_CMD_GET $SERVER_INFO_MBEAN MaxMemory | cut -d '=' -f 2`
-    MaxMemInMB=`echo "($MaxMemInBytes/1024/1024)" | bc`
+    MaxMemInMB=`echo $(($MaxMemInBytes/1024/1024))`
     echo "      |--- MaxMemory = $MaxMemInMB MB"
 
     FreeMemInBytes=`$TWIDDLE_CMD_GET $SERVER_INFO_MBEAN FreeMemory | cut -d '=' -f 2`
-    FreeMemInMB=`echo "($FreeMemInBytes/1024/1024)" | bc`
+    FreeMemInMB=`echo $(($FreeMemInBytes/1024/1024))`
     echo "      |--- FreeMemory = $FreeMemInMB MB"
 
     #HTTP ThreadPool
