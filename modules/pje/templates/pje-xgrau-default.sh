@@ -40,9 +40,9 @@ CLEAR_WORK_TMP=${CLEAR_WORK_TMP:-"Y"}
 
 # JMX Credentials
   JMX_USERS_PROPERTIES_FILE="$JBOSS_HOME/server/$JBOSS_PROFILE/conf/props/jmx-console-users.properties"
-  JMX_USER=$(cat $JMX_USERS_PROPERTIES_FILE | grep -v '#' | cut -d '=' -f 1 | head -n 1)
-  JMX_PASS="$(cat $JMX_USERS_PROPERTIES_FILE | grep -v '#' | cut -d '=' -f 2 | head -n 1 | tr -d '\r')"
-
+  JMX_CREDENTIALS=$(grep -Eo '^[[:alnum:]]+=[[:print:]]+' $JMX_USERS_PROPERTIES_FILE)
+  JMX_USER=$(cut -d= -f1 <<<$JMX_CREDENTIALS)
+  JMX_PASS=$(cut -d= -f2 <<<$JMX_CREDENTIALS)
   JBOSS_ADMIN_USER=${JMX_USER:-"admin"}
   JBOSS_ADMIN_PASS=${JMX_PASS:-"admin"}
 
