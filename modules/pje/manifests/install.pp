@@ -78,7 +78,7 @@ class pje::install {
 
   file { "/etc/default/jboss-pje":
     ensure  => present,
-    content => template('pje/jboss-pje.erb'),
+    source  => 'puppet:///modules/pje/jboss-pje',
     owner   => 'root',
     group   => 'root',
     mode    => '0644',

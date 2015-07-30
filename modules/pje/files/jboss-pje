@@ -18,11 +18,8 @@ JBOSS_2GRAU_PROFILE=pje-2grau-default
 # Para tal, vide as opções JBOSS_?GRAU_PORTS abaixo e atribua o mesmo
 # endereço IP para os dois profiles aqui.
 # 
-#JBOSS_1GRAU_IPADDR=0.0.0.0
-#JBOSS_2GRAU_IPADDR=0.0.0.0
-# 
-JBOSS_1GRAU_IPADDR=10.8.14.253
-JBOSS_2GRAU_IPADDR=10.8.14.254
+JBOSS_1GRAU_IPADDR=0.0.0.0
+JBOSS_2GRAU_IPADDR=0.0.0.0
 
 # ----------------------------------------------------------------------
 # Conjunto de portas para binding dos serviços de 1o. e 2o. graus.
@@ -40,11 +37,8 @@ JBOSS_2GRAU_IPADDR=10.8.14.254
 # Esta opção pode ser preferível, por exemplo, para economizar endereços
 # da sua faixa de IPs.
 # 
-#JBOSS_1GRAU_PORTS=ports-01
-#JBOSS_2GRAU_PORTS=ports-02
-# 
-JBOSS_1GRAU_PORTS=ports-default
-JBOSS_2GRAU_PORTS=ports-default
+JBOSS_1GRAU_PORTS=ports-01
+JBOSS_2GRAU_PORTS=ports-02
 
 # ----------------------------------------------------------------------
 # JAVA_HOME e JBOSS_HOME normalmente são definidas como variáveis de ambiente.
@@ -66,7 +60,6 @@ JBOSS_HOME=/srv/jboss
 # de segurança, também pode ser executado como mesmo usuário dono dos scripts
 # de inicialização (normalmente o root) colocando-se seu valor como RUNASIS.
 #
-#JBOSS_USER=RUNASIS
 JBOSS_USER=jboss
 
 # ----------------------------------------------------------------------
