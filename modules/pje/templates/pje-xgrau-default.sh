@@ -13,11 +13,11 @@
 # JBoss Home
   JBOSS_HOME="/srv/jboss"
 # Ports Binding set
-  JBOSS_SERVICE_BIND=${JBOSS_SERVICE_BIND:-"ports-default"}
+  JBOSS_BINDING_PORTS=${JBOSS_BINDING_PORTS:-"ports-default"}
 # define o profile (nome da instancia) usada para iniciar o jboss
   JBOSS_PROFILE=${JBOSS_PROFILE:-"pje-1grau-default"}
 # define o ip onde jboss farah o bind
-  JBOSS_BIND_ADDR=${JBOSS_BIND_ADDR:-"##########"}
+  JBOSS_BINDING_IPADDR=${JBOSS_BINDING_IPADDR:-"##########"}
 # porta do JNDI service do JBoss (usada para shutdown)
   JBOSS_JNP_PORT=${JBOSS_JNP_PORT:-"1099"}
 # LOG4J Level (FATAL ERROR WARN INFO DEBUG TRACE ALL OFF) 
@@ -41,12 +41,12 @@
   CLUSTER_UDP_MCAST_PORT=${CLUSTER_UDP_MCAST_PORT:-"55225"}
 
 # JMX Credentials
-  JMX_CREDETIALS_FILE="$JBOSS_HOME/server/$JBOSS_PROFILE/conf/props/jmx-console-users.properties"
-  JMX_USER=$(cat $JMX_CREDETIALS_FILE | grep -v '#' | cut -d '=' -f 1 | head -n 1)
-  JMX_PWD="$(cat $JMX_CREDETIALS_FILE | grep -v '#' | cut -d '=' -f 2 | head -n 1 | tr -d '\r')"
+  JMX_USERS_PROPERTIES_FILE="$JBOSS_HOME/server/$JBOSS_PROFILE/conf/props/jmx-console-users.properties"
+  JMX_USER=$(cat $JMX_USERS_PROPERTIES_FILE | grep -v '#' | cut -d '=' -f 1 | head -n 1)
+  JMX_PASS="$(cat $JMX_USERS_PROPERTIES_FILE | grep -v '#' | cut -d '=' -f 2 | head -n 1 | tr -d '\r')"
 
   JBOSS_ADMIN_USER=${JMX_USER:-"admin"}
-  JBOSS_ADMIN_PWD=${JMX_PWD:-"admin"}
+  JBOSS_ADMIN_PASS=${JMX_PASS:-"admin"}
 
 # make sure java is in your path
   JAVAPTH=${JAVAPTH:-"$JAVA_HOME/bin"}
@@ -56,14 +56,14 @@
 # define the script to use to start jboss
 # test if the profile has cluster support
 if [ -e $JBOSS_HOME/server/$JBOSS_PROFILE/deploy/cluster ]; then
-   JBOSSSH="$JBOSS_HOME/bin/run.sh -c $JBOSS_PROFILE -b $JBOSS_BIND_ADDR -g $CLUSTER_PARTITION -Djboss.default.jgroups.stack=$CLUSTER_JGROUPS_STACK"
+   JBOSSSH="$JBOSS_HOME/bin/run.sh -c $JBOSS_PROFILE -b $JBOSS_BINDING_IPADDR -g $CLUSTER_PARTITION -Djboss.default.jgroups.stack=$CLUSTER_JGROUPS_STACK"
 
    if [[ "$CLUSTER_JGROUPS_STACK" =~ udp* ]]; then
      JBOSSSH="$JBOSSSH -u $CLUSTER_UDP_MCAST_ADDR -m $CLUSTER_UDP_MCAST_PORT "
    fi
 
 else
-  JBOSSSH=${JBOSSSH:-"$JBOSS_HOME/bin/run.sh -c $JBOSS_PROFILE -b $JBOSS_BIND_ADDR "}
+  JBOSSSH=${JBOSSSH:-"$JBOSS_HOME/bin/run.sh -c $JBOSS_PROFILE -b $JBOSS_BINDING_IPADDR "}
 fi
 
 # get the current user
@@ -93,15 +93,15 @@ fi
 #define what will be done with the console log
 JBOSS_CONSOLE=${JBOSS_CONSOLE:-"/dev/null"}
 
-JBOSS_JVM_PROP="-Djboss.service.binding.set=$JBOSS_SERVICE_BIND"
+JBOSS_JVM_PROP="-Djboss.service.binding.set=$JBOSS_BINDING_PORTS"
 JBOSS_JVM_PROP="$JBOSS_JVM_PROP -Djboss.server.log.threshold=$JBOSS_LOG_LEVEL"
 JBOSS_JVM_PROP="$JBOSS_JVM_PROP -Djboss.server.log.dir=$JBOSS_LOG_DIR"
 
 JBOSS_CMD_START="$JBOSSSH $JBOSS_JVM_PROP"
 
 JBOSS_CMD_STOP=${JBOSS_CMD_STOP:-"java -classpath $JBOSSCP org.jboss.Shutdown --shutdown \
-                                  -s jnp://$JBOSS_BIND_ADDR:$JBOSS_JNP_PORT \
-                                  -u $JBOSS_ADMIN_USER -p $JBOSS_ADMIN_PWD"}
+                                  -s jnp://$JBOSS_BINDING_IPADDR:$JBOSS_JNP_PORT \
+                                  -u $JBOSS_ADMIN_USER -p $JBOSS_ADMIN_PASS"}
 
 if [ -z "`echo $PATH | grep $JAVAPTH`" ]; then
    export PATH=$PATH:$JAVAPTH
@@ -120,7 +120,7 @@ fi
 function twiddleStatus()
 {
    # use twiddle to get some server status 
-   TWIDDLE_CMD="$JBOSS_HOME/bin/twiddle.sh -s jnp://$JBOSS_BIND_ADDR:$JBOSS_JNP_PORT -u $JBOSS_ADMIN_USER -p $JBOSS_ADMIN_PWD"
+   TWIDDLE_CMD="$JBOSS_HOME/bin/twiddle.sh -s jnp://$JBOSS_BINDING_IPADDR:$JBOSS_JNP_PORT -u $JBOSS_ADMIN_USER -p $JBOSS_ADMIN_PASS"
    TWIDDLE_CMD_GET="$TWIDDLE_CMD get"
    TWIDDLE_CMD_QRY="$TWIDDLE_CMD query"
    TWIDDLE_CMD_IVK="$TWIDDLE_CMD invoke"
@@ -202,7 +202,7 @@ function jbossPID()
 {
    # try get the JVM PID
    local jbossPID="x"
-   jbossPID=$(ps -eo pid,cmd | grep "org.jboss.Main" | grep "${JBOSS_BIND_ADDR} " | grep "${JBOSS_PROFILE}" | grep "${JBOSS_SERVICE_BIND}" | grep -v grep | cut -c1-6)
+   jbossPID=$(ps -eo pid,cmd | grep "org.jboss.Main" | grep "${JBOSS_BINDING_IPADDR} " | grep "${JBOSS_PROFILE}" | grep "${JBOSS_BINDING_PORTS}" | grep -v grep | cut -c1-6)
    echo "$jbossPID"
 }
 
@@ -214,8 +214,8 @@ start)
    PID=$(jbossPID)
    if [ "x$PID" = "x" ]
    then
-      echo "starting JBoss (instance $JBOSS_PROFILE at $JBOSS_BIND_ADDR)..."
-      echo "   using service bind: $JBOSS_SERVICE_BIND"
+      echo "starting JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR)..."
+      echo "   using service bind: $JBOSS_BINDING_PORTS"
 
       #echo "JBOSS_CMD_START=$JBOSS_CMD_START"
 
@@ -225,11 +225,11 @@ start)
          $SUBIT "$JBOSS_CMD_START >${JBOSS_CONSOLE} 2>&1 &" 
       fi
    else
-      echo "JBoss (instance $JBOSS_PROFILE at $JBOSS_BIND_ADDR) is already running [PID $PID]"
+      echo "JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR) is already running [PID $PID]"
    fi
    ;;
 stop)
-   echo "stop JBoss (instance $JBOSS_PROFILE at $JBOSS_BIND_ADDR)..."
+   echo "stop JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR)..."
 
    if [ -z "$SUBIT" ]; then
        $JBOSS_CMD_STOP
@@ -252,7 +252,7 @@ kill)
    PID=$(jbossPID)
    if [ "x$PID" = "x" ]
    then
-      echo "JBoss (instance $JBOSS_PROFILE at $JBOSS_BIND_ADDR) not runing! JVM process not found!"
+      echo "JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR) not runing! JVM process not found!"
    else
       echo "process still running..."
       echo "killing JBoss (JVM process) [PID $PID]"
@@ -275,10 +275,10 @@ status)
    PID=$(jbossPID)
    if [ "x$PID" = "x" ]
    then
-      echo "JBoss (instance $JBOSS_PROFILE at $JBOSS_BIND_ADDR) not runing! JVM process not found!"
+      echo "JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR) not runing! JVM process not found!"
    else
       echo " "
-      echo "JBoss (instance $JBOSS_PROFILE at $JBOSS_BIND_ADDR) runing!"
+      echo "JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR) runing!"
       echo "   JBoss (JVM process) [PID $PID] is UP"
       echo " "
       echo "   Some server status:"
