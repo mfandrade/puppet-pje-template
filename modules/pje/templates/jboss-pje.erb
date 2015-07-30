@@ -1,0 +1,95 @@
+# ----------------------------------------------------------------------
+# Nomes dos diretórios dos profiles para 1o. e 2o. graus.
+# Estes diretórios por padrão residem em $JBOSS_HOME/server
+# 
+JBOSS_1GRAU_PROFILE=pje-1grau-default
+JBOSS_2GRAU_PROFILE=pje-2grau-default
+
+# ----------------------------------------------------------------------
+# Endereços de IP para binding dos serviços de 1o. e 2o. graus.
+# 
+# Se desejar fazer binding do serviço em IPs diferentes, é necessário
+# ter feito antes uma configuração de interface de rede para cada um dos
+# IPs aqui definidos.  Por exemplo, eth0 e eth0:1.
+# Para informações de como fazer isto, consulte:
+# https://www.google.com.br/search?q=how+to+configure+two+ip+addresses+linux
+# 
+# Também é possível diferenciar o serviço por portas ao invés de por IPs.
+# Para tal, vide as opções JBOSS_?GRAU_PORTS abaixo e atribua o mesmo
+# endereço IP para os dois profiles aqui.
+# 
+#JBOSS_1GRAU_IPADDR=0.0.0.0
+#JBOSS_2GRAU_IPADDR=0.0.0.0
+# 
+JBOSS_1GRAU_IPADDR=10.8.14.253
+JBOSS_2GRAU_IPADDR=10.8.14.254
+
+# ----------------------------------------------------------------------
+# Conjunto de portas para binding dos serviços de 1o. e 2o. graus.
+# 
+# Se no parâmetro anterior for configurado o mesmo endereço IP para os
+# serviços de 1o. e 2o. graus, será obrigatório definir conjuntos de portas
+# distintos para o binding dos profiles.
+#
+# Por padrão, estão disponíveis os conjuntos nomeados de ports-01 a ports-04,
+# além do ports-default.  Cada um incrementa em 100 o range de portas para
+# cada serviço do JBoss.  Por exemplo, o serviço web roda em 8180 para ports-01
+# e assim por diante.  No JBoss v5.1.1, tais configurações estão disponível
+# no arquivo $JBOSS_HOME/conf/bindingservice.beans/META-INF/bindings-jboss-beans.xml
+# 
+# Esta opção pode ser preferível, por exemplo, para economizar endereços
+# da sua faixa de IPs.
+# 
+#JBOSS_1GRAU_PORTS=ports-01
+#JBOSS_2GRAU_PORTS=ports-02
+# 
+JBOSS_1GRAU_PORTS=ports-default
+JBOSS_2GRAU_PORTS=ports-default
+
+# ----------------------------------------------------------------------
+# JAVA_HOME e JBOSS_HOME normalmente são definidas como variáveis de ambiente.
+# No entanto, podem também ser atribuídas aqui por comodidade.
+#
+# Isto pode ser útil, por exemplo, para facilitar a utilização do servidor
+# de aplicação com outras máquinas virtuais Java, se mais de uma estiver
+# instalada no servidor.
+#
+JAVA_HOME=/usr/java/default
+JBOSS_HOME=/srv/jboss
+
+# ----------------------------------------------------------------------
+# Usuário com o qual o servidor de aplicação será executado.
+# Preferencialmente este deve ser um usuário comum, sem permissões de
+# superadministrador.
+# 
+# Para efeitos de teste ou se isso não for uma questão contra suas políticas
+# de segurança, também pode ser executado como mesmo usuário dono dos scripts
+# de inicialização (normalmente o root) colocando-se seu valor como RUNASIS.
+#
+#JBOSS_USER=RUNASIS
+JBOSS_USER=jboss
+
+# ----------------------------------------------------------------------
+# Verbosidade para os arquivos de log padrão, normalmente encontrados em
+# log/server.log dentro do diretório do profile.
+# Este parâmetro afeta a verbosidade de log de todos os profiles.
+#
+# Valores possíveis são: FATAL ERROR WARN INFO DEBUG TRACE ALL OFF
+#
+JBOSS_LOG_LEVEL=ERROR
+
+# ----------------------------------------------------------------------
+# Se deseja limpar arquivos temporários e de trabalho antes de iniciar os
+# serviços.  Deixar em Y geralmente é uma boa ideia.
+#
+CLEAR_WORK_TMP=Y
+
+# ----------------------------------------------------------------------
+# Se desejável, é possível direcionar a saída do console para algum arquivo
+# ou dispositivo, por exemplo, um terminal no servidor.
+#
+# No entanto, isto aumenta em muito o I/O de disco, o que pode influenciar
+# no desempenho do serviço.  Como as informações também são muito verbosas,
+# não recomenda-se utilizá-las em produção.
+# 
+JBOSS_CONSOLE=/dev/null
