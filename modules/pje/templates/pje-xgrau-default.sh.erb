@@ -1,12 +1,11 @@
 #!/bin/sh
 # chkconfig: 345 90 10
-# description: JBoss EAP 5 Service
+# description: JBoss EAP 5 service for <%= @profile_name %>
 #
 # JBoss Control Script
-# To use this script run it as root - it will switch to the specified user
-#
-# Either modify this script for your requirements or just ensure that
-# the following variables are set correctly before calling the script.
+# To use this script run it as root - it will switch to the specified user.
+# 
+# Please dont't modify this script!  Define needed params in DEFAULT_VARS file.
 
 DEFAULT_VARS=/etc/default/jboss-pje
 if [[ -f $DEFAULT_VARS ]]; then
@@ -16,11 +15,9 @@ else
     exit 3 # http://refspecs.linuxbase.org/LSB_3.1.1/LSB-Core-generic/LSB-Core-generic/iniscrptact.html
 fi
 
-JBOSS_PROFILE=$JBOSS_1GRAU_PROFILE
-JBOSS_BINDING_PORTS=$JBOSS_1GRAU_PORTS
-JBOSS_BINDING_IPADDR=$JBOSS_1GRAU_IPADDR
-
-
+JBOSS_PROFILE="$JBOSS_<%= @grau %>GRAU_PROFILE"
+JBOSS_BINDING_PORTS="$JBOSS_<%= @grau %>GRAU_PORTS"
+JBOSS_BINDING_IPADDR="$JBOSS_<%= @grau %>GRAU_IPADDR"
 
 # ##############################################################################
 # #### DON'T EDIT BELOW THIS LINE UNLESS YOU REALLY KNOW WHAT YOU ARE DOING ####
@@ -36,7 +33,7 @@ elif [ "$JBOSS_BINDING_PORTS" = "ports-03" ]; then
 elif [ "$JBOSS_BINDING_PORTS" = "ports-04" ]; then 
     JNP_PORT="1499"
 else
-    echo "JBOSS_BINDING_PORTS is not properly configured (allowed values: 'ports-0[1-4]' or 'ports-default')"
+    echo "JBOSS_BINDING_PORTS not properly configured (allowed values: 'ports-0[1-4]' or 'ports-default')"
     exit 3  
 fi
 JBOSS_JNP_PORT="$JNP_PORT"

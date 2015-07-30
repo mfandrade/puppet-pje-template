@@ -73,7 +73,7 @@ define pje::profile (
   file { "$profile_name.sh":
     ensure  => present,
     path    => "${::pje::params::jboss_home}/bin/$profile_name.sh",
-    source  => 'puppet:///modules/pje/pje-xgrau-default.sh',
+    content => template('pje/pje-xgrau-default.sh.erb'),
     owner   => $owner_group,
     group   => $owner_group,
     mode    => '0755',
