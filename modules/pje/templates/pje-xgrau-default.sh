@@ -12,7 +12,7 @@ DEFAULT_VARS=/etc/default/jboss-pje
 if [[ -f $DEFAULT_VARS ]]; then
     . $DEFAULT_VARS
 else
-    echo "File '$DEFAULT_VARS' not found.  Please, create it with params for JBoss startup."    
+    echo "DEFAULT_VARS '$DEFAULT_VARS' file not found.  Please create it with params for proper JBoss startup."    
     exit 3 # http://refspecs.linuxbase.org/LSB_3.1.1/LSB-Core-generic/LSB-Core-generic/iniscrptact.html
 fi
 
@@ -20,7 +20,21 @@ JBOSS_PROFILE=$JBOSS_1GRAU_PROFILE
 JBOSS_BINDING_PORTS=$JBOSS_1GRAU_PORTS
 JBOSS_BINDING_IPADDR=$JBOSS_1GRAU_IPADDR
 
-JBOSS_JNP_PORT=1099 # TODO lógica
+if [ "$JBOSS_BINDING_PORTS" = "ports-default" ]; then 
+    JNP_PORT="1099"
+elif [ "$JBOSS_BINDING_PORTS" = "ports-01" ]; then 
+    JNP_PORT="1199"
+elif [ "$JBOSS_BINDING_PORTS" = "ports-02" ]; then 
+    JNP_PORT="1299"
+elif [ "$JBOSS_BINDING_PORTS" = "ports-03" ]; then 
+    JNP_PORT="1399"
+elif [ "$JBOSS_BINDING_PORTS" = "ports-04" ]; then 
+    JNP_PORT="1499"
+else
+    echo "JBOSS_BINDING_PORTS is not properly configured (allowed values: 'ports-0[1-4]' or 'ports-default')"
+    exit 3  
+fi
+JBOSS_JNP_PORT="$JNP_PORT"
 JBOSS_LOG_LEVEL=${JBOSS_LOG_LEVEL:-"ERROR"}
 
 JBOSS_LOG_DIR=${JBOSS_LOG_DIR:-"$JBOSS_HOME/server/$JBOSS_PROFILE/log"}
