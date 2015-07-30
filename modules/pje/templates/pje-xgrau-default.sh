@@ -110,7 +110,7 @@ if [ ! -d "$JBOSS_HOME" ]; then
    exit 1
 fi
 
-function twiddleStatus()
+function twiddleInfo()
 {
    # use twiddle to get some server status 
    TWIDDLE_CMD="$JBOSS_HOME/bin/twiddle.sh -s jnp://$JBOSS_BINDING_IPADDR:$JBOSS_JNP_PORT -u $JBOSS_ADMIN_USER -p $JBOSS_ADMIN_PASS"
@@ -222,11 +222,8 @@ start_profile()
    fi
 }
 
-case "$1" in
-start)
-    start_profile
-    ;;
-stop)
+stop_profile()
+{
    echo "stop JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR)..."
 
    if [ -z "$SUBIT" ]; then
@@ -241,7 +238,14 @@ stop)
    if [ "$CLEAR_WORK_TMP" = "Y" ]; then
       cleanWorkTmp
    fi
+}
 
+case "$1" in
+start)
+    start_profile
+    ;;
+stop)
+    stop_profile
    ;;
 kill)
    echo "trying halt the JVM process..."
@@ -263,9 +267,9 @@ kill)
 
    ;;
 restart)
-   $0 stop
-   $0 start
-   ;;
+    stop_profile
+    start_profile
+    ;;
 status)
    PID=$(jbossPID)
    if [ "x$PID" = "x" ]; then
@@ -291,7 +295,7 @@ info)
       echo " "
       echo "   Some server info:"
 
-      twiddleStatus
+      twiddleInfo
    fi
    ;;
 *)
