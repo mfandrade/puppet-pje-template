@@ -105,11 +105,6 @@ if [ -z "`echo $PATH | grep $JAVAPTH`" ]; then
    export PATH=$PATH:$JAVAPTH
 fi
 
-if [ $# != 1  ]; then
-   echo "usage: $0 start|stop|restart|kill|status "
-   exit 1
-fi
-
 if [ ! -d "$JBOSS_HOME" ]; then
    echo JBOSS_HOME does not exist as a valid directory : $JBOSS_HOME
    exit 1
@@ -200,12 +195,12 @@ function jbossPID()
 {
    # try get the JVM PID
    local jbossPID="x"
-   jbossPID=$(ps -eo pid,cmd | grep "org.jboss.Main" | grep "${JBOSS_BINDING_IPADDR} " | grep "${JBOSS_PROFILE}" | grep "${JBOSS_BINDING_PORTS}" | grep -v grep | cut -c1-6)
+   jbossPID=$(pgrep -f "org\.jboss\.Main -c $JBOSS_PROFILE -b $JBOSS_BINDING_IPADDR -Djboss.service.binding.set=$JBOSS_SERVICE_BIND")
    echo "$jbossPID"
 }
 
-case "$1" in
-start)
+start_profile()
+{
    cd $JBOSS_HOME/bin
 
    # verifica se a instancia jah estah em execucao
@@ -225,7 +220,12 @@ start)
    else
       echo "JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR) is already running [PID $PID]"
    fi
-   ;;
+}
+
+case "$1" in
+start)
+    start_profile
+    ;;
 stop)
    echo "stop JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR)..."
 
@@ -267,6 +267,16 @@ restart)
    $0 start
    ;;
 status)
+   PID=$(jbossPID)
+   if [ "x$PID" = "x" ]; then
+      echo "JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR) not running! JVM process not found!"
+      exit 3
+   else
+      echo "JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR) is started [PID $PID]"
+      exit 0
+   fi  
+   ;;  
+info)
    clear
 
    # try get the JVM PID
@@ -279,12 +289,13 @@ status)
       echo "JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR) runing!"
       echo "   JBoss (JVM process) [PID $PID] is UP"
       echo " "
-      echo "   Some server status:"
+      echo "   Some server info:"
 
       twiddleStatus
    fi
    ;;
 *)
-   echo "usage: $0 start|stop|restart|kill|status"
+   echo "usage: $0 start|stop|restart|kill|status|info"
 esac
+
 
