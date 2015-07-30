@@ -61,7 +61,16 @@ CLEAR_WORK_TMP=${CLEAR_WORK_TMP:-"Y"}
   JBOSS_ADMIN_PASS=${JMX_PASS:-"admin"}
 
 # make sure java is in your path
-  JAVAPTH=${JAVAPTH:-"$JAVA_HOME/bin"}
+JAVABIN=$(which java 2>/dev/null)
+if [[ "$JAVABIN" = "" ]]; then
+    if [[ ( -n "$JAVA_HOME") && (-x "$JAVA_HOME/bin/java") ]]; then
+        JAVABIN="$JAVA_HOME/bin/java"
+    else
+        echo "Executable 'java' could not be found. It is not in the PATH or JAVA_HOME is not properly set."
+        exit 3
+    fi
+fi
+
 # define the classpath for the shutdown class
   JBOSSCP=${JBOSSCP:-"$JBOSS_HOME/bin/shutdown.jar:$JBOSS_HOME/client/jnet.jar"}
 
@@ -105,22 +114,18 @@ fi
 #define what will be done with the console log
 JBOSS_CONSOLE=${JBOSS_CONSOLE:-"/dev/null"}
 
-JBOSS_JVM_PROP="-Djboss.service.binding.set=$JBOSS_BINDING_PORTS"
-JBOSS_JVM_PROP="$JBOSS_JVM_PROP -Djboss.server.log.threshold=$JBOSS_LOG_LEVEL"
-JBOSS_JVM_PROP="$JBOSS_JVM_PROP -Djboss.server.log.dir=$JBOSS_LOG_DIR"
+JBOSS_JVM_PROP="-Djboss.service.binding.set=$JBOSS_BINDING_PORTS \
+    -Djboss.server.log.threshold=$JBOSS_LOG_LEVEL \
+    -Djboss.server.log.dir=$JBOSS_LOG_DIR"
 
 JBOSS_CMD_START="$JBOSSSH $JBOSS_JVM_PROP"
 
-JBOSS_CMD_STOP=${JBOSS_CMD_STOP:-"java -classpath $JBOSSCP org.jboss.Shutdown --shutdown \
-                                  -s jnp://$JBOSS_BINDING_IPADDR:$JBOSS_JNP_PORT \
-                                  -u $JBOSS_ADMIN_USER -p $JBOSS_ADMIN_PASS"}
-
-if [ -z "`echo $PATH | grep $JAVAPTH`" ]; then
-   export PATH=$PATH:$JAVAPTH
-fi
+JBOSS_CMD_STOP="$JAVABIN -classpath $JBOSSCP org.jboss.Shutdown --shutdown \
+    -s jnp://$JBOSS_BINDING_IPADDR:$JBOSS_JNP_PORT \
+    -u $JBOSS_ADMIN_USER -p $JBOSS_ADMIN_PASS"
 
 if [ ! -d "$JBOSS_HOME" ]; then
-   echo JBOSS_HOME does not exist as a valid directory : $JBOSS_HOME
+   echo "JBOSS_HOME does not exist as a valid directory: $JBOSS_HOME"
    exit 1
 fi
 
