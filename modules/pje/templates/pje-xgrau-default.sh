@@ -238,9 +238,26 @@ case "$1" in
 start)
     start_profile
     ;;
+    
 stop)
     stop_profile
     ;;
+    
+restart)
+    stop_profile
+    start_profile
+    ;;
+    
+status)
+    PID=$(jbossPID)
+    if [ "x$PID" = "x" ]; then
+        echo "JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR) not running! JVM process not found!"
+        exit 3
+    else
+        echo "JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR) is started [PID $PID]"
+        exit 0
+    fi  
+    ;;  
 kill)
     echo "trying halt the JVM process..."
 
@@ -257,20 +274,7 @@ kill)
         cleanWorkTmp
     fi
     ;;
-restart)
-    stop_profile
-    start_profile
-    ;;
-status)
-    PID=$(jbossPID)
-    if [ "x$PID" = "x" ]; then
-        echo "JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR) not running! JVM process not found!"
-        exit 3
-    else
-        echo "JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR) is started [PID $PID]"
-        exit 0
-    fi  
-    ;;  
+
 info)
     clear
 
