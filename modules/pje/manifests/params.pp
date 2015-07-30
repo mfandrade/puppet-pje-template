@@ -90,6 +90,9 @@
 # [*jvm_maxpermsize*]
 #   jvm_maxpermsize
 #
+# [*jmx_credentials*]
+#   jmx_credentials
+#
 # === Exemplo
 #
 #  Nada de interessante :-P
@@ -138,5 +141,6 @@ class pje::params {
   $jvm_maxheapsize    = '2g'
   $jvm_permsize       = '128m'
   $jvm_maxpermsize    = '512m'
+  $jmx_credentials    = 'admin=pje@cluster'
 
 }

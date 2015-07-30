@@ -120,6 +120,12 @@ define pje::profile (
     require => File["$profile_name"],
   }
 
+  file { "jmx-users-${grau}":
+    ensure  => present,
+    path    => "${profile_dir}/conf/props/jmx-console-users.properties",
+    content => "${::pje::params::jmx_credentials}",
+    require => File["$profile_name"],
+  }
 
   file { "$profile_dir/deploy/API-ds.xml":
     ensure  => present,

@@ -58,7 +58,6 @@ class pje::install {
     require => Class['jboss'], # por causa do jboss_home, obviamente
   }
 
-  $initscript = $::pje::params::initscript_name
   file { ['/etc/init.d/pje-1grau-default.sh',
           '/etc/init.d/pje-2grau-default.sh',
           '/etc/init.d/pje-1grau-default',
@@ -67,14 +66,6 @@ class pje::install {
           '/etc/init.d/pje2grau']:
     ensure => absent,
   }
-  file { "/etc/init.d/${initscript}":
-    ensure  => present,
-    content => template('pje/initscript.erb'),
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0755',
-    require => Class['jboss'], # por causa do bin/run.sh
-  }
 
   file { "/etc/default/jboss-pje":
     ensure  => present,
@@ -82,6 +73,16 @@ class pje::install {
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
+  }
+
+  $initscript = $::pje::params::initscript_name
+  file { "/etc/init.d/${initscript}":
+    ensure  => present,
+    content => template('pje/initscript.erb'),
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => Class['jboss'], # por causa do bin/run.sh
   }
 
   $pje_version = $::pje::params::pje_version
