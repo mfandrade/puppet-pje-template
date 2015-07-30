@@ -36,7 +36,7 @@ class pje::service {
   service { $::pje::params::initscript_name:
     ensure     => running,
     enable     => true,
-    hasstatus  => false,
+    hasstatus  => true,
     hasrestart => true,
     require    => Class['pje::install'],
   }
