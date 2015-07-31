@@ -73,9 +73,11 @@ CLUSTER_UDP_MCAST_PORT=${CLUSTER_UDP_MCAST_PORT:-"55225"}
 
 # JMX Credentials
 JMX_USERS_PROPERTIES_FILE="$JBOSS_HOME/server/$JBOSS_PROFILE/conf/props/jmx-console-users.properties"
-JMX_CREDENTIALS=$(grep -Eo '^[[:alnum:]]+=[[:print:]]+' $JMX_USERS_PROPERTIES_FILE)
-JMX_USER=$(cut -d= -f1 <<<$JMX_CREDENTIALS)
-JMX_PASS=$(cut -d= -f2 <<<$JMX_CREDENTIALS)
+if [[ -r $JMX_USERS_PROPERTIES_FILE ]]; then
+  JMX_CREDENTIALS=$(grep -Eo '^[[:alnum:]]+=[[:print:]]+' $JMX_USERS_PROPERTIES_FILE)
+  JMX_USER=$(cut -d= -f1 <<<$JMX_CREDENTIALS)
+  JMX_PASS=$(cut -d= -f2 <<<$JMX_CREDENTIALS)
+fi
 JBOSS_ADMIN_USER=${JMX_USER:-"admin"}
 JBOSS_ADMIN_PASS=${JMX_PASS:-"admin"}
 
