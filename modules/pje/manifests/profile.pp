@@ -137,8 +137,8 @@ define pje::profile (
   file { "$profile_dir/run.conf":
     ensure  => present,
     content => template('pje/run.conf.erb'),
+    require => File["$profile_name"],
   }
-
 
 
   if $grau == '1' {
@@ -160,13 +160,18 @@ define pje::profile (
 
   $war_file = "pje-jt-${::pje::params::pje_version}.war"
   $war_dir  = "${profile_dir}/deploy/${ctxpath}.war"
+  #file { "undeploy-old-pje-${grau}":
+  #  path    => $war_dir,
+  #  ensure  => absent,
+  #  require => Class['pje::install'],
+  #  before  => Exec["deploy-pje-${grau}"],
+  #}
   exec { "deploy-pje-${grau}":
-    command => "rm -rf ${war_dir}; unzip ${war_file} -d ${war_dir}",
+    command => "rm -rf ${war_dir} &>/dev/null; unzip ${war_file} -d ${war_dir}",
+    onlyif  => "test -f ${war_file}",
     cwd     => '/tmp',
     path    => '/bin:/usr/bin',
-    onlyif  => "test -d ${war_dir} -a -f ${war_file}",
     require => Class['pje::install'],
     notify  => Class['pje::service'],
   }
-
 }
