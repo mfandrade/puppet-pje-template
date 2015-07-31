@@ -35,7 +35,7 @@ define pje::profile (
   $profile_dir  = "$::pje::params::jboss_home/server/$profile_name"
 
   if $ds_databasename == undef {
-    $ds_databasename = "pje_${grau}grau_producao"
+    fail("You need to specify 'ds_databasename' parameter for pje::profile ${name}")
   }
 
 
@@ -78,12 +78,6 @@ define pje::profile (
     group   => $owner_group,
     mode    => '0755',
   }
-  #exec { "fix-perms-${profile_name}":
-  #  command => "chown -R ${owner_group}.${owner_group} ${profile_name}",
-  #  cwd     => "${::pje::params::jboss_home}/server",
-  #  path    => '/bin',
-  #}
-
 
   $remove_from_deploy_folder = [
     "$profile_dir/deploy/ROOT.war",
