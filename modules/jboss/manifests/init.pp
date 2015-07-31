@@ -97,7 +97,7 @@ class jboss ($version, $jboss_home) {
     exec { 'download-install-java6':
       command => "wget ${wget_options} ${url} -O jdk6.bin && /bin/bash jdk6.bin",
       cwd     => '/tmp',
-      timeout => 0,
+      timeout => 60,
       unless  => "rpm -q jdk-1.6.0_45",
       path    => '/usr/bin:/bin',
       before  => Exec['extract-jboss511']
@@ -139,7 +139,7 @@ class jboss ($version, $jboss_home) {
     file { "${install_dir}":
       recurse => true,
       require => [Exec['extract-jboss511'], User['jboss']],
-      notify  => Exec['fix-perms'],
+      #notify  => Exec['fix-perms'],
     }
 
     file { "${jboss_home}":
@@ -147,12 +147,12 @@ class jboss ($version, $jboss_home) {
       target  => "${install_dir}/jboss-as",
       require => Exec['extract-jboss511'],
     }
-    exec { 'fix-perms':
-      command => "chown -R jboss.jboss ${install_dir}",
-      onlyif  => "find ${install_dir} \\! -user jboss",
-      path    => '/bin:/usr/bin',
-      require => User['jboss'],
-    }
+    #exec { 'fix-perms':
+    #  command => "chown -R jboss.jboss ${install_dir}",
+    #  onlyif  => "find ${install_dir} \\! -user jboss &>/dev/null",
+    #  path    => '/bin:/usr/bin',
+    #  require => User['jboss'],
+    #}
   }
 
 }
