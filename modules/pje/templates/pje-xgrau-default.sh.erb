@@ -224,6 +224,7 @@ start_profile()
     else
         echo "JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR) is already running [PID $PID]"
     fi
+    exit 0
 }
 
 stop_profile()
@@ -231,7 +232,6 @@ stop_profile()
     PID=$(jbossPID)
     if [ "x$PID" = "x" ]; then
         echo "JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR) not running! JVM process not found!"
-        exit 3
     else
         echo "stopping JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR)..."
 
@@ -246,6 +246,7 @@ stop_profile()
             cleanWorkTmp
         fi
     fi
+    exit 3
 }
 
 case "$1" in
@@ -274,18 +275,18 @@ status)
     ;;
     
 kill)
-    echo "trying to kill the JVM process..."
+    #echo "trying to kill the JVM process..."
 
     PID=$(jbossPID)
     if [ "x$PID" = "x" ]; then
         echo "JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR) not running! JVM process not found!"
     else
-        echo "process still running..."
+        #echo "process still running..."
         echo -n "killing JBoss (JVM process) [PID $PID]... "
         kill -9 $PID
         cleanWorkTmp
         echo "DONE!"
-        echo "Please avoid doing this next time."
+        echo "Please avoid doing this next time!"
     fi
     
     exit 3
@@ -306,6 +307,7 @@ info)
         echo "   Some server info:"
         
         twiddleInfo
+        exit 0
     fi
     ;;
 *)

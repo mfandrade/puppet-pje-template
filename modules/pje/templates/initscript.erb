@@ -11,20 +11,35 @@ if [[ $# -eq 0  ]]; then
 
 elif [[ $# -eq 1 ]]; then
 
-  [[ -x $SCRIPT_1GRAU ]] && $SCRIPT_1GRAU "$1"
-  [[ -x $SCRIPT_2GRAU ]] && $SCRIPT_2GRAU "$1"
+    # TODO: possível lógica para saída (espera-se não necessária)
+    #EXITCODE=0
+    #if [[ -x $SCRIPT_1GRAU ]]; then
+    #    EXITCODE=$($SCRIPT_1GRAU "$1")
+    #fi 
+    #if [[ -x $SCRIPT_2GRAU ]]; then
+    #    EXITCODE=$($SCRIPT_2GRAU "$1" || $EXITCODE)
+    #fi 
+    #exit $EXITCODE
+                                    
+    if [[ -x $SCRIPT_1GRAU ]]; then
+        $SCRIPT_1GRAU "$1"
+    fi  
+    if [[ -x $SCRIPT_2GRAU ]]; then
+        $SCRIPT_2GRAU "$1"
+    fi  
 
 elif [[ $# -ge 2 ]]; then
 
-  if [[ "$2" = "1grau" ]]; then
-    [[ -x $SCRIPT_1GRAU ]] && $SCRIPT_1GRAU "$1"
-    
-  elif [[ "$2" = "2grau" ]]; then
-    [[ -x $SCRIPT_2GRAU ]] && $SCRIPT_2GRAU "$1"
-    
-  else
-    echo "PJE '$2' is an invalid instance"
-    exit 3
-
-  fi
+    if [[ "$2" = "1grau" ]]; then
+        if [[ -x $SCRIPT_1GRAU ]]; then
+            $SCRIPT_1GRAU "$1"
+        fi  
+    elif [[ "$2" = "2grau" ]]; then
+        if [[ -x $SCRIPT_2GRAU ]]; then
+            $SCRIPT_2GRAU "$1"
+        fi  
+    else
+        echo "PJE '$2' is an invalid instance"
+        exit 4
+    fi
 fi
