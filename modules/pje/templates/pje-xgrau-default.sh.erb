@@ -207,7 +207,6 @@ jbossPID()
 
 start_profile()
 {
-    # verifica se a instancia jah estah em execucao
     PID=$(jbossPID)
     if [ "x$PID" = "x" ]; then
         echo "starting JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR)..."
@@ -227,18 +226,23 @@ start_profile()
 
 stop_profile()
 {
-    echo "stop JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR)..."
-
-    if [ -z "$SU_USER" ]; then
-        $JBOSS_CMD_STOP
+    PID=$(jbossPID)
+    if [ "x$PID" = "x" ]; then
+        echo "JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR) not running! JVM process not found!"
+        exit 3
     else
-        #echo "CMD: $JBOSS_CMD_STOP"
-        $SU_USER "$JBOSS_CMD_STOP"
-    fi 
+        echo "stopping JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR)..."
 
-    if [ "$CLEAR_WORK_TMP" = "Y" ]; then
-        sleep 10
-        cleanWorkTmp
+        if [ -z "$SU_USER" ]; then
+            $JBOSS_CMD_STOP
+        else
+            #echo "CMD: $JBOSS_CMD_STOP"
+            $SU_USER "$JBOSS_CMD_STOP"
+        fi
+        if [ "$CLEAR_WORK_TMP" = "Y" ]; then
+            sleep 10
+            cleanWorkTmp
+        fi
     fi
 }
 
