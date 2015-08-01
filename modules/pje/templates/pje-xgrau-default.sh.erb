@@ -212,7 +212,7 @@ cleanWorkTmp()
 
 jbossPID()
 {
-    jbossPID=$(pgrep -f "org\.jboss\.Main -c $JBOSS_PROFILE -b $JBOSS_BINDING_IPADDR -Djboss.service.binding.set=$JBOSS_SERVICE_BIND")
+    jbossPID=$(pgrep -f "org\.jboss\.Main -c $JBOSS_PROFILE -b $JBOSS_BINDING_IPADDR") # -Djboss.service.binding.set=$JBOSS_BINDING_PORTS")
     echo "$jbossPID"
 }
 
