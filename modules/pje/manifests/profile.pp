@@ -160,13 +160,13 @@ define pje::profile (
   }
 
   $war_file = "pje-jt-${::pje::params::pje_version}.war"
-  $war_dir  = "${profile_dir}/deploy/${ctxpath}.war"
+  $war_dir  = "${profile_path}/deploy/${ctxpath}.war"
   exec { "deploy-pje-${grau}":
     command => "rm -rf ${war_dir} &>/dev/null; unzip ${war_file} -d ${war_dir}",
     onlyif  => "test -f ${war_file}",
     cwd     => '/tmp',
     path    => '/bin:/usr/bin',
-    require => File["$profile_name"],
+    require => File["${profile_path}"],
     notify  => Service["pje${grau}grau"],
   }
   service { "pje${grau}grau":
