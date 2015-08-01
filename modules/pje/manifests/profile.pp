@@ -124,30 +124,38 @@ define pje::profile (
 
   file { "jmx-users-${grau}":
     ensure  => present,
+    owner   => $owner_group,
+    group   => $owner_group,
     path    => "${profile_path}/conf/props/jmx-console-users.properties",
     content => "${::pje::params::jmx_credentials}",
     require => Exec["create-profile-${grau}"],
   }
   file { "${profile_path}/deploy/API-ds.xml":
     ensure  => present,
+    owner   => $owner_group,
+    group   => $owner_group,
     content => template('pje/API-ds.xml.erb'),
     require => Exec["create-profile-${grau}"],
   }
   file { "${profile_path}/deploy/GIM-ds.xml":
     ensure  => present,
+    owner   => $owner_group,
+    group   => $owner_group,
     content => template('pje/GIM-ds.xml.erb'),
     require => Exec["create-profile-${grau}"],
   }
   file { "${profile_path}/deploy/PJE-ds.xml":
     ensure  => present,
+    owner   => $owner_group,
+    group   => $owner_group,
     content => template('pje/PJE-ds.xml.erb'),
     require => Exec["create-profile-${grau}"],
   }
   file { "${profile_path}/run.conf":
     ensure  => present,
-    content => template('pje/run.conf.erb'),
     owner   => $owner_group,
     group   => $owner_group,
+    content => template('pje/run.conf.erb'),
     require => Exec["create-profile-${grau}"],
   }
 
@@ -172,7 +180,7 @@ define pje::profile (
   $war_file = "pje-jt-${::pje::params::pje_version}.war"
   $war_path = "${profile_path}/deploy/${ctxpath}.war"
   exec { "deploy-pje-${grau}":
-    command => "rm -rf ${war_path} &>/dev/null; unzip ${war_file} -d ${war_path}",
+    command => "rm -rf ${war_path} 2>/dev/null; unzip ${war_file} -d ${war_path}; chown -R ${owner_group}.${owner_group} ${war_path}",
     onlyif  => "test -f ${war_file}",
     cwd     => '/tmp',
     path    => '/bin:/usr/bin',
