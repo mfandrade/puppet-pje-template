@@ -65,11 +65,13 @@ define pje::profile (
     $owner_group = 'root'
   }
   exec { "create-profile-${grau}":
-    command => "rsync -qrup ${jboss_home}/server/default ${profile_path}",
-    unless  => "test -d ${profile_path}",
-    path    => '/usr/bin',
+    #command => "rsync -av default ${profile_name}",
+    command => "cp -pRu default ${profile_name}",
+    cwd     => "${jboss_home}/server",
+    path    => '/usr/bin:/bin',
     require => Class['pje::install'],
   }
+  
   file { "${profile_name}.sh":
     ensure  => present,
     path    => "${jboss_home}/bin/${profile_name}.sh",
@@ -126,7 +128,6 @@ define pje::profile (
     content => "${::pje::params::jmx_credentials}",
     require => Exec["create-profile-${grau}"],
   }
-
   file { "${profile_path}/deploy/API-ds.xml":
     ensure  => present,
     content => template('pje/API-ds.xml.erb'),
@@ -142,7 +143,6 @@ define pje::profile (
     content => template('pje/PJE-ds.xml.erb'),
     require => Exec["create-profile-${grau}"],
   }
-
   file { "${profile_path}/run.conf":
     ensure  => present,
     content => template('pje/run.conf.erb'),
@@ -168,9 +168,9 @@ define pje::profile (
   }
 
   $war_file = "pje-jt-${::pje::params::pje_version}.war"
-  $war_dir  = "${profile_path}/deploy/${ctxpath}.war"
+  $war_path = "${profile_path}/deploy/${ctxpath}.war"
   exec { "deploy-pje-${grau}":
-    command => "rm -rf ${war_dir} &>/dev/null; unzip ${war_file} -d ${war_dir}",
+    command => "rm -rf ${war_path} &>/dev/null; unzip ${war_file} -d ${war_path}",
     onlyif  => "test -f ${war_file}",
     cwd     => '/tmp',
     path    => '/bin:/usr/bin',
@@ -184,4 +184,5 @@ define pje::profile (
     hasrestart => true,
     require    => File["/etc/init.d/pje${grau}grau"],
   }
+
 }
