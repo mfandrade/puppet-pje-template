@@ -31,8 +31,9 @@ define pje::profile (
   } else {
     fail("PJE profile '$name' is an invalid jvmRoute pattern")
   }
+  $jboss_home   = $::pje::params::jboss_home
   $profile_name = "pje-${grau}grau-default"
-  $profile_path = "$::pje::params::jboss_home/server/${profile_name}"
+  $profile_path = "${jboss_home}/server/${profile_name}"
 
   if $ds_databasename == undef {
     fail("You need to specify 'ds_databasename' parameter for pje::profile ${name}")
@@ -63,23 +64,24 @@ define pje::profile (
     $jboss_user  = 'RUNASIS' # para o script de inicialização
     $owner_group = 'root'
   }
-  file { "${profile_path}":
-    ensure  => present,
-    source  => "file:///$::pje::params::jboss_home/server/default",
-    recurse => true,
+  exec { "create-profile-${grau}":
+    command => "rsync -qrup ${jboss_home}/server/default ${profile_path}",
+    unless  => "test -d ${profile_path}",
+    path    => '/usr/bin',
     require => Class['pje::install'],
   }
   file { "${profile_name}.sh":
     ensure  => present,
-    path    => "${::pje::params::jboss_home}/bin/${profile_name}.sh",
+    path    => "${jboss_home}/bin/${profile_name}.sh",
     content => template('pje/pje-xgrau-default.sh.erb'),
     owner   => $owner_group,
     group   => $owner_group,
     mode    => '0755',
+    require => Class['pje::install'],
   }
   file { "/etc/init.d/pje${grau}grau":
     ensure  => link,
-    target  => "${::pje::params::jboss_home}/bin/${profile_name}.sh",
+    target  => "${jboss_home}/bin/${profile_name}.sh",
     require => File["${profile_name}.sh"],
   }
 
@@ -115,30 +117,36 @@ define pje::profile (
   file { $remove_from_deploy_folder:
     ensure  => absent,
     force   => true,
+    require => Exec["create-profile-${grau}"],
   }
 
   file { "jmx-users-${grau}":
     ensure  => present,
     path    => "${profile_path}/conf/props/jmx-console-users.properties",
     content => "${::pje::params::jmx_credentials}",
+    require => Exec["create-profile-${grau}"],
   }
 
   file { "${profile_path}/deploy/API-ds.xml":
     ensure  => present,
     content => template('pje/API-ds.xml.erb'),
+    require => Exec["create-profile-${grau}"],
   }
   file { "${profile_path}/deploy/GIM-ds.xml":
     ensure  => present,
     content => template('pje/GIM-ds.xml.erb'),
+    require => Exec["create-profile-${grau}"],
   }
   file { "${profile_path}/deploy/PJE-ds.xml":
     ensure  => present,
     content => template('pje/PJE-ds.xml.erb'),
+    require => Exec["create-profile-${grau}"],
   }
 
   file { "${profile_path}/run.conf":
     ensure  => present,
     content => template('pje/run.conf.erb'),
+    require => Exec["create-profile-${grau}"],
   }
 
 
@@ -166,7 +174,7 @@ define pje::profile (
     onlyif  => "test -f ${war_file}",
     cwd     => '/tmp',
     path    => '/bin:/usr/bin',
-    require => File["${profile_path}"],
+    require => Exec["create-profile-${grau}"],
     notify  => Service["pje${grau}grau"],
   }
   service { "pje${grau}grau":

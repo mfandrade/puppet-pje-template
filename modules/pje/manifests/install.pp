@@ -82,4 +82,9 @@ class pje::install {
     require => Package['unzip'],
   }
 
+  package { 'rsync':
+    ensure        => present,
+    allow_virtual => false,
+  }
+
 }
