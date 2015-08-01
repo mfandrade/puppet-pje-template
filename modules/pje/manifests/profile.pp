@@ -146,6 +146,8 @@ define pje::profile (
   file { "${profile_path}/run.conf":
     ensure  => present,
     content => template('pje/run.conf.erb'),
+    owner   => $owner_group,
+    group   => $owner_group,
     require => Exec["create-profile-${grau}"],
   }
 
