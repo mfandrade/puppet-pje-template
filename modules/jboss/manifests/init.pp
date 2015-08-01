@@ -121,7 +121,8 @@ class jboss ($version, $jboss_home) {
     exec { 'extract-jboss511':
       command => "unzip -uo /tmp/jboss511.zip -d ${destination_dir}",
       onlyif  => "test \\! -x ${install_dir}/jboss-as/bin/run.sh -a -f /tmp/jboss511.zip",
-      require => [File["/tmp/jboss511.zip"], Package['unzip'], File["${destination_dir}"]],
+      require => [Package['unzip'], File["${destination_dir}"]],
+      #require => [File["/tmp/jboss511.zip"], Package['unzip'], File["${destination_dir}"]],
       path    => '/usr/bin',
     }
 
