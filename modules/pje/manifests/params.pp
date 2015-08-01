@@ -21,9 +21,6 @@
 # [*exec_quartz*]
 #   exec_quartz
 #
-# [*initscript_name*]
-#   initscript_name
-#
 # [*ds_servername*]
 #   ds_servername
 #
@@ -116,7 +113,7 @@ class pje::params {
   $exec_quartz        = false
   #$binding_to         = undef
   #$jmxremote_port     = undef
-  $initscript_name    = 'pje'
+  #$initscript_name    = 'pje'
   $pje_version        = '1.5.2.3'
   $ds_servername      = '10.8.14.211'
   $ds_portnumber      = 5432

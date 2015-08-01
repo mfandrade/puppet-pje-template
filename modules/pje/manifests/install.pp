@@ -58,31 +58,12 @@ class pje::install {
     require => Class['jboss'], # por causa do jboss_home, obviamente
   }
 
-  file { ['/etc/init.d/pje-1grau-default.sh',
-          '/etc/init.d/pje-2grau-default.sh',
-          '/etc/init.d/pje-1grau-default',
-          '/etc/init.d/pje-2grau-default',
-          '/etc/init.d/pje1grau',
-          '/etc/init.d/pje2grau']:
-    ensure => absent,
-  }
-
   file { "/etc/default/jboss-pje":
     ensure  => present,
     source  => 'puppet:///modules/pje/jboss-pje',
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-  }
-
-  $initscript = $::pje::params::initscript_name
-  file { "/etc/init.d/${initscript}":
-    ensure  => present,
-    content => template('pje/initscript.erb'),
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0755',
-    require => Class['jboss'], # por causa do bin/run.sh
   }
 
   $pje_version = $::pje::params::pje_version
@@ -94,10 +75,11 @@ class pje::install {
   }
   exec { 'download-war':
     command => "wget -c '${url}'",
-    unless  => "test -f ${war_name} && unzip -t -qq ${war_name}",
+    unless  => "unzip -t -q ${war_name} 2>/dev/null",
     cwd     => '/tmp',
     path    => '/usr/bin',
-    require => [File["/tmp/${war_name}"], Package['unzip']],
+    #require => [File["/tmp/${war_name}"], Package['unzip']],
+    require => Package['unzip'],
   }
 
 }
