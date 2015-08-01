@@ -75,7 +75,7 @@ class pje::install {
   }
   exec { 'download-war':
     command => "wget -c '${url}'",
-    unless  => "unzip -t -q ${war_name} 2>/dev/null",
+    unless  => "unzip -t -qq ${war_name} 2>/dev/null",
     cwd     => '/tmp',
     path    => '/usr/bin',
     #require => [File["/tmp/${war_name}"], Package['unzip']],
