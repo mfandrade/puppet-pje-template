@@ -15,13 +15,25 @@ else
     exit 3 # http://refspecs.linuxbase.org/LSB_3.1.1/LSB-Core-generic/LSB-Core-generic/iniscrptact.html
 fi
 
-JBOSS_PROFILE="$JBOSS_<%= @grau %>GRAU_PROFILE"
-JBOSS_BINDING_PORTS="$JBOSS_<%= @grau %>GRAU_PORTS"
-JBOSS_BINDING_IPADDR="$JBOSS_<%= @grau %>GRAU_IPADDR"
 
 # ##############################################################################
 # #### DON'T EDIT BELOW THIS LINE UNLESS YOU REALLY KNOW WHAT YOU ARE DOING ####
 # ##############################################################################
+
+JBOSS_PROFILE="$JBOSS_<%= @grau %>GRAU_PROFILE"
+if [[ $JBOSS_<%= @grau %>GRAU_BINDTO =~ ^ports-(default|0[1-3]) ]]; then
+    JBOSS_BINDING_IPADDR="0.0.0.0"
+    JBOSS_BINDING_PORTS="$JBOSS_<%= @grau %>GRAU_BINDTO"
+
+elif [[ $JBOSS_<%= @grau %>GRAU_BINDTO =~ ^[0-9]{1,3}(\.[0-9]{1,3}){3} ]]; then
+    JBOSS_BINDING_IPADDR="$JBOSS_<%= @grau %>GRAU_BINDTO"
+    JBOSS_BINDING_PORTS="ports-default"
+
+else
+    echo "JBOSS_<%= @grau %>GRAU_BINDTO must be a configured IP address or a valid JBoss profile port set"
+    exit 3
+fi
+
 if [ "$JBOSS_BINDING_PORTS" = "ports-default" ]; then 
     JNP_PORT="1099"
 elif [ "$JBOSS_BINDING_PORTS" = "ports-01" ]; then 
