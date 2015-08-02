@@ -33,11 +33,14 @@
 #
 # Copyleft 2015 Marcelo F Andrade (vide arquivo LICENSE)
 #
-class pje::install {
+class pje::install($version) {
 
+  include pje::params
+
+  $jboss_home = $::pje::params::jboss_home
   class { 'jboss':
     version    => '5.1.1',
-    jboss_home => $::pje::params::jboss_home,
+    jboss_home => $jboss_home,
   }
 
   file { 'aplicacaojt.keystore':
@@ -50,7 +53,6 @@ class pje::install {
     require => Class['jboss'], # por causa do java
   }
 
-  $jboss_home = $::pje::params::jboss_home
   file { 'drive-postgresql':
     ensure  => present,
     path    => "${jboss_home}/common/lib/postgresql-9.3-1103.jdbc4.jar",
@@ -66,19 +68,13 @@ class pje::install {
     mode    => '0644',
   }
 
-  $pje_version = $::pje::params::pje_version
-  $war_name    = "pje-jt-${pje_version}.war"
-  $url         = "http://portal.pje.redejt/nexus/content/repositories/releases/br/jus/csjt/pje/pje-jt/${pje_version}/${war_name}"
-  file { "/tmp/${war_name}": 
-    ensure => present,
-    source => "puppet:///modules/pje/${war_name}",
-  }
+  $war_name = "pje-jt-${version}.war"
+  $url      = "http://portal.pje.redejt/nexus/content/repositories/releases/br/jus/csjt/pje/pje-jt/${version}/${war_name}"
   exec { 'download-war':
-    command => "wget -c '${url}'",
-    unless  => "unzip -tqq ${war_name}",
+    command => "wget -c '${url}'", # TODO: falta setar o proxy
+    unless  => "test -f ${war_name} && unzip -tqq ${war_name}",
     cwd     => '/tmp',
     path    => '/usr/bin',
-    #require => [File["/tmp/${war_name}"], Package['unzip']],
     require => Package['unzip'],
   }
 

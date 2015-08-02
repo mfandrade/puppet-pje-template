@@ -1,7 +1,7 @@
-class pje($version = undef) {
+class pje($version) {
 
-  include pje::params
-  include pje::install
-  #include pje::service
+  class { 'pje::install':
+    version => $version,
+  }
 
 }

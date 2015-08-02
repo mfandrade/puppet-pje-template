@@ -17,8 +17,6 @@ define pje::profile (
   $exec_quartz        = false,
 ) {
 
-  include pje
-
 # ------------------------------------------------------------------------
   $jvmroute = $name
 
@@ -177,7 +175,7 @@ define pje::profile (
     fail("PJE environment '${env}' does not exist")
   }
 
-  $war_file = "pje-jt-${::pje::params::pje_version}.war"
+  $war_file = "pje-jt-${version}.war"
   $war_path = "${profile_path}/deploy/${ctxpath}.war"
   exec { "deploy-pje-${grau}":
     command => "rm -rf ${war_path} 2>/dev/null; unzip ${war_file} -d ${war_path}; chown -R ${owner_group}.${owner_group} ${war_path}",
