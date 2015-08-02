@@ -63,13 +63,12 @@ define pje::profile (
     $owner_group = 'root'
   }
   exec { "create-profile-${grau}":
-    #command => "rsync -av default ${profile_name}",
     command => "cp -pRu default ${profile_name}",
     cwd     => "${jboss_home}/server",
     path    => '/usr/bin:/bin',
     require => Class['pje::install'],
   }
-  
+ 
   file { "${profile_name}.sh":
     ensure  => present,
     path    => "${jboss_home}/bin/${profile_name}.sh",

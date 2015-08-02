@@ -70,17 +70,19 @@ class pje::install($version) {
 
   $war_name = "pje-jt-${version}.war"
   $url      = "http://portal.pje.redejt/nexus/content/repositories/releases/br/jus/csjt/pje/pje-jt/${version}/${war_name}"
+  file { "/tmp/${war_name}":
+    mode    => '0644',
+    owner   => 'root',
+    group   => 'root',
+    source  => ["puppet:///modules/pje/${war_name}", 'file:///dev/null'],
+  }
   exec { 'download-war':
-    command => "wget -c '${url}'", # TODO: falta setar o proxy
+    command => "wget -c '${url}'",
+    timeout => '1200',
     unless  => "test -f ${war_name} && unzip -tqq ${war_name}",
     cwd     => '/tmp',
     path    => '/usr/bin',
-    require => Package['unzip'],
-  }
-
-  package { 'rsync':
-    ensure        => present,
-    allow_virtual => false,
+    require => [Package['unzip'], File["/tmp/${war_name}"]],
   }
 
 }
