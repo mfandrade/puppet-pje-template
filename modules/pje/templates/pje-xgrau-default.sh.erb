@@ -251,7 +251,7 @@ stop_profile()
             $SU_USER "$JBOSS_CMD_STOP"
         fi
         if [ "$CLEAR_WORK_TMP" = "Y" ]; then
-            sleep 10
+            #sleep 10
             cleanWorkTmp
         fi
     fi
