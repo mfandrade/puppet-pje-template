@@ -63,7 +63,7 @@ define pje::profile (
     $owner_group = 'root'
   }
   exec { "create-profile-${grau}":
-    command => "cp -pRu default ${profile_name}",
+    command => "rm -rf ${profile_name} 2>/dev/null; cp -pRu default ${profile_name}",
     cwd     => "${jboss_home}/server",
     path    => '/usr/bin:/bin',
     require => Class['pje::install'],
