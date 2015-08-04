@@ -84,7 +84,7 @@ class jboss ($version, $jboss_home) {
 
   } else {
 
-    $baseurl = 'http://download.oracle.com/otn-pub/java/jdk/6u45-b06/'
+    $baseurl = 'http://download.oracle.com/otn-pub/java/jdk/'
     if $::architecture =~ /^i.86$/ {
       $url = "${baseurl}/6u45-b06/jdk-6u45-linux-i586-rpm.bin"
 
@@ -96,9 +96,9 @@ class jboss ($version, $jboss_home) {
     }
   
     $accept_header = 'Cookie: oraclelicense=accept-securebackup-cookie'
-    $wget_options  = "-c --no-check-certificate --no-cookies --header '${accept_header}'"
+    $wget_options  = "-c --no-check-certificate --header '${accept_header}'"
     exec { 'download-install-java6':
-      command => "wget ${wget_options} ${url} -O jdk6.bin && /bin/bash jdk6.bin",
+      command => "wget ${wget_options} ${url} -O jdk6.bin; /bin/bash jdk6.bin",
       cwd     => '/tmp',
       timeout => 0,
       unless  => 'rpm -q jdk-1.6.0_45',
@@ -122,8 +122,9 @@ class jboss ($version, $jboss_home) {
       # FIXME: ^o arquivo deve existir e, por favor, ponha uma variável no name
     }
     exec { 'extract-jboss511':
-      command => "unzip -uo /tmp/jboss511.zip -d ${destination_dir}",
-      onlyif  => "test \\! -x ${install_dir}/jboss-as/bin/run.sh -a -f /tmp/jboss511.zip",
+      command => "unzip -uo jboss511.zip -d ${destination_dir}",
+      onlyif  => "test \\! -x ${install_dir}/jboss-as/bin/run.sh -a -f jboss511.zip",
+      cwd     => '/tmp',
       require => [Package['unzip'], File[$destination_dir]],
       path    => '/usr/bin',
     }
