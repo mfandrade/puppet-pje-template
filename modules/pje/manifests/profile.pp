@@ -150,7 +150,7 @@ define pje::profile (
 #       mas dá problema de classe redeclarada. Talvez se
 #       jogar os parâmetros todos para o hiera...
 
-  include pje::params
+  include pje
 
   if $::pje::params::runas_user != undef {
     $jboss_user  = $::pje::params::runas_user

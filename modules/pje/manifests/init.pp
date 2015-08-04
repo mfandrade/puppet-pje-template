@@ -39,10 +39,11 @@
 # limitations under the License.
 # ----------------------------------------------------------------------------
 #
-class pje($version) {
+class pje {
 
+  include pje::params
   class { 'pje::install':
-    version => $version,
+    version => hiera('pje_version'),
   }
 
 }
