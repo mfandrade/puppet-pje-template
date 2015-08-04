@@ -52,12 +52,13 @@ JBOSS_LOG_LEVEL=${JBOSS_LOG_LEVEL:-"ERROR"}
 
 
 # make sure java is in your path
-JAVABIN=$(which java 2>/dev/null)
-if [[ "$JAVABIN" = "" ]]; then
-    if [[ ( -n "$JAVA_HOME") && (-x "$JAVA_HOME/bin/java") ]]; then
-        JAVABIN="$JAVA_HOME/bin/java"
+if [[ (-n "$JAVA_HOME") && (-x "$JAVA_HOME/bin/java") ]]; then
+    JAVABIN="$JAVA_HOME/bin/java"
+else
+    if [[ $(which java 2>/dev/null) ]]; then
+        JAVABIN=$(which java)
     else
-        echo "Executable 'java' could not be found. It is not in the PATH or JAVA_HOME is not properly set."
+        echo "Executable 'java' is not in the PATH or JAVA_HOME is not properly set."
         exit 3
     fi
 fi
