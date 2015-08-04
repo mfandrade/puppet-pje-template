@@ -1,3 +1,95 @@
+# == Definição: pje::profile
+#
+# Definição para provisionamento dos profiles, 1o. e 2o. graus, do PJE.
+#
+# === Parâmetros
+#
+# Esta definição possui os seguintes parâmetros.
+#
+# [*{namevar}*]
+#   jvmroute - obrigatório
+#
+# [*version*]
+#   version - obrigatório
+#
+# [*env*]
+#   env - obrigatório
+#
+# [*binding_to*]
+#   binding_to - obrigatório
+#
+# [*jmxremote_port*]
+#   jmxremote_port - obrigatório
+#
+# [*ds_databasename*]
+#   ds_databasename - obrigatório
+#
+# [*ds_minpoolsize_pje*]
+#   ds_minpoolsize_pje
+#
+# [*ds_maxpoolsize_pje*]
+#   ds_maxpoolsize_pje
+#
+# [*ds_minpoolsize_api*]
+#   ds_minpoolsize_api
+#
+# [*ds_maxpoolsize_api*]
+#   ds_maxpoolsize_api
+#
+# [*ds_minpoolsize_gim*]
+#   ds_minpoolsize_gim
+#
+# [*ds_maxpoolsize_gim*]
+#
+# [*jvm_heapsize*]
+#   jvm_heapsize
+#
+# [*jvm_maxheapsize*]
+#   jvm_maxheapsize
+#
+# [*jvm_permsize*]
+#   jvm_permsize
+#
+# [*jvm_maxpermsize*]
+#   jvm_maxpermsize
+#
+# [*exec_quartz*]
+#   exec_quartz
+#
+# === Variáveis
+#
+# TODO: documentação das variáveis
+#
+# === Exemplo
+#
+#```
+#    pje::profile { 'int1a': # primeiro grau, interno, servidor A
+#        version         => '1.6.0',
+#        env             => 'treinamento',
+#        ds_databasename => 'pje_1grau_treinamento',
+#        binding_to      => 'ports-default',
+#        jmx_remote_port => '10150',
+#        
+#    }
+#```
+#
+# ===
+# Copyright 2015 Marcelo de Freitas Andrade
+#
+# Marcelo F Andrade can be contacted at <mfandrade@gmail.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#    http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
 define pje::profile (
   $version,
   $env,
@@ -52,8 +144,9 @@ define pje::profile (
   }
 
 # ------------------------------------------------------------------------
-  include pje::params
+# TODO: gostaria de incluir o PJE parametrizado(?) aqui, mas dá problema de classe redeclarada
 
+  include pje::params
 
   if $::pje::params::runas_user != undef {
     $jboss_user  = $::pje::params::runas_user

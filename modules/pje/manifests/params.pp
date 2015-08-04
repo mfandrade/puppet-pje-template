@@ -98,26 +98,31 @@
 #   include pje::params
 #```
 #
-# === Autor
+# ===
+# Copyright 2015 Marcelo de Freitas Andrade
 #
-# Marcelo F Andrade <contato@marceloandrade.info>
+# Marcelo F Andrade can be contacted at <mfandrade@gmail.com>
 #
-# === Copyleft
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#    http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 #
-# Copyleft 2015 Marcelo F Andrade (vide arquivo LICENSE)
-#
-class pje::params {
+class pje::params {  # TODO: utilizar variáveis para o hiera
 
-  $jboss_home      = '/srv/jboss'
-  $runas_user         = 'jboss' # TODO vide módulo jboss
+  $jboss_home         = '/srv/jboss'
+  $runas_user         = 'jboss' # vide módulo jboss
   $exec_quartz        = false
-  #$binding_to         = undef
-  #$jmxremote_port     = undef
-  #$initscript_name    = 'pje'
   $pje_version        = '1.6.0'
   $ds_servername      = '10.8.14.206'
   $ds_portnumber      = 5432
-  #$ds_databasename    = undef
   $ds_username_pje    = 'pje'
   $ds_password_pje    = 'PjEcSjT'
   $ds_minpoolsize_pje = 5
