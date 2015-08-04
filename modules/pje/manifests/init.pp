@@ -1,6 +1,6 @@
-# Copyright 2015 Marcelo de Freitas Andrade
+# Copyright 2015 Marcelo F Andrade
 #
-# Marcelo F Andrade can be contacted at <mfandrade@gmail.com>
+# Marcelo F Andrade can be contacted at http://marceloandrade.info
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# ------------------------------------------------------------------------------
 class pje($version) {
 
   class { 'pje::install':

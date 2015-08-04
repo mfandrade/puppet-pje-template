@@ -1,3 +1,20 @@
+# Copyright 2015 Marcelo F Andrade
+#
+# Marcelo F Andrade can be contacted at http://marceloandrade.info
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#    http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# ----------------------------------------------------------------------------
 # == Definição: pje::profile
 #
 # Definição para provisionamento dos profiles, 1o. e 2o. graus, do PJE.
@@ -60,10 +77,10 @@
 #
 # TODO: documentação das variáveis
 #
-# === Exemplo
+# === Exemplo de uso
 #
 #```
-#    pje::profile { 'int1a': # primeiro grau, interno, servidor A
+#    pje::profile { 'int1a':
 #        version         => '1.6.0',
 #        env             => 'treinamento',
 #        ds_databasename => 'pje_1grau_treinamento',
@@ -73,23 +90,7 @@
 #    }
 #```
 #
-# ===
-# Copyright 2015 Marcelo de Freitas Andrade
-#
-# Marcelo F Andrade can be contacted at <mfandrade@gmail.com>
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# 
-#    http://www.apache.org/licenses/LICENSE-2.0
-# 
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
+# ----------------------------------------------------------------------------
 define pje::profile (
   $version,
   $env,
@@ -109,28 +110,28 @@ define pje::profile (
   $exec_quartz        = false,
 ) {
 
-# ------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
   $jvmroute = $name
 
   if $jvmroute =~ /^pje([12])([a-z])x?$/ { # EXEMPLO: pje1a, pje2bx
-    $grau    = "$1"
+    $grau = $1
 
   } elsif $jvmroute =~ /^(int|ext)[a-z]([12])$/ { # EXEMPLO: inta1, extb2
-    $grau = "$2"
+    $grau = $2
 
   } else {
-    fail("PJE profile '$name' is an invalid jvmRoute pattern")
+    fail("PJE profile '${name}' is an invalid jvmRoute pattern")
   }
   $jboss_home   = $::pje::params::jboss_home
   $profile_name = "pje-${grau}grau-default"
   $profile_path = "${jboss_home}/server/${profile_name}"
 
   if $ds_databasename == undef {
-    fail("You need to specify 'ds_databasename' parameter for pje::profile ${name}")
+    fail("You need to set 'ds_databasename' parameter for pje::profile ${name}")
   }
 
 
-# ------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
   if ($binding_to == 'ports-default') or ($binding_to =~ /^ports-0[1-3]$/) {
     $binding_ipaddr = '0.0.0.0'
     $binding_ports  = $binding_to
@@ -143,8 +144,10 @@ define pje::profile (
     fail('You need to specify an IP address or a default port set to bind to')
   }
 
-# ------------------------------------------------------------------------
-# TODO: gostaria de incluir o PJE parametrizado(?) aqui, mas dá problema de classe redeclarada
+# ----------------------------------------------------------------------------
+# TODO: Gostaria de incluir o PJE parametrizado(?) aqui,
+#       mas dá problema de classe redeclarada. Talvez se
+#       jogar os parâmetros todos para o hiera...
 
   include pje::params
 
@@ -156,12 +159,12 @@ define pje::profile (
     $owner_group = 'root'
   }
   exec { "create-profile-${grau}":
-    command => "rm -rf ${profile_name} 2>/dev/null; cp -pRu default ${profile_name}",
+    command => "rm -rf ${profile_name}; cp -pRu default ${profile_name}",
     cwd     => "${jboss_home}/server",
     path    => '/usr/bin:/bin',
     require => Class['pje::install'],
   }
- 
+
   file { "${profile_name}.sh":
     ensure  => present,
     path    => "${jboss_home}/bin/${profile_name}.sh",
@@ -217,7 +220,7 @@ define pje::profile (
     owner   => $owner_group,
     group   => $owner_group,
     path    => "${profile_path}/conf/props/jmx-console-users.properties",
-    content => "${::pje::params::jmx_credentials}",
+    content => $::pje::params::jmx_credentials,
     require => Exec["create-profile-${grau}"],
   }
   file { "${profile_path}/deploy/API-ds.xml":
@@ -258,7 +261,7 @@ define pje::profile (
 
   }
   if $env == 'producao' {
-    $ctxpath = "${ordgrau}"
+    $ctxpath = $ordgrau
 
   } elsif $env =~ /^(homologacao|treinamento|bugfix)$/ {
     $ctxpath = "${ordgrau}_${env}"
@@ -270,7 +273,7 @@ define pje::profile (
   $war_file = "pje-jt-${version}.war"
   $war_path = "${profile_path}/deploy/${ctxpath}.war"
   exec { "deploy-pje-${grau}":
-    command => "rm -rf ${war_path} 2>/dev/null; unzip ${war_file} -d ${war_path}; chown -R ${owner_group}.${owner_group} ${war_path}",
+    command => "rm -rf ${war_path}; unzip ${war_file} -d ${war_path}; chown -R ${owner_group}.${owner_group} ${war_path}",
     onlyif  => "test -f ${war_file}",
     cwd     => '/tmp',
     path    => '/bin:/usr/bin',
