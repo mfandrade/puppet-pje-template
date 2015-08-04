@@ -1,3 +1,27 @@
+# Class: pje
+#
+# Módulo para gerenciar instalações e atualizações do PJE.
+#
+# Esta classe é responsável por garantir os pré-requisitos necessários para
+# execução do PJE no servidor de aplicação JBoss, além de disponibilizar o
+# arquivo .war para ser implantado posteriormente pelos profiles (vide
+# profile.pp)
+#
+#
+# Parâmetros:
+#
+# [*$version*]
+#   Versão do PJE a ser implantada.  Esta classe pode provisionar o arquivo
+#   disponível como source na pasta `files` (o que economiza tempo e recursos
+#   de rede) ou baixá-lo da rede interna, se o arquivo não estiver presente.
+#
+#
+# Exemplo de uso:
+#
+#   Normalmente esta classe não deve ser utilizada diretamente.
+#
+#
+# ------------------------------------------------------------------------------
 # Copyright 2015 Marcelo F Andrade
 #
 # Marcelo F Andrade can be contacted at http://marceloandrade.info
@@ -13,8 +37,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+# ----------------------------------------------------------------------------
 #
-# ------------------------------------------------------------------------------
 class pje($version) {
 
   class { 'pje::install':

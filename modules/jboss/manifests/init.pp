@@ -1,14 +1,12 @@
-# == Class: jboss
+# Class: jboss
 #
-# Classe para simples instalação do servidor de aplicação JBoss.
+# Módulo para simples instalação do servidor de aplicação JBoss.
+#
 # Esta classe no momento não gerencia muita coisa neste servidor
 # além da definição do diretório JBOSS_HOME.
-#
-# Coisas como scripts de inicialização e parametrização em geral
-# possivelmente será feita quando necessárias pelo uso das aplicações
-# implantadas neste servidor.
 # 
-# === Parâmetros
+#
+# Parâmetros:
 #
 # Os únicos parâmetros no momento são:
 #
@@ -23,54 +21,48 @@
 #   parâmetro representará um link simbólico para o local efetivo
 #   dentro do diretório de instalação.
 #
-# Com o tempo, o parâmetro [version] pode definir qual versão do JBoss
+# Com o tempo, o parâmetro `version` pode definir qual versão do JBoss
 # a ser instalada --talvez com download da rede, dificultada no momento
 # devido à versão Enterprise Application Platform só estar disponível em
 # área restrita do site da RedHat.
 #
-# === Variáveis
+#
+# Variáveis:
 #
 # Apenas a título informativo e para melhor entendimento do funcionamento
 # deste módulo, tem-se que o mesmo faz uso internamente das seguintes
 # variáveis:
 #
-# [*$::osfamily*]
-#   Na verdade, um fato.  Nesta versão atual, este módulo suporta apenas 
-#   hosts baseados em RPM, que é o formato de distribuição do Java escolhido.
+# [*$url*]
+#   URL para download do binário RPM para instalação do Oracle Java 6u45.
 #
-# [*$accept*] e [*$url*]
-#   Este módulo jboss vai depender do Java JDK para funcionar.  Foi definida
-#   utilização da distribuição Java da Oracle em formato RPM.  Estas variáveis
-#   são utilizadas para download do Java JDK via script.  No futuro, outras
-#   versões e arquiteturas serão suportadas além da JDK 6u45 e i586,
-#   respectivamente.
+# [*$accept_header*]
+#   Cabeçalho com cookie necessário para download do Java na $url.
 #
-# [*$jboss_zip*]
-#   O nome do arquivo zip do JBoss EAP já baixado e disponbilizado.
-#   (TODO: Há que se verificar questões legais de se distribuir este arquivo).
+# [*$wget_options*]
+#   Montagem das opções de download para uso no wget.
 #
-# [*extracted_dir*]
-#   Nome da pasta gerada quando se descompacta o [$jboss_zip].
+# [*$extracted_dir*]
+#   Pasta resultante da descompactação do JBoss.  Depende da versão.
 #
 # [*$destination_dir*]
-#   Diretório onde o arquivo será descompactado.  Leia informações sobre o
-#   parâmetro [*$jboss_home*].
+#   Diretório onde o JBoss será descompactado.
 #
 # [*$install_dir*]
-#   Caminho completo do servidor de aplicação extraído do arquivo zip, usando
-#   [*$destination_dir*] e [*$extracted_dir*].
+#   Diretório onde se encontra o servidor de aplicação em si.
 #
-# === Exemplos
+#
+# Exemplo de uso:
 #
 #  class { 'jboss':
 #    version    => '5.1.1',
 #    jboss_home => '/srv/jboss',
 #  }
 #
-# ===
-# Copyright 2015 Marcelo de Freitas Andrade
+# ----------------------------------------------------------------------------
+# Copyright 2015 Marcelo F Andrade
 #
-# Marcelo F Andrade can be contacted at <mfandrade@gmail.com>
+# Marcelo F Andrade can be contacted at http://marceloandrade.info
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -83,22 +75,24 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+# ----------------------------------------------------------------------------
 #
 class jboss ($version, $jboss_home) {
 
   if $::osfamily != 'RedHat' {
-    fail("Only supported by rpm-based Linux distributions (current: ${::osfamily})")
+    fail('Only supported by rpm-based Linux distributions')
 
   } else {
 
+    $baseurl = 'http://download.oracle.com/otn-pub/java/jdk/6u45-b06/'
     if $::architecture =~ /^i.86$/ {
-      $url = 'http://download.oracle.com/otn-pub/java/jdk/6u45-b06/jdk-6u45-linux-i586-rpm.bin'
+      $url = "${baseurl}/6u45-b06/jdk-6u45-linux-i586-rpm.bin"
 
     } elsif $::architecture == 'x86_64' {
-      $url = 'http://download.oracle.com/otn-pub/java/jdk/6u45-b06/jdk-6u45-linux-x64-rpm.bin'
+      $url = "${baseurl}/6u45-b06/jdk-6u45-linux-x64-rpm.bin"
 
     } else {
-      fail("Only supported by i586 and x86_64 architectures (current: ${::architecture})")
+      fail('Only supported by i586 and x86_64 architectures')
     }
   
     $accept_header = 'Cookie: oraclelicense=accept-securebackup-cookie'
@@ -107,7 +101,7 @@ class jboss ($version, $jboss_home) {
       command => "wget ${wget_options} ${url} -O jdk6.bin && /bin/bash jdk6.bin",
       cwd     => '/tmp',
       timeout => 0,
-      unless  => "rpm -q jdk-1.6.0_45",
+      unless  => 'rpm -q jdk-1.6.0_45',
       path    => '/usr/bin:/bin',
       before  => Exec['extract-jboss511']
     }
@@ -119,19 +113,18 @@ class jboss ($version, $jboss_home) {
       ensure        => present,
       allow_virtual => false,
     }
-    file { "${destination_dir}":
+    file { $destination_dir:
       ensure => directory,
     }
-    file { "/tmp/jboss511.zip":
+    file { '/tmp/jboss511.zip':
       ensure => present,
       source => 'puppet:///modules/jboss/jboss-eap-5.1.1.zip',
-      # FIXME: ^o arquivo deve existir e, por favor, ponha uma variável aqui no name
+      # FIXME: ^o arquivo deve existir e, por favor, ponha uma variável no name
     }
     exec { 'extract-jboss511':
       command => "unzip -uo /tmp/jboss511.zip -d ${destination_dir}",
       onlyif  => "test \\! -x ${install_dir}/jboss-as/bin/run.sh -a -f /tmp/jboss511.zip",
-      require => [Package['unzip'], File["${destination_dir}"]],
-      #require => [File["/tmp/jboss511.zip"], Package['unzip'], File["${destination_dir}"]],
+      require => [Package['unzip'], File[$destination_dir]],
       path    => '/usr/bin',
     }
 
@@ -143,16 +136,16 @@ class jboss ($version, $jboss_home) {
       ensure  => present,
       gid     => 501,
       uid     => 501,
-      home    => "${jboss_home}",
+      home    => $jboss_home,
       require => Group['jboss'],
     }
-    file { "${install_dir}":
+    file { $install_dir:
       recurse => true,
       require => [Exec['extract-jboss511'], User['jboss']],
       notify  => Exec['fix-perms'],
     }
 
-    file { "${jboss_home}":
+    file { $jboss_home:
       ensure  => link,
       target  => "${install_dir}/jboss-as",
       require => Exec['extract-jboss511'],

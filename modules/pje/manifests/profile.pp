@@ -1,62 +1,47 @@
-# Copyright 2015 Marcelo F Andrade
-#
-# Marcelo F Andrade can be contacted at http://marceloandrade.info
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# 
-#    http://www.apache.org/licenses/LICENSE-2.0
-# 
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-# ----------------------------------------------------------------------------
-# == Definição: pje::profile
+# Define: pje::profile
 #
 # Definição para provisionamento dos profiles, 1o. e 2o. graus, do PJE.
 #
-# === Parâmetros
+#
+# Parâmetros:
 #
 # Esta definição possui os seguintes parâmetros.
 #
 # [*{namevar}*]
 #   jvmroute - obrigatório
 #
-# [*version*]
+# [*$version*]
 #   version - obrigatório
 #
-# [*env*]
+# [*$env*]
 #   env - obrigatório
 #
-# [*binding_to*]
+# [*$binding_to*]
 #   binding_to - obrigatório
 #
-# [*jmxremote_port*]
+# [*$jmxremote_port*]
 #   jmxremote_port - obrigatório
 #
-# [*ds_databasename*]
+# [*$ds_databasename*]
 #   ds_databasename - obrigatório
 #
-# [*ds_minpoolsize_pje*]
+# [*$ds_minpoolsize_pje*]
 #   ds_minpoolsize_pje
 #
-# [*ds_maxpoolsize_pje*]
+# [*$ds_maxpoolsize_pje*]
 #   ds_maxpoolsize_pje
 #
-# [*ds_minpoolsize_api*]
+# [*$ds_minpoolsize_api*]
 #   ds_minpoolsize_api
 #
-# [*ds_maxpoolsize_api*]
+# [*$ds_maxpoolsize_api*]
 #   ds_maxpoolsize_api
 #
-# [*ds_minpoolsize_gim*]
+# [*$ds_minpoolsize_gim*]
 #   ds_minpoolsize_gim
 #
-# [*ds_maxpoolsize_gim*]
+# [*$ds_maxpoolsize_gim*]
+#   $ds_maxpoolsize_gim
 #
 # [*jvm_heapsize*]
 #   jvm_heapsize
@@ -73,22 +58,38 @@
 # [*exec_quartz*]
 #   exec_quartz
 #
-# === Variáveis
+#
+# Variáveis:
 #
 # TODO: documentação das variáveis
 #
-# === Exemplo de uso
 #
-#```
-#    pje::profile { 'int1a':
-#        version         => '1.6.0',
-#        env             => 'treinamento',
-#        ds_databasename => 'pje_1grau_treinamento',
-#        binding_to      => 'ports-default',
-#        jmx_remote_port => '10150',
-#        
-#    }
-#```
+# Exemplo de uso:
+#
+# pje::profile { 'int1a':
+#   version         => '1.6.0',
+#   env             => 'treinamento',
+#   ds_databasename => 'pje_1grau_treinamento',
+#   binding_to      => 'ports-default',
+#   jmx_remote_port => '10150',
+# }
+#
+# ----------------------------------------------------------------------------
+# Copyright 2015 Marcelo F Andrade
+#
+# Marcelo F Andrade can be contacted at http://marceloandrade.info
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#    http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 #
 # ----------------------------------------------------------------------------
 define pje::profile (
