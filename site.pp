@@ -9,7 +9,7 @@ node /^pje8-jb-(int|ext)-([a-z]).trt8.net$/ {
     version         => $pje_version,
     binding_to      => '10.8.14.253',
     jmxremote_port  => '9001',
-    env             => $environment',
+    env             => $environment,
     ds_databasename => "pje_1grau_${environment}",
   }
 
