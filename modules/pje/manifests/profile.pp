@@ -5,8 +5,6 @@
 #
 # Parâmetros:
 #
-# Esta definição possui os seguintes parâmetros.
-#
 # [*{namevar}*]
 #   jvmroute - obrigatório
 #
