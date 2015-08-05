@@ -116,16 +116,17 @@ class jboss ($version, $jboss_home) {
     file { $destination_dir:
       ensure => directory,
     }
-    file { '/tmp/jboss511.zip':
+    file { 'jb.zip':
       ensure => present,
+      path   => '/tmp/jb511.zip',
       source => 'puppet:///modules/jboss/jboss-eap-5.1.1.zip',
       # FIXME: ^o arquivo deve existir e, por favor, ponha uma variável no name
     }
     exec { 'extract-jboss511':
-      command => "unzip -uo jboss511.zip -d ${destination_dir}",
-      onlyif  => "test \\! -x ${install_dir}/jboss-as/bin/run.sh -a -f jboss511.zip",
-      cwd     => '/tmp',
-      require => [Package['unzip'], File[$destination_dir]],
+      command => "unzip -uo /tmp/jb511.zip -d ${destination_dir}",
+      onlyif  => 'test \! -x bin/run.sh -o \! -d server/default',
+      cwd     => "${install_dir}/jboss-as",
+      require => [Package['unzip'], File[$destination_dir], File['jb.zip']],
       path    => '/usr/bin',
     }
 
@@ -152,10 +153,12 @@ class jboss ($version, $jboss_home) {
       require => Exec['extract-jboss511'],
     }
     exec { 'fix-perms':
-      command => "chown -R jboss.jboss ${install_dir}",
-      onlyif  => "find ${install_dir} \\! -user jboss &>/dev/null",
-      path    => '/bin:/usr/bin',
-      require => User['jboss'],
+      command     => "chown -R jboss.jboss .",
+      onlyif      => 'find . \\! -user jboss &>/dev/null',
+      cwd         => $install_dir,
+      path        => '/bin:/usr/bin',
+      refreshonly => true,
+      require     => User['jboss'],
     }
   }
 
