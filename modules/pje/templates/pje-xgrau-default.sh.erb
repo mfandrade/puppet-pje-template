@@ -269,8 +269,13 @@ stop)
     ;;
     
 restart)
-    stop_profile
-    start_profile
+    PID=$(jbossPID)
+    if [ "x$PID" = "x" ]; then
+        start_profile
+    else
+        stop_profile
+        start_profile
+    fi
     ;;
     
 status)

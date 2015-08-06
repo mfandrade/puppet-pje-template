@@ -5,8 +5,6 @@
 #
 # Parâmetros:
 #
-# Esta definição possui os seguintes parâmetros.
-#
 # [*{namevar}*]
 #   jvmroute - obrigatório
 #
@@ -146,11 +144,7 @@ define pje::profile (
   }
 
 # ----------------------------------------------------------------------------
-# TODO: Gostaria de incluir o PJE parametrizado(?) aqui,
-#       mas dá problema de classe redeclarada. Talvez se
-#       jogar os parâmetros todos para o hiera...
-
-  include pje::params
+  include pje
 
   if $::pje::params::runas_user != undef {
     $jboss_user  = $::pje::params::runas_user
@@ -222,6 +216,7 @@ define pje::profile (
     group   => $owner_group,
     path    => "${profile_path}/conf/props/jmx-console-users.properties",
     content => $::pje::params::jmx_credentials,
+    before  => Service["pje${grau}grau"],
     require => Exec["create-profile-${grau}"],
   }
   file { "${profile_path}/deploy/API-ds.xml":
