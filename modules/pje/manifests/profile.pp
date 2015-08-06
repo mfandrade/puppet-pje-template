@@ -216,6 +216,7 @@ define pje::profile (
     group   => $owner_group,
     path    => "${profile_path}/conf/props/jmx-console-users.properties",
     content => $::pje::params::jmx_credentials,
+    before  => Service["pje${grau}grau"],
     require => Exec["create-profile-${grau}"],
   }
   file { "${profile_path}/deploy/API-ds.xml":
