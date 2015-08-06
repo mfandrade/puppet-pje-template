@@ -1,3 +1,37 @@
+# Classe: pje::install
+#
+# Classe para gerenciar os requisitos básicos para se executar o PJE.  Neste
+# momento, a saber, o servidor de aplicação JBoss (vide módulo específico) e os
+# arquivos necessários: keystore, driver do postgresql e init script.
+#
+#
+# Parâmetros:
+#
+# [*version*]
+#   Número de uma versão válida do PJE.
+#
+#
+# Variáveis:
+#
+# [*$jboss_home*]
+#   Variável definida com o valor do parâmetro correspondente para reduzir
+#   tamanho da linha e evitar alerta do `puppet-lint`.
+#
+# [*$war_name*]
+#   Nome do pacote war do PJE, padronizado e obtido a partir da versão.
+#
+# [*$url*]
+#   URL da intranet dos Tribunais onde o pacote do PJE normalmente é
+#   disponibilizado.
+#
+#
+# Exemplo de uso:
+#
+# Esta classe é utilizada diretamente pelo `init.pp` deste módulo, assim:
+#
+# class { pje::install: version => '1.6.0', }
+#
+# ----------------------------------------------------------------------------
 # Copyright 2015 Marcelo F Andrade
 #
 # Marcelo F Andrade can be contacted at http://marceloandrade.info
@@ -14,39 +48,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# ----------------------------------------------------------------------------
-# = Classe: pje::install
-#
-# Classe para gerenciar os requisitos básicos para se executar o PJE.  Neste
-# momento, a saber, o servidor de aplicação JBoss (vide módulo específico) e os
-# arquivos necessários: keystore, driver do postgresql e init script.
-#
-# == Parâmetros
-#
-# No momento, esta classe recebe como parâmetro o número de uma versão válida
-# do PJE.  Esse e demais parâmetros presentes na classe `pje::params` devem
-# ser extraídos para o hiera futuramente.
-#
-# == Variáveis
-#
-# [*jboss_home*]
-#   Variável definida com o valor do parâmetro correspondente para reduzir
-#   tamanho da linha e evitar alerta do `puppet-lint`.
-#
-# [*war_name*]
-#   Nome do pacote war do PJE, padronizado e obtido a partir da versão.
-#
-# [*url*]
-#   URL da intranet dos Tribunais onde o pacote do PJE normalmente é
-#   disponibilizado.
-#
-# == Exemplo de uso
-#
-# Esta classe é utilizada diretamente pelo `init.pp` deste módulo, assim:
-#
-#```
-#   class { pje::install: version => '1.6.0', }
-#```
 # ----------------------------------------------------------------------------
 class pje::install($version) {
 
