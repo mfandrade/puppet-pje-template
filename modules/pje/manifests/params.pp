@@ -121,8 +121,7 @@ class pje::params {  # TODO: migrar as variáveis para o hiera
   $jboss_home         = '/srv/jboss'
   $runas_user         = 'jboss' # vide módulo jboss
   $exec_quartz        = false
-  #pje_version        = '1.6.0'
-  $ds_servername      = '10.8.14.206'
+  $ds_servername      = '10.8.14.211'
   $ds_portnumber      = 5432
   $ds_username_pje    = 'pje'
   $ds_password_pje    = 'PjEcSjT'
