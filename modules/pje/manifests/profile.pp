@@ -154,7 +154,7 @@ define pje::profile (
     $owner_group = 'root'
   }
   exec { "create-profile-${grau}":
-    command => "rm -rf ${profile_name}; cp -pRu default ${profile_name}",
+    command => "rm -rf ${profile_name}; cp -pRu default ${profile_name}; chown -R ${owner_group}.${owner_group} ${profile_name}",
     cwd     => "${jboss_home}/server",
     path    => '/usr/bin:/bin',
     require => Class['pje::install'],
@@ -209,7 +209,15 @@ define pje::profile (
     force   => true,
     require => Exec["create-profile-${grau}"],
   }
-
+  file { "server-xml-${grau}":
+    ensure  => present,
+    path    => "${profile_path}/deploy/jbossweb.sar/server.xml",
+    source  => 'puppet:///modules/pje/server.xml',
+    owner   => $owner_group,
+    group   => $owner_group,
+    mode    => '0644',
+    require => Exec["create-profile-${grau}"],
+  }
   file { "jmx-users-${grau}":
     ensure  => present,
     owner   => $owner_group,
