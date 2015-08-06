@@ -144,10 +144,6 @@ define pje::profile (
   }
 
 # ----------------------------------------------------------------------------
-# TODO: Gostaria de incluir o PJE parametrizado(?) aqui,
-#       mas dá problema de classe redeclarada. Talvez se
-#       jogar os parâmetros todos para o hiera...
-
   include pje
 
   if $::pje::params::runas_user != undef {
