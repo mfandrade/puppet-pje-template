@@ -142,10 +142,9 @@ class jboss ($version, $jboss_home) {
       require => Group['jboss'],
     }
     file { $install_dir:
-      recurse => true,
       owner   => 'root',
       group   => 'root',
-      require => [Exec['extract-jboss511'], User['jboss']],
+      require => Exec['extract-jboss511'],
     }
 
     file { $jboss_home:
@@ -155,18 +154,19 @@ class jboss ($version, $jboss_home) {
       target  => "${install_dir}/jboss-as",
       require => [Exec['extract-jboss511'], User['jboss']],
     }
-    file { 'docs':
-      ensure  => absent,
-      path    => "${jboss_home}/docs",
-      require => File[$jboss_home],
-    }
     exec { 'fix-perms':
       command => 'chown -R jboss.jboss .',
       onlyif  => 'find . \! -user jboss &>/dev/null',
       cwd     => $jboss_home,
       path    => '/bin:/usr/bin',
-      require => [User['jboss'], File[$jboss_home]],
+      require => [File[$jboss_home], User['jboss']],
     }
-  }
+    file { 'docs':
+      ensure  => absent,
+      force   => true,
+      path    => "${jboss_home}/docs",
+      require => File[$jboss_home],
+    }
 
+  }
 }
