@@ -160,6 +160,14 @@ define pje::profile (
     require => Class['pje::install'],
   }
 
+  $default_file = $::pje::params::default_file # variável usada no template
+  $change_this  = "^JBOSS_${grau}GRAU_BINDTO=.*$"
+  $to_this      = "JBOSS_${grau}GRAU_BINDTO=${binding_to}"
+  exec { "config-file-${grau}":
+    command => "sed -i.orig '/${change_this}/c ${to_this}' ${default_file}",
+    path    => '/bin',
+    require => Class['pje::install'],
+  }
   file { "${profile_name}.sh":
     ensure  => present,
     path    => "${jboss_home}/bin/${profile_name}.sh",
@@ -167,7 +175,7 @@ define pje::profile (
     owner   => $owner_group,
     group   => $owner_group,
     mode    => '0755',
-    require => Class['pje::install'],
+    require => Exec["config-file-${grau}"],
   }
   file { "/etc/init.d/pje${grau}grau":
     ensure  => link,

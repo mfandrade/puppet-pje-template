@@ -7,11 +7,11 @@
 # 
 # Please dont't modify this script!  Define needed params in DEFAULT_VARS file.
 
-DEFAULT_VARS=/etc/default/jboss-pje
-if [[ -f $DEFAULT_VARS ]]; then
-    . $DEFAULT_VARS
+DEFAULT_FILE=<%= @default_file %>
+if [[ -f $DEFAULT_FILE ]]; then
+    . $DEFAULT_FILE
 else
-    echo "DEFAULT_VARS '$DEFAULT_VARS' file not found.  Please create it with params for proper JBoss startup."    
+    echo "DEFAULT_FILE '$DEFAULT_FILE' file not found.  Please create it with params for proper JBoss startup."
     exit 3 # http://refspecs.linuxbase.org/LSB_3.1.1/LSB-Core-generic/LSB-Core-generic/iniscrptact.html
 fi
 

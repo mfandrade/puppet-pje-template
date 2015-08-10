@@ -153,4 +153,7 @@ class pje::params {
   $jvm_maxpermsize    = hiera('jvm_maxpermsize')
   $jmx_credentials    = hiera('jmx_credentials')
 
+# module conf data
+  $default_file       = '/etc/default/jboss-pje'
+
 }

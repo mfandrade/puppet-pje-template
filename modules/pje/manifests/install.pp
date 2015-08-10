@@ -76,9 +76,9 @@ class pje::install($version) {
     require => Class['jboss'], # por causa do jboss_home, obviamente
   }
 
-  file { '/etc/default/jboss-pje':
+  file { $::pje::params::default_file:
     ensure => present,
-    source => 'puppet:///modules/pje/jboss-pje',
+    source => 'puppet:///modules/pje/default-file',
     owner  => 'root',
     group  => 'root',
     mode   => '0644',
