@@ -7,7 +7,7 @@
 # 
 # Please dont't modify this script!  Define needed params in DEFAULT_VARS file.
 
-DEFAULT_FILE=<%= @default_file %>
+DEFAULT_FILE=<%= scope['::pje::params::default_file'] %>
 if [[ -f $DEFAULT_FILE ]]; then
     . $DEFAULT_FILE
 else

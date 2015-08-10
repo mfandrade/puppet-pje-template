@@ -163,7 +163,7 @@ define pje::profile (
     require => Class['pje::install'],
   }
 
-  $default_file = $::pje::params::default_file # variável usada no template
+  $default_file = $::pje::params::default_file
   $change_this  = "^JBOSS_${grau}GRAU_BINDTO=.*$"
   $to_this      = "JBOSS_${grau}GRAU_BINDTO=${binding_to}"
   exec { "config-file-${grau}":
