@@ -74,6 +74,6 @@ CLEAR_WORK_TMP=Y
 #
 # No entanto, isto aumenta em muito o I/O de disco, o que pode influenciar
 # no desempenho do serviço.  Como as informações também são muito verbosas,
-# não recomenda-se utilizá-las em produção.
+# não sed recomenda utilizá-las em produção.
 # 
 JBOSS_CONSOLE=/dev/null
