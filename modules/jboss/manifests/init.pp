@@ -124,8 +124,7 @@ class jboss ($version, $jboss_home) {
     }
     exec { 'extract-jboss511':
       command => "unzip -uo /tmp/jb511.zip -d ${destination_dir}",
-      onlyif  => 'test \! -x bin/run.sh -o \! -d server/default',
-      cwd     => "${install_dir}/jboss-as",
+      onlyif  => "test \\! -x ${install_dir}/bin/run.sh -o \! -d ${install_dir}/server/default",
       require => [Package['unzip'], File[$destination_dir], File['jb.zip']],
       path    => '/usr/bin',
     }
