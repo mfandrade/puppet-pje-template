@@ -129,7 +129,7 @@
   </no-tx-datasource>
   <no-tx-datasource>
     <jndi-name>PJE_DESCANSO_BASE_REPLICADA_BIN_DS</jndi-name>
-    <connection-url>jdbc:postgresql://<%= scope['::pje::params::ds_servername'] %>:<%= scope['::pje::params::ds_portnumber'] %>/<%= @ds_databasename %></connection-url>
+    <connection-url>jdbc:postgresql://<%= scope['::pje::params::ds_servername'] %>:<%= scope['::pje::params::ds_portnumber'] %>/<%= @ds_databasename %>_bin</connection-url>
     <driver-class>org.postgresql.Driver</driver-class>
     <user-name><%= scope['::pje::params::ds_username_pje'] %></user-name>
     <password><%= scope['::pje::params::ds_password_pje'] %></password>
