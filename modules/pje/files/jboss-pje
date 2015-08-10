@@ -26,10 +26,10 @@ JBOSS_2GRAU_PROFILE=pje-2grau-default
 # Esta opção pode ser preferível, por exemplo, para economizar endereços da
 # faixa de IPs de sua rede.
 # 
-JBOSS_1GRAU_BINDTO=10.8.14.253
-JBOSS_2GRAU_BINDTO=10.8.14.254
-#JBOSS_1GRAU_BINDTO=ports-01
-#JBOSS_2GRAU_BINDTO=ports-02
+#JBOSS_1GRAU_BINDTO=192.168.33.10
+#JBOSS_2GRAU_BINDTO=192.168.33.11
+JBOSS_1GRAU_BINDTO=ports-01
+JBOSS_2GRAU_BINDTO=ports-02
 
 # ----------------------------------------------------------------------------
 # JAVA_HOME e JBOSS_HOME normalmente são definidas como variáveis de ambiente.

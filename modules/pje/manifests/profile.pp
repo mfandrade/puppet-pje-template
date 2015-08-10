@@ -112,10 +112,10 @@ define pje::profile (
 # ----------------------------------------------------------------------------
   $jvmroute = $name
 
-  if $jvmroute =~ /^pje([12])([a-z])x?$/ { # EXEMPLO: pje1a, pje2bx
+  if $jvmroute =~ /^pje([12])[a-z](treinam|hom|bug)$/ { # EXEMPLO: pje1a, pje2btreinam
     $grau = $1
 
-  } elsif $jvmroute =~ /^(int|ext)[a-z]([12])$/ { # EXEMPLO: inta1, extb2
+  } elsif $jvmroute =~ /^(int|ext|tre|hom|bug)[a-z]([12])$/ { # EXEMPLO: inta1, treb2
     $grau = $2
 
   } else {
