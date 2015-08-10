@@ -112,11 +112,14 @@ define pje::profile (
 # ----------------------------------------------------------------------------
   $jvmroute = $name
 
-  if $jvmroute =~ /^pje([12])[a-z](treinam|hom|bug)$/ { # EXEMPLO: pje1a, pje2btreinam
+  if $jvmroute =~ /^pje([12])[a-z].*$/ { # EXEMPLO: pje1a, pje2btreinam
     $grau = $1
 
   } elsif $jvmroute =~ /^(int|ext|tre|hom|bug)[a-z]([12])$/ { # EXEMPLO: inta1, treb2
     $grau = $2
+
+  } elsif $jvmroute =~ /^[a-zA-Z]*([12]).*$/ { # EXEMPLO: QQ-cOiSa_que_contenha_1ou2
+    $grau = $1
 
   } else {
     fail("PJE profile '${name}' is an invalid jvmRoute pattern")
