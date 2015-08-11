@@ -101,4 +101,14 @@ class pje::install($version) {
     require => [Package['unzip'], File["/tmp/${war_name}"]],
   }
 
+  $age      = $::pje::params::age_tmpfiles
+  $tmpfiles = '-name "*.crl" -o -name "*.tmp" -o -name "*.upload"'
+  cron { 'delete-tmpfiles':
+    command => "/usr/bin/find /tmp ${tmpfiles} -mmin +${age} -delete",
+    user    => 'jboss', #::pje::params::owner_group,
+    minute  => '*/20',
+    require => Class['jboss'],
+  }
+
+
 }

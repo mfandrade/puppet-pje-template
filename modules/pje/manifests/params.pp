@@ -129,8 +129,8 @@ class pje::params {
 # {environment} 
   $pje_version        = hiera('pje_version')
   $ds_servername      = hiera('ds_servername')
-  #ds_databasename    = undef # atributo de profile
-  #binding_to         = undef # atributo de profile
+  #ds_databasename    = undef # exclusivo de profile
+  #binding_to         = undef # exclusivo de profile
 
 # defaults
   $exec_quartz        = hiera('exec_quartz')
@@ -155,5 +155,6 @@ class pje::params {
 
 # module conf data
   $default_file       = '/etc/default/jboss-pje'
+  $age_tmpfiles       = '120'
 
 }

@@ -42,6 +42,7 @@
 class pje {
 
   include pje::params
+
   class { 'pje::install':
     version => hiera('pje_version'),
   }
