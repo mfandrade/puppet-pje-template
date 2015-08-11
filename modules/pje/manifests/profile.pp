@@ -132,7 +132,6 @@ define pje::profile (
     fail("You need to set 'ds_databasename' parameter for pje::profile ${name}")
   }
 
-
 # ----------------------------------------------------------------------------
   if ($binding_to == 'ports-default') or ($binding_to =~ /^ports-0[1-3]$/) {
     $binding_ipaddr = '0.0.0.0'
@@ -147,6 +146,9 @@ define pje::profile (
   }
 
 # ----------------------------------------------------------------------------
+  Exec { path => '/bin:/usr/bin', }
+
+# ----------------------------------------------------------------------------
   include pje
 
   if $::pje::params::runas_user != undef {
@@ -159,7 +161,6 @@ define pje::profile (
   exec { "create-profile-${grau}":
     command => "rm -rf ${profile_name}; cp -pRu default ${profile_name}; chown -R ${owner_group}.${owner_group} ${profile_name}",
     cwd     => "${jboss_home}/server",
-    path    => '/usr/bin:/bin',
     require => Class['pje::install'],
   }
 
@@ -168,7 +169,6 @@ define pje::profile (
   $to_this      = "JBOSS_${grau}GRAU_BINDTO=${binding_to}"
   exec { "config-file-${grau}":
     command => "sed -i.orig '/${change_this}/c ${to_this}' ${default_file}",
-    path    => '/bin',
     require => Class['pje::install'],
   }
   file { "${profile_name}.sh":
@@ -291,7 +291,6 @@ define pje::profile (
     command => "rm -rf ${war_path}; unzip ${war_file} -d ${war_path}; chown -R ${owner_group}.${owner_group} ${war_path}",
     onlyif  => "test -f ${war_file}",
     cwd     => '/tmp',
-    path    => '/bin:/usr/bin',
     require => Exec["create-profile-${grau}"],
     notify  => Service["pje${grau}grau"],
   }

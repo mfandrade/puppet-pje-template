@@ -94,6 +94,8 @@ class jboss ($version, $jboss_home) {
     } else {
       fail('Only supported by i586 and x86_64 architectures')
     }
+
+    Exec { path => '/bin:/usr/bin', }
   
     $accept_header = 'Cookie: oraclelicense=accept-securebackup-cookie'
     $wget_options  = "-c --no-check-certificate --header '${accept_header}'"
@@ -102,7 +104,6 @@ class jboss ($version, $jboss_home) {
       cwd     => '/tmp',
       timeout => 0,
       unless  => 'rpm -q jdk-1.6.0_45',
-      path    => '/usr/bin:/bin',
       before  => Exec['extract-jboss511']
     }
 
@@ -126,7 +127,6 @@ class jboss ($version, $jboss_home) {
       command => "unzip -uo /tmp/jb511.zip -d ${destination_dir}",
       onlyif  => "test \\! -x ${install_dir}/bin/run.sh -o \\! -d ${install_dir}/server/default",
       require => [Package['unzip'], File[$destination_dir], File['jb.zip']],
-      path    => '/usr/bin',
     }
 
     group { 'jboss':
@@ -157,7 +157,6 @@ class jboss ($version, $jboss_home) {
       command => 'chown -R jboss.jboss .',
       onlyif  => 'find . \! -user jboss &>/dev/null',
       cwd     => $jboss_home,
-      path    => '/bin:/usr/bin',
       require => [File[$jboss_home], User['jboss']],
     }
     file { 'docs':
