@@ -8,9 +8,6 @@
 # [*{namevar}*]
 #   jvmroute - obrigatório
 #
-# [*$version*]
-#   version - obrigatório
-#
 # [*$env*]
 #   env - obrigatório
 #
@@ -22,6 +19,9 @@
 #
 # [*$ds_databasename*]
 #   ds_databasename - obrigatório
+#
+# [*$version*]
+#   version
 #
 # [*$ds_minpoolsize_pje*]
 #   ds_minpoolsize_pje
@@ -91,23 +91,25 @@
 #
 # ----------------------------------------------------------------------------
 define pje::profile (
-  $version,
   $env,
   $binding_to,
   $jmxremote_port,
   $ds_databasename,
-  $ds_minpoolsize_pje = 5,
-  $ds_maxpoolsize_pje = 40,
-  $ds_minpoolsize_api = 1,
-  $ds_maxpoolsize_api = 10,
-  $ds_minpoolsize_gim = 1,
-  $ds_maxpoolsize_gim = 10,
-  $jvm_heapsize       = '16m',
-  $jvm_maxheapsize    = '1536m',
-  $jvm_permsize       = '64m',
-  $jvm_maxpermsize    = '512m',
-  $exec_quartz        = false,
+  $version            = undef,
+  $ds_minpoolsize_pje = undef,
+  $ds_maxpoolsize_pje = undef,
+  $ds_minpoolsize_api = undef,
+  $ds_maxpoolsize_api = undef,
+  $ds_minpoolsize_gim = undef,
+  $ds_maxpoolsize_gim = undef,
+  $jvm_heapsize       = undef,
+  $jvm_maxheapsize    = undef,
+  $jvm_permsize       = undef,
+  $jvm_maxpermsize    = undef,
+  $exec_quartz        = undef,
 ) {
+
+  include pje
 
 # ----------------------------------------------------------------------------
   $jvmroute = $name
@@ -146,11 +148,54 @@ define pje::profile (
   }
 
 # ----------------------------------------------------------------------------
+  $val_version = $version ? {
+    undef   => $::pje::params::pje_version,
+    default => $version
+  }
+  $val_ds_minpoolsize_pje = $ds_minpoolsize_pje ? {
+    undef   => $::pje::params::ds_minpoolsize_pje,
+    default => $ds_minpoolsize_pje,
+  }
+  $val_ds_maxpoolsize_pje = $ds_maxpoolsize_pje ? {
+    undef   => $::pje::params::ds_maxpoolsize_pje,
+    default => $ds_maxpoolsize_pje,
+  }
+  $val_ds_minpoolsize_api = $ds_minpoolsize_api ? {
+    undef   => $::pje::params::ds_minpoolsize_api,
+    default => $ds_minpoolsize_api,
+  }
+  $val_ds_maxpoolsize_api = $ds_maxpoolsize_api ? {
+    undef   => $::pje::params::ds_maxpoolsize_api,
+    default => $ds_maxpoolsize_api,
+  }
+  $val_ds_minpoolsize_gim = $ds_minpoolsize_gim ? {
+    undef   => $::pje::params::ds_minpoolsize_gim,
+    default => $ds_minpoolsize_gim,
+  }
+  $val_ds_maxpoolsize_gim = $ds_maxpoolsize_gim ? {
+    undef   => $::pje::params::ds_maxpoolsize_gim,
+    default => $ds_maxpoolsize_gim,
+  }
+  $val_jvm_heapsize = $jvm_heapsize ? {
+    undef   => $::pje::params::jvm_heapsize,
+    default => $jvm_heapsize,
+  }
+  $val_jvm_maxheapsize = $jvm_maxheapsize ? {
+    undef   => $::pje::params::jvm_maxheapsize,
+    default => $jvm_maxheapsize,
+  }
+  $val_jvm_permsize = $jvm_permsize ? {
+    undef   => $::pje::params::jvm_permsize,
+    default => $jvm_permsize,
+  }
+  $val_jvm_maxpermsize = $jvm_maxpermsize ? {
+    undef   => $::pje::params::jvm_maxpermsize,
+    default => $jvm_maxpermsize,
+  }
+
   Exec { path => '/bin:/usr/bin', }
 
 # ----------------------------------------------------------------------------
-  include pje
-
   if $::pje::params::runas_user != undef {
     $jboss_user  = $::pje::params::runas_user
     $owner_group = $::pje::params::runas_user
@@ -285,7 +330,7 @@ define pje::profile (
     fail("PJE environment '${env}' does not exist")
   }
 
-  $war_file = "pje-jt-${version}.war"
+  $war_file = "pje-jt-${val_version}.war"
   $war_path = "${profile_path}/deploy/${ctxpath}.war"
   exec { "deploy-pje-${grau}":
     command => "rm -rf ${war_path}; unzip ${war_file} -d ${war_path}; chown -R ${owner_group}.${owner_group} ${war_path}",

@@ -42,7 +42,7 @@ JAVA_HOME="/usr/java/default"
 # Specify options to pass to the Java VM.
 #
 if [ "x$JAVA_OPTS" = "x" ]; then
-   JAVA_OPTS="-Xms<%= @jvm_heapsize %> -Xmx<%= @jvm_maxheapsize %> -XX:PermSize=<%= @jvm_permsize %> -XX:MaxPermSize=<%= @jvm_maxpermsize %>"
+   JAVA_OPTS="-Xms<%= @val_jvm_heapsize %> -Xmx<%= @val_jvm_maxheapsize %> -XX:PermSize=<%= @val_jvm_permsize %> -XX:MaxPermSize=<%= @val_jvm_maxpermsize %>"
    JAVA_OPTS="$JAVA_OPTS -Dorg.jboss.resolver.warning=true"
    JAVA_OPTS="$JAVA_OPTS -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000"
    JAVA_OPTS="$JAVA_OPTS -Dsun.lang.ClassLoader.allowArraySyntax=true"

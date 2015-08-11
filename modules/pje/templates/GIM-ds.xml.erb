@@ -12,8 +12,8 @@
     <driver-class>org.postgresql.Driver</driver-class>
     <user-name><%= scope['::pje::params::ds_username_gim'] %></user-name>
     <password><%= scope['::pje::params::ds_password_gim'] %></password>
-    <min-pool-size><%= @ds_minpoolsize_gim %></min-pool-size>
-    <max-pool-size><%= @ds_maxpoolsize_gim %></max-pool-size>
+    <min-pool-size><%= @val_ds_minpoolsize_gim %></min-pool-size>
+    <max-pool-size><%= @val_ds_maxpoolsize_gim %></max-pool-size>
     <idle-timeout-minutes>5</idle-timeout-minutes>
     <validate-on-match>true</validate-on-match>
     <valid-connection-checker-class-name>org.jboss.resource.adapter.jdbc.vendor.PostgreSQLValidConnectionChecker</valid-connection-checker-class-name>
