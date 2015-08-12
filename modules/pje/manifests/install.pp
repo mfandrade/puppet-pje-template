@@ -105,7 +105,7 @@ class pje::install($version) {
   $tmpfiles = '-name "*.crl" -o -name "*.tmp" -o -name "*.upload"'
   cron { 'delete-tmpfiles':
     command => "/usr/bin/find /tmp ${tmpfiles} -mmin +${age} -delete",
-    user    => 'jboss', #::pje::params::owner_group,
+    user    => 'jboss', #::pje::params::runas_user,
     minute  => '*/20',
     require => Class['jboss'],
   }

@@ -171,7 +171,7 @@ define pje::profile (
     $owner_group = 'root'
   }
   exec { "create-profile-${grau}":
-    command => "rm -rf ${profile_name}; cp -pRu default ${profile_name}; chown -R ${owner_group}.${owner_group} ${profile_name}",
+    command => "rsync -aqz default/ ${profile_name}/",
     cwd     => "${jboss_home}/server",
     require => Class['pje::install'],
   }
