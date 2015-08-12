@@ -110,5 +110,4 @@ class pje::install($version) {
     require => Class['jboss'],
   }
 
-
 }

@@ -106,7 +106,7 @@ define pje::profile (
   $jvm_maxheapsize    = undef,
   $jvm_permsize       = undef,
   $jvm_maxpermsize    = undef,
-  $exec_quartz        = undef,
+  $exec_quartz        = false,
 ) {
 
   include pje
@@ -148,50 +148,17 @@ define pje::profile (
   }
 
 # ----------------------------------------------------------------------------
-  $val_version = $version ? {
-    undef   => $::pje::params::pje_version,
-    default => $version
-  }
-  $val_ds_minpoolsize_pje = $ds_minpoolsize_pje ? {
-    undef   => $::pje::params::ds_minpoolsize_pje,
-    default => $ds_minpoolsize_pje,
-  }
-  $val_ds_maxpoolsize_pje = $ds_maxpoolsize_pje ? {
-    undef   => $::pje::params::ds_maxpoolsize_pje,
-    default => $ds_maxpoolsize_pje,
-  }
-  $val_ds_minpoolsize_api = $ds_minpoolsize_api ? {
-    undef   => $::pje::params::ds_minpoolsize_api,
-    default => $ds_minpoolsize_api,
-  }
-  $val_ds_maxpoolsize_api = $ds_maxpoolsize_api ? {
-    undef   => $::pje::params::ds_maxpoolsize_api,
-    default => $ds_maxpoolsize_api,
-  }
-  $val_ds_minpoolsize_gim = $ds_minpoolsize_gim ? {
-    undef   => $::pje::params::ds_minpoolsize_gim,
-    default => $ds_minpoolsize_gim,
-  }
-  $val_ds_maxpoolsize_gim = $ds_maxpoolsize_gim ? {
-    undef   => $::pje::params::ds_maxpoolsize_gim,
-    default => $ds_maxpoolsize_gim,
-  }
-  $val_jvm_heapsize = $jvm_heapsize ? {
-    undef   => $::pje::params::jvm_heapsize,
-    default => $jvm_heapsize,
-  }
-  $val_jvm_maxheapsize = $jvm_maxheapsize ? {
-    undef   => $::pje::params::jvm_maxheapsize,
-    default => $jvm_maxheapsize,
-  }
-  $val_jvm_permsize = $jvm_permsize ? {
-    undef   => $::pje::params::jvm_permsize,
-    default => $jvm_permsize,
-  }
-  $val_jvm_maxpermsize = $jvm_maxpermsize ? {
-    undef   => $::pje::params::jvm_maxpermsize,
-    default => $jvm_maxpermsize,
-  }
+  $val_version            = get_value($version, $::pje::params::pje_version)
+  $val_ds_minpoolsize_pje = get_value($ds_minpoolsize_pje, $::pje::params::ds_minpoolsize_pje)
+  $val_ds_maxpoolsize_pje = get_value($ds_maxpoolsize_pje, $::pje::params::ds_maxpoolsize_pje)
+  $val_ds_minpoolsize_api = get_value($ds_minpoolsize_api, $::pje::params::ds_minpoolsize_api)
+  $val_ds_maxpoolsize_api = get_value($ds_maxpoolsize_api, $::pje::params::ds_maxpoolsize_api)
+  $val_ds_minpoolsize_gim = get_value($ds_minpoolsize_gim, $::pje::params::ds_minpoolsize_gim)
+  $val_ds_maxpoolsize_gim = get_value($ds_maxpoolsize_gim, $::pje::params::ds_maxpoolsize_gim)
+  $val_jvm_heapsize       = get_value($jvm_heapsize, $::pje::params::jvm_heapsize)
+  $val_jvm_maxheapsize    = get_value($jvm_maxheapsize, $::pje::params::jvm_maxheapsize)
+  $val_jvm_permsize       = get_value($jvm_permsize, $::pje::params::jvm_permsize)
+  $val_jvm_maxpermsize    = get_value($jvm_maxpermsize, $::pje::params::jvm_maxpermsize)
 
   Exec { path => '/bin:/usr/bin', }
 
