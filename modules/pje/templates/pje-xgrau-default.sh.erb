@@ -234,7 +234,6 @@ start_profile()
     else
         echo "JBoss (instance $JBOSS_PROFILE at $JBOSS_BINDING_IPADDR) is already running [PID $PID]"
     fi
-    exit 0
 }
 
 stop_profile()
@@ -256,16 +255,17 @@ stop_profile()
             cleanWorkTmp
         fi
     fi
-    exit 3
 }
 
 case "$1" in
 start)
     start_profile
+    exit 0
     ;;
     
 stop)
     stop_profile
+    exit 3
     ;;
     
 restart)
@@ -276,6 +276,7 @@ restart)
         stop_profile
         start_profile
     fi
+    exit 0
     ;;
     
 status)
@@ -303,7 +304,6 @@ kill)
         echo "DONE!"
         echo "Please avoid doing this next time!"
     fi
-    
     exit 3
     ;;
 
