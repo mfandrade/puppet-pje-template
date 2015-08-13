@@ -241,6 +241,7 @@ define pje::profile (
     owner   => $owner_group,
     group   => $owner_group,
     mode    => '0644',
+    before  => Service["pje${grau}grau"],
     require => Exec["create-profile-${grau}"],
   }
   file { "jmx-users-${grau}":
@@ -301,8 +302,15 @@ define pje::profile (
 
   $war_file = "pje-jt-${val_version}.war"
   $war_path = "${profile_path}/deploy/${ctxpath}.war"
+  exec { "force-stop-${grau}":
+    command => "/etc/init.d/pje${grau}grau stop; rm -rf data log tmp work deploy/${ctxpath}.war",
+    cwd     => "${profile_path}",
+    require => Exec["create-profile-${grau}"],
+    before  => Exec["deploy-pje-${grau}"],
+  }
   exec { "deploy-pje-${grau}":
-    command => "rm -rf ${war_path}; unzip ${war_file} -d ${war_path}; chown -R ${owner_group}.${owner_group} ${war_path}",
+    command => "unzip ${war_file} -d ${war_path}; chown -R ${owner_group}.${owner_group} ${war_path}",
+    #command => "cp -fa ${war_file} ${war_path}", #; chown ${owner_group}.${owner_group} ${war_path}",
     onlyif  => "test -f ${war_file}",
     cwd     => '/tmp',
     require => Exec["create-profile-${grau}"],
