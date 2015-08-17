@@ -114,13 +114,13 @@ define pje::profile (
 # ----------------------------------------------------------------------------
   $jvmroute = $name
 
-  if $jvmroute =~ /^pje([12])[a-z].*$/ { # EXEMPLO: pje1a, pje2btreinam
+  if $jvmroute =~ /^pje([12])[a-z].*$/ { # pje1a, pje2btreinam
     $grau = $1
 
-  } elsif $jvmroute =~ /^(int|ext|tre|hom|bug)[a-z]([12])$/ { # EXEMPLO: inta1, treb2
+  } elsif $jvmroute =~ /^(int|ext|tre|hom|bug)[a-z]([12])$/ { # inta1, treb2
     $grau = $2
 
-  } elsif $jvmroute =~ /^[a-zA-Z]*([12]).*$/ { # EXEMPLO: QQ-cOiSa_que_contenha_1ou2
+  } elsif $jvmroute =~ /^[a-zA-Z]*([12]).*$/ { # QQ-cOiSa_que_contenha_1ou2
     $grau = $1
 
   } else {
@@ -314,14 +314,14 @@ define pje::profile (
   $war_file = "pje-jt-${pje_version}.war"
   $war_path = "${profile_path}/deploy/${ctxpath}.war"
   exec { "force-stop-${grau}":
-    command => "/etc/init.d/pje${grau}grau stop; rm -rf data log tmp work deploy/${ctxpath}.war",
-    cwd     => "${profile_path}",
+    command => "/etc/init.d/pje${grau}grau stop; rm -rf deploy/${ctxpath}.war",
+    cwd     => $profile_path,
     require => Exec["create-profile-${grau}"],
     before  => Exec["deploy-pje-${grau}"],
   }
   exec { "deploy-pje-${grau}":
-    command => "unzip ${war_file} -d ${war_path}; chown -R ${owner_group}.${owner_group} ${war_path}",
-    #command => "cp -fa ${war_file} ${war_path}", #; chown ${owner_group}.${owner_group} ${war_path}",
+    command => "unzip ${war_file} -d ${war_path}; \
+                chown -R ${owner_group}.${owner_group} ${war_path}",
     onlyif  => "test -f ${war_file}",
     cwd     => '/tmp',
     require => Exec["create-profile-${grau}"],

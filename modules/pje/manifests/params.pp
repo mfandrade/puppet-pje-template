@@ -43,28 +43,27 @@
 #   Valor máximo do pool de conexões do datasource "pje".
 #
 # [*$ds_username_api*]
-#   Usuário do datasource "api". (decisões arquiteturais da equipe)
+#   Usuário do datasource "api".
 #   
 # [*$ds_password_api*]
-#   Senha do usuário do datasource "api". (decisões arquiteturais da equipe)
+#   Senha do usuário do datasource "api".
 #
 # [*$ds_minpoolsize_api*]
-#   Valor mínimo do pool de conexões do datasource "api". (decisões arquiteturais da equipe)
 #
 # [*$ds_maxpoolsize_api*]
-#   Valor máximo do pool de conexões do datasource "api". (decisões arquiteturais da equipe)
+#   Valor máximo do pool de conexões do datasource "api".
 #
 # [*$ds_username_gim*]
-#   Senha do usuário do datasource "gim". (decisões arquiteturais da equipe)
+#   Senha do usuário do datasource "gim".
 #   
 # [*$ds_password_gim*]
-#   Senha do usuário do datasource "gim". (decisões arquiteturais da equipe)
+#   Senha do usuário do datasource "gim".
 #
 # [*$ds_minpoolsize_gim*]
-#   Valor mínimo do pool de conexões do datasource "gim". (decisões arquiteturais da equipe)
+#   Valor mínimo do pool de conexões do datasource "gim".
 #
 # [*$ds_maxpoolsize_gim*]
-#   Valor máximo do pool de conexões do datasource "gim". (decisões arquiteturais da equipe)
+#   Valor máximo do pool de conexões do datasource "gim".
 #
 # [*$mail_host*]
 #   IP ou hostname do servidor SMTP.
