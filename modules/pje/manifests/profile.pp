@@ -158,17 +158,28 @@ define pje::profile (
   }
 
 # ----------------------------------------------------------------------------
-  $val_version            = get_value($version, $::pje::params::pje_version)
-  $val_ds_minpoolsize_pje = get_value($ds_minpoolsize_pje, $::pje::params::ds_minpoolsize_pje)
-  $val_ds_maxpoolsize_pje = get_value($ds_maxpoolsize_pje, $::pje::params::ds_maxpoolsize_pje)
-  $val_ds_minpoolsize_api = get_value($ds_minpoolsize_api, $::pje::params::ds_minpoolsize_api)
-  $val_ds_maxpoolsize_api = get_value($ds_maxpoolsize_api, $::pje::params::ds_maxpoolsize_api)
-  $val_ds_minpoolsize_gim = get_value($ds_minpoolsize_gim, $::pje::params::ds_minpoolsize_gim)
-  $val_ds_maxpoolsize_gim = get_value($ds_maxpoolsize_gim, $::pje::params::ds_maxpoolsize_gim)
-  $val_jvm_heapsize       = get_value($jvm_heapsize, $::pje::params::jvm_heapsize)
-  $val_jvm_maxheapsize    = get_value($jvm_maxheapsize, $::pje::params::jvm_maxheapsize)
-  $val_jvm_permsize       = get_value($jvm_permsize, $::pje::params::jvm_permsize)
-  $val_jvm_maxpermsize    = get_value($jvm_maxpermsize, $::pje::params::jvm_maxpermsize)
+  $pje_version         = get_value($version, $::pje::params::pje_version)
+  
+  $_ds_servername      = $::pje::params::ds_servername
+  $_ds_portnumber      = $::pje::params::ds_portnumber
+  $_ds_databasename    = $ds_databasename # profile specific
+  $_ds_username_pje    = $::pje::params::ds_username_pje
+  $_ds_password_pje    = $::pje::params::ds_password_pje
+  $_ds_username_api    = $::pje::params::ds_username_api
+  $_ds_password_api    = $::pje::params::ds_password_api
+  $_ds_username_gim    = $::pje::params::ds_username_gim
+  $_ds_password_gim    = $::pje::params::ds_password_gim
+  
+  $_ds_minpoolsize_pje = get_value($ds_minpoolsize_pje, $::pje::params::ds_minpoolsize_pje)
+  $_ds_maxpoolsize_pje = get_value($ds_maxpoolsize_pje, $::pje::params::ds_maxpoolsize_pje)
+  $_ds_minpoolsize_api = get_value($ds_minpoolsize_api, $::pje::params::ds_minpoolsize_api)
+  $_ds_maxpoolsize_api = get_value($ds_maxpoolsize_api, $::pje::params::ds_maxpoolsize_api)
+  $_ds_minpoolsize_gim = get_value($ds_minpoolsize_gim, $::pje::params::ds_minpoolsize_gim)
+  $_ds_maxpoolsize_gim = get_value($ds_maxpoolsize_gim, $::pje::params::ds_maxpoolsize_gim)
+  $_jvm_heapsize       = get_value($jvm_heapsize, $::pje::params::jvm_heapsize)
+  $_jvm_maxheapsize    = get_value($jvm_maxheapsize, $::pje::params::jvm_maxheapsize)
+  $_jvm_permsize       = get_value($jvm_permsize, $::pje::params::jvm_permsize)
+  $_jvm_maxpermsize    = get_value($jvm_maxpermsize, $::pje::params::jvm_maxpermsize)
 
   Exec { path => '/bin:/usr/bin', }
 
@@ -300,7 +311,7 @@ define pje::profile (
     fail("PJE environment '${env}' does not exist")
   }
 
-  $war_file = "pje-jt-${val_version}.war"
+  $war_file = "pje-jt-${pje_version}.war"
   $war_path = "${profile_path}/deploy/${ctxpath}.war"
   exec { "force-stop-${grau}":
     command => "/etc/init.d/pje${grau}grau stop; rm -rf data log tmp work deploy/${ctxpath}.war",

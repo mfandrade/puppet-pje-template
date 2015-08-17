@@ -1,144 +1,110 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!DOCTYPE datasources
     PUBLIC "-//JBoss//DTD JBOSS JCA Config 1.5//EN"
     "http://www.jboss.org/j2ee/dtd/jboss-ds_1_5.dtd">
-    
+
 <datasources>
 
- 
-<!--####### BASE PJE #######-->
-  <xa-datasource>
-    <jndi-name>PJE_DESCANSO_DS</jndi-name>
-    <xa-datasource-class>org.postgresql.xa.PGXADataSource</xa-datasource-class>
-    <xa-datasource-property name="ServerName"><%= scope['::pje::params::ds_servername'] %></xa-datasource-property>
-    <xa-datasource-property name="PortNumber"><%= scope['::pje::params::ds_portnumber'] %></xa-datasource-property>
-    <xa-datasource-property name="DatabaseName"><%= @ds_databasename %></xa-datasource-property>
-    <user-name><%= scope['::pje::params::ds_username_pje'] %></user-name>
-    <password><%= scope['::pje::params::ds_password_pje'] %></password>
-    <!-- Connection Pool Tuning -->
-    <min-pool-size><%= @val_ds_minpoolsize_pje %></min-pool-size>
-    <max-pool-size><%= @val_ds_maxpoolsize_pje %></max-pool-size>
-    <prepared-statement-cache-size>10</prepared-statement-cache-size>
-    <shared-prepared-statements>true</shared-prepared-statements>
-    <idle-timeout-minutes>5</idle-timeout-minutes>
-    <validate-on-match>true</validate-on-match>
-    <valid-connection-checker-class-name>org.jboss.resource.adapter.jdbc.vendor.PostgreSQLValidConnectionChecker</valid-connection-checker-class-name>
-    <track-connection-by-tx />
-    <!-- corresponding type-mapping in conf/standardjbosscmp-jdbc.xml -->
-    <metadata>
-      <type-mapping>PostgreSQL 8.0</type-mapping>
-    </metadata>
-  </xa-datasource>
+    <xa-datasource>
+        <jndi-name>PJE_DESCANSO_DS</jndi-name>
+        <xa-datasource-class>org.postgresql.xa.PGXADataSource</xa-datasource-class>
+        <xa-datasource-property name="ServerName"><%= @_ds_servername %></xa-datasource-property>
+        <xa-datasource-property name="PortNumber"><%= @_ds_portnumber %></xa-datasource-property>
+        <xa-datasource-property name="DatabaseName"><%= @_ds_databasename %></xa-datasource-property>
+        <user-name><%= @_ds_username_pje %></user-name>
+        <password><%= @_ds_password_pje %></password>
+        <min-pool-size><%= @_ds_minpoolsize_pje %></min-pool-size>
+        <max-pool-size><%= @_ds_minpoolsize_pje %></max-pool-size>
+        <prepared-statement-cache-size>10</prepared-statement-cache-size>
+        <shared-prepared-statements>true</shared-prepared-statements>
+        <track-connection-by-tx />
+        <metadata>
+            <type-mapping>PostgreSQL 8.0</type-mapping>
+        </metadata>
+        <validate-on-match>true</validate-on-match>
+        <valid-connection-checker-class-name>org.jboss.resource.adapter.jdbc.vendor.PostgreSQLValidConnectionChecker</valid-connection-checker-class-name>
+    </xa-datasource>
   
-  <xa-datasource>
-    <jndi-name>PJE_DESCANSO_BIN_DS</jndi-name>
-    <xa-datasource-class>org.postgresql.xa.PGXADataSource</xa-datasource-class>
-    <xa-datasource-property name="ServerName"><%= scope['::pje::params::ds_servername'] %></xa-datasource-property>
-    <xa-datasource-property name="PortNumber"><%= scope['::pje::params::ds_portnumber'] %></xa-datasource-property>
-    <xa-datasource-property name="DatabaseName"><%= @ds_databasename %>_bin</xa-datasource-property>
-    <user-name><%= scope['::pje::params::ds_username_pje'] %></user-name>
-    <password><%= scope['::pje::params::ds_password_pje'] %></password>
+    <xa-datasource>
+        <jndi-name>PJE_DESCANSO_BIN_DS</jndi-name>
+        <xa-datasource-class>org.postgresql.xa.PGXADataSource</xa-datasource-class>
+        <xa-datasource-property name="ServerName"><%= @_ds_servername %></xa-datasource-property>
+        <xa-datasource-property name="PortNumber"><%= @_ds_portnumber %></xa-datasource-property>
+        <xa-datasource-property name="DatabaseName"><%= @ds_databasename %>_bin</xa-datasource-property>
+        <user-name><%= @_ds_username_pje %></user-name>
+        <password><%= @_ds_password_pje %></password>
+        <min-pool-size><%= @_ds_minpoolsize_pje %></min-pool-size>
+        <max-pool-size><%= @_ds_minpoolsize_pje %></max-pool-size>
+        <prepared-statement-cache-size>10</prepared-statement-cache-size>
+        <shared-prepared-statements>true</shared-prepared-statements>
+        <track-connection-by-tx />
+        <metadata>
+            <type-mapping>PostgreSQL 8.0</type-mapping>
+        </metadata>
+        <validate-on-match>true</validate-on-match>
+        <valid-connection-checker-class-name>org.jboss.resource.adapter.jdbc.vendor.PostgreSQLValidConnectionChecker</valid-connection-checker-class-name>
+    </xa-datasource>
 
-    <!-- Connection Pool Tuning -->
-    <min-pool-size><%= @val_ds_minpoolsize_pje %></min-pool-size>
-    <max-pool-size><%= @val_ds_maxpoolsize_pje %></max-pool-size>
-    <prepared-statement-cache-size>10</prepared-statement-cache-size>
-    <shared-prepared-statements>true</shared-prepared-statements>
-    <idle-timeout-minutes>5</idle-timeout-minutes>
-    <validate-on-match>true</validate-on-match>
-    <valid-connection-checker-class-name>org.jboss.resource.adapter.jdbc.vendor.PostgreSQLValidConnectionChecker</valid-connection-checker-class-name>
-    <!-- disable transaction interleaving -->
-    <track-connection-by-tx />
-    <!-- corresponding type-mapping in conf/standardjbosscmp-jdbc.xml -->
-    <metadata>
-      <type-mapping>PostgreSQL 8.0</type-mapping>
-    </metadata>
-  </xa-datasource>
+    <xa-datasource>
+        <jndi-name>PJE_DESCANSO_LOG_DS</jndi-name> 
+        <xa-datasource-class>org.postgresql.xa.PGXADataSource</xa-datasource-class>
+        <xa-datasource-property name="ServerName"><%= @_ds_servername %></xa-datasource-property>
+        <xa-datasource-property name="PortNumber"><%= @_ds_portnumber %></xa-datasource-property>
+        <xa-datasource-property name="DatabaseName"><%= @ds_databasename %>_log</xa-datasource-property>
+        <user-name><%= @_ds_username_pje %></user-name>
+        <password><%= @_ds_password_pje %></password>
+        <min-pool-size><%= @_ds_minpoolsize_pje %></min-pool-size>
+        <max-pool-size><%= @_ds_minpoolsize_pje %></max-pool-size>
+        <metadata>
+            <type-mapping>PostgreSQL 8.0</type-mapping>
+        </metadata>
+        <validate-on-match>true</validate-on-match>
+        <valid-connection-checker-class-name>org.jboss.resource.adapter.jdbc.vendor.PostgreSQLValidConnectionChecker</valid-connection-checker-class-name>
+    </xa-datasource>
 
-<!--## Valores sugeridos. Cada TRT pode necessitar de valores diferentes ##-->
-<!--####### BASE LOG #######-->
-  <xa-datasource>
-    <jndi-name>PJE_DESCANSO_LOG_DS</jndi-name> 
-    <xa-datasource-class>org.postgresql.xa.PGXADataSource</xa-datasource-class>
-    <xa-datasource-property name="ServerName"><%= scope['::pje::params::ds_servername'] %></xa-datasource-property>
-    <xa-datasource-property name="PortNumber"><%= scope['::pje::params::ds_portnumber'] %></xa-datasource-property>
-    <xa-datasource-property name="DatabaseName"><%= @ds_databasename %>_log</xa-datasource-property>
-    <user-name><%= scope['::pje::params::ds_username_pje'] %></user-name>
-    <password><%= scope['::pje::params::ds_password_pje'] %></password>
-  
-    <!-- Connection Pool Tuning -->
-    <min-pool-size><%= @val_ds_minpoolsize_pje %></min-pool-size>
-    <max-pool-size><%= @val_ds_maxpoolsize_pje %></max-pool-size>
-    <prepared-statement-cache-size>10</prepared-statement-cache-size>
-    <shared-prepared-statements>true</shared-prepared-statements>
-    <idle-timeout-minutes>5</idle-timeout-minutes>
-    <validate-on-match>true</validate-on-match>
-    <valid-connection-checker-class-name>org.jboss.resource.adapter.jdbc.vendor.PostgreSQLValidConnectionChecker</valid-connection-checker-class-name>
-    
-  <!-- disable transaction interleaving -->
-    <track-connection-by-tx />
+    <xa-datasource>
+        <jndi-name>PJE_DESCANSO_QUARTZ_DS</jndi-name> 
+        <xa-datasource-class>org.postgresql.xa.PGXADataSource</xa-datasource-class>
+        <xa-datasource-property name="ServerName"><%= @_ds_servername %></xa-datasource-property>
+        <xa-datasource-property name="PortNumber"><%= @_ds_portnumber %></xa-datasource-property>
+        <xa-datasource-property name="DatabaseName"><%= @ds_databasename %></xa-datasource-property>
+        <user-name><%= @_ds_username_pje %></user-name>
+        <password><%= @_ds_password_pje %></password>
+        <min-pool-size><%= @_ds_minpoolsize_pje %></min-pool-size>
+        <max-pool-size><%= @_ds_minpoolsize_pje %></max-pool-size>
+        <metadata>
+            <type-mapping>PostgreSQL 8.0</type-mapping>
+        </metadata>
+        <validate-on-match>true</validate-on-match>
+        <valid-connection-checker-class-name>org.jboss.resource.adapter.jdbc.vendor.PostgreSQLValidConnectionChecker</valid-connection-checker-class-name>
+    </xa-datasource>
 
-    <!-- corresponding type-mapping in conf/standardjbosscmp-jdbc.xml -->
-  <metadata>
-    <type-mapping>PostgreSQL 8.0</type-mapping>
-    </metadata>
-  </xa-datasource>
+    <no-tx-datasource>
+        <jndi-name>PJE_DESCANSO_BASE_REPLICADA_DS</jndi-name>
+        <connection-url>jdbc:postgresql://<%= @_ds_servername %>:<%= @_ds_portnumber %>/<%= @ds_databasename %></connection-url>
+        <driver-class>org.postgresql.Driver</driver-class>
+        <user-name><%= @_ds_username_pje %></user-name>
+        <password><%= @_ds_password_pje %></password>
+        <min-pool-size><%= @_ds_minpoolsize_pje %></min-pool-size>
+        <max-pool-size><%= @_ds_minpoolsize_pje %></max-pool-size>
+        <metadata>
+            <type-mapping>PostgreSQL 8.0</type-mapping>
+        </metadata>
+    </no-tx-datasource>
 
-<!--## Valores sugeridos. Cada TRT pode necessitar de valores diferentes ##-->
-<!--####### BASE QUARTZ #######-->
-  <no-tx-datasource>
-    <jndi-name>PJE_DESCANSO_QUARTZ_DS</jndi-name>
-    <connection-url>jdbc:postgresql://<%= scope['::pje::params::ds_servername'] %>:<%= scope['::pje::params::ds_portnumber'] %>/<%= @ds_databasename %></connection-url>
-    <driver-class>org.postgresql.Driver</driver-class>
-    <user-name><%= scope['::pje::params::ds_username_pje'] %></user-name>
-    <password><%= scope['::pje::params::ds_password_pje'] %></password>
-  
-    <!-- Connection Pool Tuning -->
-    <min-pool-size><%= @val_ds_minpoolsize_pje %></min-pool-size>
-    <max-pool-size><%= @val_ds_maxpoolsize_pje %></max-pool-size>
-    <prepared-statement-cache-size>10</prepared-statement-cache-size>
-    <shared-prepared-statements>true</shared-prepared-statements>
-    <idle-timeout-minutes>5</idle-timeout-minutes>
-    <validate-on-match>true</validate-on-match>
-    <valid-connection-checker-class-name>org.jboss.resource.adapter.jdbc.vendor.PostgreSQLValidConnectionChecker</valid-connection-checker-class-name>
-  
-    <!-- disable transaction interleaving -->
-    <track-connection-by-tx />
-    <!-- corresponding type-mapping in conf/standardjbosscmp-jdbc.xml -->
-    <metadata>
-      <type-mapping>PostgreSQL 8.0</type-mapping>
-    </metadata>
-  </no-tx-datasource>
+    <no-tx-datasource>
+        <jndi-name>PJE_DESCANSO_BASE_REPLICADA_BIN_DS</jndi-name>
+        <connection-url>jdbc:postgresql://<%= @_ds_servername %>:<%= @_ds_portnumber %>/<%= @ds_databasename %>_bin</connection-url>
+        <driver-class>org.postgresql.Driver</driver-class>
+        <user-name><%= @_ds_username_pje %></user-name>
+        <password><%= @_ds_password_pje %></password>
+        <min-pool-size><%= @_ds_minpoolsize_pje %></min-pool-size>
+        <max-pool-size><%= @_ds_minpoolsize_pje %></max-pool-size>
+        <validate-on-match>true</validate-on-match>
+        <valid-connection-checker-class-name>org.jboss.resource.adapter.jdbc.vendor.PostgreSQLValidConnectionChecker</valid-connection-checker-class-name>
+        <metadata>
+            <type-mapping>PostgreSQL 8.0</type-mapping>
+        </metadata>
+    </no-tx-datasource>
 
-
-<!--####### BASE REPLICADA #######-->
-  <no-tx-datasource>
-    <jndi-name>PJE_DESCANSO_BASE_REPLICADA_DS</jndi-name>
-    <connection-url>jdbc:postgresql://<%= scope['::pje::params::ds_servername'] %>:<%= scope['::pje::params::ds_portnumber'] %>/<%= @ds_databasename %></connection-url>
-    <driver-class>org.postgresql.Driver</driver-class>
-    <user-name><%= scope['::pje::params::ds_username_pje'] %></user-name>
-    <password><%= scope['::pje::params::ds_password_pje'] %></password>
-    <idle-timeout-minutes>5</idle-timeout-minutes>
-    <validate-on-match>true</validate-on-match>
-    <valid-connection-checker-class-name>org.jboss.resource.adapter.jdbc.vendor.PostgreSQLValidConnectionChecker</valid-connection-checker-class-name>
-    <metadata>
-      <type-mapping>PostgreSQL 8.0</type-mapping>
-    </metadata>
-    
-  </no-tx-datasource>
-  <no-tx-datasource>
-    <jndi-name>PJE_DESCANSO_BASE_REPLICADA_BIN_DS</jndi-name>
-    <connection-url>jdbc:postgresql://<%= scope['::pje::params::ds_servername'] %>:<%= scope['::pje::params::ds_portnumber'] %>/<%= @ds_databasename %>_bin</connection-url>
-    <driver-class>org.postgresql.Driver</driver-class>
-    <user-name><%= scope['::pje::params::ds_username_pje'] %></user-name>
-    <password><%= scope['::pje::params::ds_password_pje'] %></password>
-    <idle-timeout-minutes>5</idle-timeout-minutes>
-    <validate-on-match>true</validate-on-match>
-    <valid-connection-checker-class-name>org.jboss.resource.adapter.jdbc.vendor.PostgreSQLValidConnectionChecker</valid-connection-checker-class-name>
-    <metadata>
-      <type-mapping>PostgreSQL 8.0</type-mapping>
-    </metadata>
-  </no-tx-datasource> 
-  
 </datasources>
