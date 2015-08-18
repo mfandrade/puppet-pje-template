@@ -8,9 +8,6 @@
 # [*{namevar}*]
 #   jvmroute - obrigatório
 #
-# [*$env*]
-#   env - obrigatório
-#
 # [*$binding_to*]
 #   binding_to - obrigatório
 #
@@ -66,7 +63,6 @@
 #
 # pje::profile { 'int1a':
 #   version         => '1.6.0',
-#   env             => 'treinamento',
 #   ds_databasename => 'pje_1grau_treinamento',
 #   binding_to      => 'ports-default',
 #   jmx_remote_port => '10150',
@@ -91,7 +87,6 @@
 #
 # ----------------------------------------------------------------------------
 define pje::profile (
-  $env,
   $binding_to,
   $jmxremote_port,
   $ds_databasename,
@@ -123,9 +118,6 @@ define pje::profile (
   } else {
     fail("PJE profile '${name}' is an invalid jvmRoute pattern")
   }
-  $jboss_home   = $::pje::params::jboss_home
-  $profile_name = "pje-${grau}grau-default"
-  $profile_path = "${jboss_home}/server/${profile_name}"
 
   if $ds_databasename == undef {
     fail("You need to set 'ds_databasename' parameter for pje::profile ${name}")
@@ -138,18 +130,26 @@ define pje::profile (
     $ordgrau = 'segundograu'
 
   }
-  if $env == 'producao' {
-    $ctxpath = $ordgrau
 
-  } elsif $env =~ /^(homologacao|treinamento|bugfix)$/ {
-    $ctxpath = "${ordgrau}_${env}"
+  if $environment in hiera('environments') {
+
+    if $environment == 'producao' {
+      $ctxpath = $ordgrau
+
+    } else {
+      $ctxpath = "${ordgrau}_${environment}"
+    }
 
   } else {
-    fail("PJE environment '${env}' doesn't exist.  Did you forget --environment?")
+    fail("PJE '${environment}' doesn't exist.  Did you forget --environment?")
   }
 # ----------------------------------------------------------------------------
 
   include pje
+
+  $jboss_home   = $::pje::params::jboss_home
+  $profile_name = "pje-${grau}grau-default"
+  $profile_path = "${jboss_home}/server/${profile_name}"
 
 # ----------------------------------------------------------------------------
   if ($binding_to == 'ports-default') or ($binding_to =~ /^ports-0[1-3]$/) {
