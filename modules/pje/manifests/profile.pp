@@ -108,9 +108,6 @@ define pje::profile (
   $jvm_maxpermsize    = undef,
   $exec_quartz        = false,
 ) {
-
-  include pje
-
 # ----------------------------------------------------------------------------
   $jvmroute = $name
 
@@ -133,6 +130,26 @@ define pje::profile (
   if $ds_databasename == undef {
     fail("You need to set 'ds_databasename' parameter for pje::profile ${name}")
   }
+
+  if $grau == '1' {
+    $ordgrau = 'primeirograu'
+
+  } elsif $grau == '2' {
+    $ordgrau = 'segundograu'
+
+  }
+  if $env == 'producao' {
+    $ctxpath = $ordgrau
+
+  } elsif $env =~ /^(homologacao|treinamento|bugfix)$/ {
+    $ctxpath = "${ordgrau}_${env}"
+
+  } else {
+    fail("PJE environment '${env}' doesn't exist.  Did you forget --environment?")
+  }
+# ----------------------------------------------------------------------------
+
+  include pje
 
 # ----------------------------------------------------------------------------
   if ($binding_to == 'ports-default') or ($binding_to =~ /^ports-0[1-3]$/) {
@@ -293,23 +310,6 @@ define pje::profile (
     require => Exec["create-profile-${grau}"],
   }
 
-
-  if $grau == '1' {
-    $ordgrau = 'primeirograu'
-
-  } elsif $grau == '2' {
-    $ordgrau = 'segundograu'
-
-  }
-  if $env == 'producao' {
-    $ctxpath = $ordgrau
-
-  } elsif $env =~ /^(homologacao|treinamento|bugfix)$/ {
-    $ctxpath = "${ordgrau}_${env}"
-
-  } else {
-    fail("PJE environment '${env}' does not exist")
-  }
 
   $war_file = "pje-jt-${pje_version}.war"
   $war_path = "${profile_path}/deploy/${ctxpath}.war"
