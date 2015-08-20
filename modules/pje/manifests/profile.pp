@@ -165,7 +165,7 @@ define pje::profile (
     $change_this  = "^JBOSS_${grau}GRAU_BINDTO=.*$"
     $to_this      = "JBOSS_${grau}GRAU_BINDTO=${binding_to}"
     exec { "config-file-${grau}":
-      command => "sed -i.orig '/${change_this}/c ${to_this}' ${default_file}",
+      command => "sed -i '/${change_this}/c ${to_this}' ${default_file}",
       require => Class['pje::install'],
       before  => File["${profile_name}.sh"],
     }
