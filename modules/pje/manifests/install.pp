@@ -90,7 +90,7 @@ class pje::install($version) {
     mode   => '0644',
     owner  => 'root',
     group  => 'root',
-    source => ["puppet:///modules/pje/${war_name}", 'file:///dev/null'],
+    source => ["puppet:///modules/pje/${war_name}", '/etc/issue'],
   }
   exec { 'download-war':
     command => "wget -c '${url}'",
@@ -105,7 +105,7 @@ class pje::install($version) {
   $tmpfiles = '-name "*.crl" -o -name "*.tmp" -o -name "*.upload"'
   cron { 'delete-tmpfiles':
     command => "/usr/bin/find /tmp ${tmpfiles} -mmin +${age} -delete",
-    user    => 'jboss', #::pje::params::runas_user,
+    user    => $::pje::params::runas_user,
     minute  => '*/20',
     require => Class['jboss'],
   }
