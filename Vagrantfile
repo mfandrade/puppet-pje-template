@@ -12,9 +12,23 @@ Vagrant.configure(2) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  #FIXME: demora 25min para atualizar o guestadditions
-  #config.vm.box = "puppetlabs/centos-6.6-32-puppet"
-  config.vm.box = "centosjavajboss"
+  # FIXME: Descomente as duas linhas box e box_version a seguir OU
+  # as linhas box e provision mais abaixo, conforme referências:
+  # - https://github.com/mitchellh/vagrant/issues/6128#issuecomment-130122361
+  # - http://stackoverflow.com/a/31820102
+  config.vm.box = "puppetlabs/centos-6.6-32-puppet"
+  config.vm.box_version = "1.0.1"
+
+  #config.vm.box = "puppetlabs/centos-6.6-32-nocm"
+  #config.vm.provision :shell, inline: <<-SHELL
+  #  if [ ! -f repo-install ]; then
+  #    RPM_REPO=https://yum.puppetlabs.com/puppetlabs-release-el-6.noarch.rpm
+  #    sudo rpm -ivh $RPM_REPO && sudo touch repo-install;
+  #  fi
+  #  if [ ! -f puppet-install ]; then
+  #    sudo yum install puppet -y && sudo touch puppet-install;
+  #  fi
+  #SHELL
 
   if Vagrant.has_plugin?('vagrant-proxyconf')
     if ENV['http_proxy']
@@ -88,7 +102,7 @@ Vagrant.configure(2) do |config|
     puppet.module_path = "modules/"
     puppet.manifest_file = "site.pp"
     puppet.manifests_path = "."
-    #puppet.options = "--verbose --debug"
-    puppet.options = "--verbose"
+    #puppet.options = "--verbose --environment bugfix"
+    puppet.options = "--verbose -debug"
   end
 end
