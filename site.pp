@@ -1,4 +1,4 @@
-node /^pje8-jb-(int|ext)-([a-z]).trt8.net$/ {
+node /^pje8-jb-(int|ext)-?([a-z]).trt8.net$/ {
 
   $id = "${1}${2}"
 
