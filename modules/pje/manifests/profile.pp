@@ -160,18 +160,18 @@ define pje::profile (
     $binding_ipaddr = $binding_to
     $binding_ports  = 'ports-default'
 
-    # default-file existente usa portas. aqui só o altera se precisar.
-    $default_file = $::pje::params::default_file
-    $change_this  = "^JBOSS_${grau}GRAU_BINDTO=.*$"
-    $to_this      = "JBOSS_${grau}GRAU_BINDTO=${binding_to}"
-    exec { "config-file-${grau}":
-      command => "sed -i '/${change_this}/c ${to_this}' ${default_file}",
-      require => Class['pje::install'],
-      before  => File["${profile_name}.sh"],
-    }
-
   } else {
     fail('You need to specify an IP address or a default port set to bind to')
+  }
+
+  # atualiza o default-file existente com os binding_to configurados
+  $default_file = $::pje::params::default_file
+  $change_this  = "^JBOSS_${grau}GRAU_BINDTO=.*$"
+  $to_this      = "JBOSS_${grau}GRAU_BINDTO=${binding_to}"
+  exec { "config-file-${grau}":
+    command => "sed -i '/${change_this}/c ${to_this}' ${default_file}",
+    require => Class['pje::install'],
+    before  => File["${profile_name}.sh"],
   }
 
 # ----------------------------------------------------------------------------
