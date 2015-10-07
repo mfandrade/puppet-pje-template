@@ -2,7 +2,6 @@
 <!DOCTYPE datasources
     PUBLIC "-//JBoss//DTD JBOSS JCA Config 1.5//EN"
     "http://www.jboss.org/j2ee/dtd/jboss-ds_1_5.dtd">
-
 <datasources>
 
     <xa-datasource>
@@ -21,8 +20,6 @@
         <metadata>
             <type-mapping>PostgreSQL 8.0</type-mapping>
         </metadata>
-        <validate-on-match>true</validate-on-match>
-        <valid-connection-checker-class-name>org.jboss.resource.adapter.jdbc.vendor.PostgreSQLValidConnectionChecker</valid-connection-checker-class-name>
     </xa-datasource>
   
     <xa-datasource>
@@ -41,8 +38,6 @@
         <metadata>
             <type-mapping>PostgreSQL 8.0</type-mapping>
         </metadata>
-        <validate-on-match>true</validate-on-match>
-        <valid-connection-checker-class-name>org.jboss.resource.adapter.jdbc.vendor.PostgreSQLValidConnectionChecker</valid-connection-checker-class-name>
     </xa-datasource>
 
     <xa-datasource>
@@ -58,8 +53,6 @@
         <metadata>
             <type-mapping>PostgreSQL 8.0</type-mapping>
         </metadata>
-        <validate-on-match>true</validate-on-match>
-        <valid-connection-checker-class-name>org.jboss.resource.adapter.jdbc.vendor.PostgreSQLValidConnectionChecker</valid-connection-checker-class-name>
     </xa-datasource>
 
     <xa-datasource>
@@ -75,8 +68,6 @@
         <metadata>
             <type-mapping>PostgreSQL 8.0</type-mapping>
         </metadata>
-        <validate-on-match>true</validate-on-match>
-        <valid-connection-checker-class-name>org.jboss.resource.adapter.jdbc.vendor.PostgreSQLValidConnectionChecker</valid-connection-checker-class-name>
     </xa-datasource>
 
     <no-tx-datasource>
@@ -100,8 +91,6 @@
         <password><%= @_ds_password_pje %></password>
         <min-pool-size><%= @_ds_minpoolsize_pje %></min-pool-size>
         <max-pool-size><%= @_ds_maxpoolsize_pje %></max-pool-size>
-        <validate-on-match>true</validate-on-match>
-        <valid-connection-checker-class-name>org.jboss.resource.adapter.jdbc.vendor.PostgreSQLValidConnectionChecker</valid-connection-checker-class-name>
         <metadata>
             <type-mapping>PostgreSQL 8.0</type-mapping>
         </metadata>
