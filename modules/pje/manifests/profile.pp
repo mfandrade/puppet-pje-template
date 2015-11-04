@@ -209,13 +209,14 @@ define pje::profile (
     $owner_group = 'root'
   }
   exec { "create-profile-${grau}":
-    command => "rsync -aqz default/ ${profile_name}/",
+    command => "rsync -aqz --exclude-from '.profile_exclude_list' \
+                --delete-excluded default/ ${profile_name}/",
     cwd     => "${jboss_home}/server",
     require => Class['pje::install'],
   }
 
   file { "${profile_name}.sh":
-    ensure  => present,
+    ensure  => file,
     path    => "${jboss_home}/bin/${profile_name}.sh",
     content => template('pje/pje-xgrau-default.sh.erb'),
     owner   => $owner_group,
@@ -228,42 +229,8 @@ define pje::profile (
     require => File["${profile_name}.sh"],
   }
 
-  $remove_from_deploy_folder = [
-    "${profile_path}/deploy/ROOT.war",
-    "${profile_path}/deploy/admin-console.war",
-    "${profile_path}/deploy/http-invoker.sar",
-    "${profile_path}/deploy/jms-ra.rar",
-    "${profile_path}/deploy/mail-ra.rar",
-    "${profile_path}/deploy/management",
-    "${profile_path}/deploy/messaging",
-    "${profile_path}/deploy/quartz-ra.rar",
-    "${profile_path}/deploy/uuid-key-generator.sar",
-    "${profile_path}/deploy/xnio-provider.jar",
-    "${profile_path}/deploy/ejb2-container-jboss-beans.xml",
-    "${profile_path}/deploy/ejb2-timer-service.xml",
-    "${profile_path}/deploy/ejb3-connectors-jboss-beans.xml",
-    "${profile_path}/deploy/ejb3-container-jboss-beans.xml",
-    "${profile_path}/deploy/ejb3-interceptors-aop.xml",
-    "${profile_path}/deploy/ejb3-timerservice-jboss-beans.xml",
-    "${profile_path}/deploy/jsr88-service.xml",
-    "${profile_path}/deploy/mail-service.xml",
-    "${profile_path}/deploy/monitoring-service.xml",
-    "${profile_path}/deploy/properties-service.xml",
-    "${profile_path}/deploy/schedule-manager-service.xml",
-    "${profile_path}/deploy/scheduler-service.xml",
-    "${profile_path}/deploy/sqlexception-service.xml",
-    "${profile_path}/deployers/bsh.deployer",
-    "${profile_path}/deployers/xnio.deployer",
-    "${profile_path}/deployers/messaging-definitions-jboss-beans.xml"
-  ]
-
-  file { $remove_from_deploy_folder:
-    ensure  => absent,
-    force   => true,
-    require => Exec["create-profile-${grau}"],
-  }
   file { "server-xml-${grau}":
-    ensure  => present,
+    ensure  => file,
     path    => "${profile_path}/deploy/jbossweb.sar/server.xml",
     source  => 'puppet:///modules/pje/server.xml',
     owner   => $owner_group,
@@ -273,7 +240,7 @@ define pje::profile (
     require => Exec["create-profile-${grau}"],
   }
   file { "jmx-users-${grau}":
-    ensure  => present,
+    ensure  => file,
     owner   => $owner_group,
     group   => $owner_group,
     path    => "${profile_path}/conf/props/jmx-console-users.properties",
@@ -282,28 +249,28 @@ define pje::profile (
     require => Exec["create-profile-${grau}"],
   }
   file { "${profile_path}/deploy/API-ds.xml":
-    ensure  => present,
+    ensure  => file,
     owner   => $owner_group,
     group   => $owner_group,
     content => template('pje/API-ds.xml.erb'),
     require => Exec["create-profile-${grau}"],
   }
   file { "${profile_path}/deploy/GIM-ds.xml":
-    ensure  => present,
+    ensure  => file,
     owner   => $owner_group,
     group   => $owner_group,
     content => template('pje/GIM-ds.xml.erb'),
     require => Exec["create-profile-${grau}"],
   }
   file { "${profile_path}/deploy/PJE-ds.xml":
-    ensure  => present,
+    ensure  => file,
     owner   => $owner_group,
     group   => $owner_group,
     content => template('pje/PJE-ds.xml.erb'),
     require => Exec["create-profile-${grau}"],
   }
   file { "${profile_path}/run.conf":
-    ensure  => present,
+    ensure  => file,
     owner   => $owner_group,
     group   => $owner_group,
     content => template('pje/run.conf.erb'),
@@ -313,12 +280,12 @@ define pje::profile (
 
   $war_file = "pje-jt-${pje_version}.war"
   $war_path = "${profile_path}/deploy/${ctxpath}.war"
-  exec { "force-stop-${grau}":
-    command => "/etc/init.d/pje${grau}grau stop; rm -rf deploy/${ctxpath}.war",
-    cwd     => $profile_path,
-    require => Exec["create-profile-${grau}"],
-    before  => Exec["deploy-pje-${grau}"],
-  }
+  #exec { "force-stop-${grau}":
+  #  command => "/etc/init.d/pje${grau}grau stop; rm -rf deploy/${ctxpath}.war",
+  #  cwd     => $profile_path,
+  #  require => Exec["create-profile-${grau}"],
+  #  before  => Exec["deploy-pje-${grau}"],
+  #}
   exec { "deploy-pje-${grau}":
     command => "unzip ${war_file} -d ${war_path}; \
                 chown -R ${owner_group}.${owner_group} ${war_path}",

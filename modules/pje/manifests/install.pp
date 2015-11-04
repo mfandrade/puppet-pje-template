@@ -59,8 +59,18 @@ class pje::install($version) {
     jboss_home => $jboss_home,
   }
 
+  file { 'profile-exclude-list':
+    ensure  => file,
+    path    => "${jboss_home}/server/.profile_exclude_list",
+    source  => 'puppet:///modules/pje/profile_exclude_list',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    require => Class['jboss'], # por causa do local
+  }
+
   file { 'aplicacaojt.keystore':
-    ensure  => present,
+    ensure  => file,
     path    => '/usr/java/default/jre/lib/security/aplicacaojt.keystore',
     source  => 'puppet:///modules/pje/aplicacaojt.keystore',
     owner   => 'root',
@@ -70,14 +80,14 @@ class pje::install($version) {
   }
 
   file { 'drive-postgresql':
-    ensure  => present,
+    ensure  => file,
     path    => "${jboss_home}/common/lib/postgresql-9.3-1103.jdbc4.jar",
     source  => 'puppet:///modules/pje/postgresql-9.3-1103.jdbc4.jar',
     require => Class['jboss'], # por causa do jboss_home, obviamente
   }
 
   file { $::pje::params::default_file:
-    ensure => present,
+    ensure => file,
     source => 'puppet:///modules/pje/default-file',
     owner  => 'root',
     group  => 'root',
